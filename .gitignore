@@ -1,0 +1,6 @@
+/out/
+/.idea/
+/doc/
+/node_modules/
+grocer.js
+*.tgz
