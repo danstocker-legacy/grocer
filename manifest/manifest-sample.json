@@ -1,0 +1,34 @@
+{
+    "libraries": {
+        "assets": {
+            "js": [
+                "src/jquery.js"
+            ]
+        }
+    },
+
+    "common": {
+        "assets": {
+            "js": [
+                "src/app.js"
+            ],
+
+            "css": [
+                "src/app.css"
+            ]
+        }
+    },
+
+    "users": {
+        "classPath": "app[\"pages\"].Users",
+        "assets": {
+            "js": [
+                "src/Users.js"
+            ],
+
+            "css": [
+                "src/Users.css"
+            ]
+        }
+    }
+}
