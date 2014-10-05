@@ -43,6 +43,23 @@ troop.postpone(grocer, 'Assets', function () {
         });
 });
 
+troop.amendPostponed(sntls, 'Hash', function () {
+    "use strict";
+
+    sntls.Hash
+        .addMethods(/** @lends sntls.Hash# */{
+            /**
+             * Converts `Hash` instance with array items to `Assets` instance.
+             * @param {string} assetType
+             * @returns {grocer.Assets}
+             */
+            toAssets: function (assetType) {
+                dessert.isArray(this.items, "Invalid Hash");
+                return grocer.Assets.create(this.items, assetType);
+            }
+        });
+});
+
 (function () {
     "use strict";
 

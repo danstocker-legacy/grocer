@@ -37,6 +37,17 @@
             "should initialize instance identically as through constructor");
     });
 
+    test("Conversion from Hash", function () {
+        var hash = ['foo/bar', 'hello/world'].toHash(),
+            assets = hash.toAssets('baz');
+
+        ok(assets.isA(g$.Assets), "should return Assets instance");
+        deepEqual(
+            assets,
+            g$.Assets.create(['foo/bar', 'hello/world'], 'baz'),
+            "should initialize instance identically as through constructor");
+    });
+
     test("Serialization", function () {
         var assets = ['foo/bar', 'hello/world'].toAssets('js');
 
