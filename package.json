@@ -1,7 +1,7 @@
 {
     "name"           : "grocer",
-    "version"        : "0.1.0",
-    "description"    : "Asset list manipulation",
+    "version"        : "0.1.1",
+    "description"    : "Front end asset manager",
     "keywords"       : [
         "asset", "asset file", "asset list",
         "manifest",
