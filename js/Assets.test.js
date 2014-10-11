@@ -48,6 +48,13 @@
             "should initialize instance identically as through constructor");
     });
 
+    test("Asset list getter", function () {
+        var assets = ['foo/bar', 'hello/world'].toAssets('baz'),
+            assetList = assets.getAssetList();
+
+        deepEqual(assetList, ['foo/bar', 'hello/world'], "should retrieve asset list array");
+    });
+
     test("Serialization", function () {
         var assets = ['foo/bar', 'hello/world'].toAssets('js');
 

@@ -35,6 +35,12 @@ troop.postpone(grocer, 'Asset', function () {
                 /** @type {string} */
                 this.assetType = assetType;
             }
+
+            /**
+             * @name grocer.Asset#toString
+             * @function
+             * @returns {string}
+             */
         });
 });
 

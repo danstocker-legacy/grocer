@@ -50,6 +50,52 @@ troop.postpone(grocer, 'Manifest', function () {
                         return assetId + '.' + assetType;
                     })
                     .toAssets(assetType);
+            },
+
+            /**
+             * @param {string} moduleName
+             * @param {string} assetType
+             * @returns {string[]}
+             */
+            getAssetListForModule: function (moduleName, assetType) {
+                var module = this.getModule(moduleName);
+                return module ?
+                    module.getAssetList(assetType) :
+                    [];
+            },
+
+            /**
+             * @param {string} assetType
+             * @returns {string[]}
+             */
+            getAssetList: function (assetType) {
+                var result = [];
+
+                this.modules
+                    .callOnEachItem('getAssetList', assetType)
+                    .forEachItem(function (assetList) {
+                        result = result.concat(assetList);
+                    });
+
+                return result;
+            },
+
+            /**
+             * @param {string} assetType
+             * @returns {string}
+             */
+            getSerializedAssetList: function (assetType) {
+                var result = [];
+
+                this.modules
+                    .callOnEachItem('getAssets', assetType)
+                    .forEachItem(function (/**grocer.Assets*/assets) {
+                        if (assets) {
+                            result.push(assets.toString());
+                        }
+                    });
+
+                return result.join('\n');
             }
         });
 });

@@ -20,18 +20,27 @@ troop.postpone(grocer, 'Assets', function () {
     grocer.Assets = self
         .addMethods(/** @lends grocer.Assets# */{
             /**
-             * @param {string[]} assetPathList
+             * @param {string[]} assetList
              * @param {string} assetType
              * @ignore
              */
-            init: function (assetPathList, assetType) {
+            init: function (assetList, assetType) {
                 dessert
-                    .isArray(assetPathList, "Invalid asset list")
+                    .isArray(assetList, "Invalid asset list")
                     .isString(assetType, "Invalid asset type");
 
                 /** @type {sntls.Collection} */
-                this.assetCollection = assetPathList.toCollection()
+                this.assetCollection = assetList.toCollection()
                     .callOnEachItem('toAsset', assetType);
+            },
+
+            /** @returns {string[]} */
+            getAssetList: function () {
+                return this.assetCollection
+                    .mapValues(function (/**grocer.Asset*/asset) {
+                        return asset.assetId;
+                    })
+                    .items;
             },
 
             /** @returns {string} */

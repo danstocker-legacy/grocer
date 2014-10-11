@@ -43,4 +43,29 @@
             ['hello.js', 'world.js'].toAssets('js'),
             "should return assets of specified type");
     });
+
+    test("Getting asset list by type", function () {
+        var module = g$.Module.create({
+                classPath: 'foo["bar"].baz',
+                assets   : {
+                    js: ['hello.js', 'world.js']
+                }
+            }),
+            scriptList;
+
+        raises(function () {
+            scriptList.getAssetList();
+        }, "should raise exception on missing arguments");
+
+        scriptList = module.getAssetList('js');
+
+        deepEqual(
+            scriptList,
+            ['hello.js', 'world.js'],
+            "should return array of asset IDs of the specified type");
+
+        scriptList = module.getAssetList('foo');
+
+        deepEqual(scriptList, [], "should return undefined for non-existing asset type");
+    });
 }());

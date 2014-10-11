@@ -74,4 +74,50 @@
             ].join('\n'),
             "should fetch modules as individual assets");
     });
+
+    test("Asset list getter for module", function () {
+        var manifest = g$.Manifest.create(manifestNode);
+
+        deepEqual(
+            manifest.getAssetListForModule('common', 'js'),
+            [ "src/app.js" ],
+            "should return asset list for specified module & type");
+
+        deepEqual(
+            manifest.getAssetListForModule('foo', 'js'),
+            [],
+            "should return empty asset list for invalid module");
+    });
+
+    test("Asset list getter", function () {
+        var manifest = g$.Manifest.create(manifestNode);
+
+        deepEqual(
+            manifest.getAssetList('js'),
+            [ "src/jquery.js", "src/app.js", "src/Users.js" ],
+            "should return combined asset list for specified type");
+
+        deepEqual(
+            manifest.getAssetList('foo'),
+            [],
+            "should return empty asset list for invalid type");
+    });
+
+    test("Serialized asset list getter", function () {
+        var manifest = g$.Manifest.create(manifestNode);
+
+        equal(
+            manifest.getSerializedAssetList('js'),
+            [
+                "src/jquery.js".toAsset('js').toString(),
+                "src/app.js".toAsset('js').toString(),
+                "src/Users.js".toAsset('js').toString()
+            ].join('\n'),
+            "should return serialized asset list for specified type");
+
+        equal(
+            manifest.getSerializedAssetList('foo'),
+            '',
+            "should return empty string for invalid type");
+    });
 }());

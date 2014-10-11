@@ -26,9 +26,8 @@ troop.postpone(grocer, 'Module', function () {
                 dessert.isObject(moduleNode, "Invalid module node");
 
                 /** @type {sntls.Tree} moduleNode */
-                this.moduleDescriptor = sntls.Tree.create(moduleNode);
-
-                var classPath = this.moduleDescriptor.getNode('classPath'.toPath());
+                var moduleDescriptor = sntls.Tree.create(moduleNode),
+                    classPath = moduleDescriptor.getNode('classPath'.toPath());
 
                 /** @type {sntls.Path} */
                 this.classPath = classPath ?
@@ -36,7 +35,7 @@ troop.postpone(grocer, 'Module', function () {
                     undefined;
 
                 /** @type {sntls.Collection} */
-                this.assetsCollection = this.moduleDescriptor
+                this.assetsCollection = moduleDescriptor
                     .getNodeAsHash('assets'.toPath())
                     .toCollection()
                     .mapValues(function (assetList, assetType) {
@@ -51,6 +50,18 @@ troop.postpone(grocer, 'Module', function () {
             getAssets: function (assetType) {
                 dessert.isString(assetType, "Invalid asset type");
                 return this.assetsCollection.getItem(assetType);
+            },
+
+            /**
+             * @param {string} assetType
+             * @returns {string[]}
+             */
+            getAssetList: function (assetType) {
+                dessert.isString(assetType, "Invalid asset type");
+                var assets = this.assetsCollection.getItem(assetType);
+                return assets ?
+                    assets.getAssetList() :
+                    [];
             }
         });
 });
