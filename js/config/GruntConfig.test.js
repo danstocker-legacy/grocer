@@ -54,6 +54,29 @@
         strictEqual(config.addTask(cssTask), config, "should be chainable");
     });
 
+    test("Config node getter", function () {
+        var config = g$.GruntConfig.create()
+            .addTask(g$.GruntTask.create('copy', {
+                dev : {},
+                prod: {}
+            }))
+            .addTask(g$.GruntTask.create('cssMin', {
+                dev : {},
+                prod: {}
+            }));
+
+        deepEqual(config.getConfigNode(), {
+            copy  : {
+                dev : {},
+                prod: {}
+            },
+            cssMin: {
+                dev : {},
+                prod: {}
+            }
+        }, "should return config node");
+    });
+
     test("Config merge", function () {
         var configA = g$.GruntConfig.create({
                 copy  : {

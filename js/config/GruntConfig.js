@@ -62,6 +62,13 @@ troop.postpone(grocer, 'GruntConfig', function () {
                 return this.tasks.getItem(taskName);
             },
 
+            /** @returns {Object} */
+            getConfigNode: function () {
+                return this.tasks.mapValues(function (/**grocer.GruntTask*/task) {
+                    return task.subTasks.items;
+                }).items;
+            },
+
             /**
              * @param {grocer.GruntConfig} remoteConfig
              * @param {string} [subTaskPrefix]
