@@ -12,11 +12,14 @@ module.exports = function (grunt) {
             'js/manifest/Assets.js',
             'js/manifest/Module.js',
             'js/manifest/Manifest.js',
+            'js/config/GruntTask.js',
+            'js/config/GruntConfig.js',
             'js/exports.js'
         ],
 
         test: [
-            'js/manifest/jsTestDriver.conf'
+            'js/manifest/jsTestDriver.conf',
+            'js/config/jsTestDriver.conf'
         ],
 
         globals: {
