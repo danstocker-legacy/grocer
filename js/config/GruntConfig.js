@@ -26,7 +26,7 @@ troop.postpone(grocer, 'GruntConfig', function () {
                 var that = this;
                 sntls.Collection.create(configNode)
                     .forEachItem(function (taskNode, taskName) {
-                        that.addTask(taskName, grocer.GruntTask.create(taskNode));
+                        that.addTask(taskName, grocer.TaskConfig.create(taskNode));
                     });
             }
         })
@@ -46,13 +46,13 @@ troop.postpone(grocer, 'GruntConfig', function () {
 
             /**
              * @param {string} taskName
-             * @param {grocer.GruntTask} task
+             * @param {grocer.TaskConfig} task
              * @returns {grocer.GruntConfig}
              */
             addTask: function (taskName, task) {
                 dessert
                     .isString(taskName, "Invalid task name")
-                    .isGruntTask(task, "Invalid task");
+                    .isTaskConfig(task, "Invalid task");
 
                 this.tasks.setItem(taskName, task);
 
@@ -61,7 +61,7 @@ troop.postpone(grocer, 'GruntConfig', function () {
 
             /**
              * @param {string} taskName
-             * @returns {grocer.GruntTask}
+             * @returns {grocer.TaskConfig}
              */
             getTask: function (taskName) {
                 return this.tasks.getItem(taskName);
@@ -69,17 +69,17 @@ troop.postpone(grocer, 'GruntConfig', function () {
 
             /** @returns {Object} */
             getConfigNode: function () {
-                return this.tasks.mapValues(function (/**grocer.GruntTask*/task) {
-                    return task.subTasks.items;
+                return this.tasks.mapValues(function (/**grocer.TaskConfig*/task) {
+                    return task.targets.items;
                 }).items;
             },
 
             /**
              * @param {grocer.GruntConfig} remoteConfig
-             * @param {string} [subTaskPrefix]
+             * @param {string} [targetPrefix]
              * @returns {troop.Base}
              */
-            mergeWith: function (remoteConfig, subTaskPrefix) {
+            mergeWith: function (remoteConfig, targetPrefix) {
                 dessert.isGruntConfig(remoteConfig, "Invalid remote grunt config");
 
                 var that = this,
@@ -94,10 +94,10 @@ troop.postpone(grocer, 'GruntConfig', function () {
                         return taskName;
                     })
                     .mapValues(function (taskName) {
-                        var currentTask = that.getTask(taskName) || grocer.GruntTask.create(),
-                            remoteTask = remoteConfig.getTask(taskName) || grocer.GruntTask.create();
+                        var currentTask = that.getTask(taskName) || grocer.TaskConfig.create(),
+                            remoteTask = remoteConfig.getTask(taskName) || grocer.TaskConfig.create();
 
-                        return currentTask.mergeWith(remoteTask, subTaskPrefix);
+                        return currentTask.mergeWith(remoteTask, targetPrefix);
                     })
                     .forEachItem(function (task, taskName) {
                         result.addTask(taskName, task);

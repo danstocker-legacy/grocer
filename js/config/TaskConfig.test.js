@@ -3,29 +3,29 @@
 (function () {
     "use strict";
 
-    module("GruntTask");
+    module("TaskConfig");
 
     test("Instantiation", function () {
         raises(function () {
-            g$.GruntTask.create('bar');
+            g$.TaskConfig.create('bar');
         }, "should raise exception on invalid arguments");
 
         var taskNode = {
                 dev : {},
                 prod: {}
             },
-            task = g$.GruntTask.create(taskNode);
+            task = g$.TaskConfig.create(taskNode);
 
-        ok(task.subTasks.isA(sntls.Collection), "should initialize subTasks property as collection");
-        strictEqual(task.subTasks.items, taskNode, "should set subTasks' buffer to specified taskNode");
+        ok(task.targets.isA(sntls.Collection), "should initialize targets property as collection");
+        strictEqual(task.targets.items, taskNode, "should set targets' buffer to specified taskNode");
     });
 
-    test("Sub-task addition", function () {
-        var task = g$.GruntTask.create();
+    test("Target addition", function () {
+        var task = g$.TaskConfig.create();
 
-        strictEqual(task.addSubTask('bar', {hello: "world"}), task, "should be chainable");
+        strictEqual(task.addTarget('bar', {hello: "world"}), task, "should be chainable");
 
-        deepEqual(task.subTasks.items, {
+        deepEqual(task.targets.items, {
             bar: {
                 hello: "world"
             }
@@ -33,13 +33,13 @@
     });
 
     test("Task merge", function () {
-        var taskA = g$.GruntTask.create({
+        var taskA = g$.TaskConfig.create({
                 dev : {
                     hello: "world"
                 },
                 prod: {}
             }),
-            taskB = g$.GruntTask.create({
+            taskB = g$.TaskConfig.create({
                 dev : {
                     hi: "all"
                 },
@@ -61,8 +61,8 @@
 
         taskMerged = taskA.mergeWith(taskB, 'foo-');
 
-        ok(taskMerged.isA(g$.GruntTask), "should return GruntTask instance");
-        deepEqual(taskMerged.subTasks.items, {
+        ok(taskMerged.isA(g$.TaskConfig), "should return TaskConfig instance");
+        deepEqual(taskMerged.targets.items, {
             'dev'     : {
                 hello: "world"
             },

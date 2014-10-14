@@ -29,8 +29,8 @@
         ok(config.tasks.isA(sntls.Collection), "should initialize tasks property as collection");
 
         deepEqual(addedTasks, [
-            ['copy', g$.GruntTask.create({})],
-            ['cssMin', g$.GruntTask.create({})]
+            ['copy', g$.TaskConfig.create({})],
+            ['cssMin', g$.TaskConfig.create({})]
         ], "should add Task instances based on parsed config node");
     });
 
@@ -38,7 +38,7 @@
         expect(4);
 
         var config = g$.GruntConfig.create(),
-            cssTask = g$.GruntTask.create({});
+            cssTask = g$.TaskConfig.create({});
 
         raises(function () {
             config.addTask('foo', 'bar');
@@ -56,11 +56,11 @@
 
     test("Config node getter", function () {
         var config = g$.GruntConfig.create()
-            .addTask('copy', g$.GruntTask.create({
+            .addTask('copy', g$.TaskConfig.create({
                 dev : {},
                 prod: {}
             }))
-            .addTask('cssMin', g$.GruntTask.create({
+            .addTask('cssMin', g$.TaskConfig.create({
                 dev : {},
                 prod: {}
             }));
@@ -111,7 +111,7 @@
 
         g$.GruntConfig.addMocks({
             addTask: function (taskName, task) {
-                addedTasks.push([taskName, task.subTasks.items]);
+                addedTasks.push([taskName, task.targets.items]);
             }
         });
 
@@ -146,6 +146,6 @@
                 }
             ]
         ],
-            "should merge remote config with prefixed sub-tasks");
+            "should merge remote config with prefixed targets");
     });
 }());
