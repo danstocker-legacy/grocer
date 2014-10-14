@@ -47,6 +47,11 @@ troop.postpone(grocer, 'GruntProxy', function () {
             /** @returns {*} */
             registerTask: function () {
                 return this.grunt.registerTask.apply(this.grunt, arguments);
+            },
+
+            /** @returns {*} */
+            loadNpmTasks: function () {
+                return this.grunt.loadNpmTasks.apply(this.grunt, arguments);
             }
         });
 });
