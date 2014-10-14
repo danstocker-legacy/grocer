@@ -41,16 +41,19 @@ troop.postpone(grocer, 'GruntProxy', function () {
              * @returns {*}
              */
             initConfig: function (config) {
+                dessert.assert(!!this.grunt, "Grunt reference not set");
                 return this.grunt.initConfig(config);
             },
 
             /** @returns {*} */
             registerTask: function () {
+                dessert.assert(!!this.grunt, "Grunt reference not set");
                 return this.grunt.registerTask.apply(this.grunt, arguments);
             },
 
             /** @returns {*} */
             loadNpmTasks: function () {
+                dessert.assert(!!this.grunt, "Grunt reference not set");
                 return this.grunt.loadNpmTasks.apply(this.grunt, arguments);
             }
         });
