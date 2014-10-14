@@ -17,8 +17,8 @@
             addedTasks = [];
 
         g$.GruntConfig.addMocks({
-            addTask: function (task) {
-                addedTasks.push(task);
+            addTask: function (taskName, task) {
+                addedTasks.push([taskName, task]);
             }
         });
 
@@ -29,8 +29,8 @@
         ok(config.tasks.isA(sntls.Collection), "should initialize tasks property as collection");
 
         deepEqual(addedTasks, [
-            g$.GruntTask.create('copy', {}),
-            g$.GruntTask.create('cssMin', {})
+            ['copy', g$.GruntTask.create({})],
+            ['cssMin', g$.GruntTask.create({})]
         ], "should add Task instances based on parsed config node");
     });
 
@@ -38,10 +38,10 @@
         expect(4);
 
         var config = g$.GruntConfig.create(),
-            cssTask = g$.GruntTask.create('cssMin', {});
+            cssTask = g$.GruntTask.create({});
 
         raises(function () {
-            config.addTask('foo');
+            config.addTask('foo', 'bar');
         }, "should raise exception on invalid argument");
 
         config.tasks.addMocks({
@@ -51,16 +51,16 @@
             }
         });
 
-        strictEqual(config.addTask(cssTask), config, "should be chainable");
+        strictEqual(config.addTask('cssMin', cssTask), config, "should be chainable");
     });
 
     test("Config node getter", function () {
         var config = g$.GruntConfig.create()
-            .addTask(g$.GruntTask.create('copy', {
+            .addTask('copy', g$.GruntTask.create({
                 dev : {},
                 prod: {}
             }))
-            .addTask(g$.GruntTask.create('cssMin', {
+            .addTask('cssMin', g$.GruntTask.create({
                 dev : {},
                 prod: {}
             }));
@@ -110,8 +110,8 @@
         }, "should raise exception on invalid remoteConfig argument");
 
         g$.GruntConfig.addMocks({
-            addTask: function (task) {
-                addedTasks.push([task.taskName, task.subTasks.items]);
+            addTask: function (taskName, task) {
+                addedTasks.push([taskName, task.subTasks.items]);
             }
         });
 

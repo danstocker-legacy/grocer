@@ -26,7 +26,7 @@ troop.postpone(grocer, 'GruntConfig', function () {
                 var that = this;
                 sntls.Collection.create(configNode)
                     .forEachItem(function (taskNode, taskName) {
-                        that.addTask(grocer.GruntTask.create(taskName, taskNode));
+                        that.addTask(taskName, grocer.GruntTask.create(taskNode));
                     });
             }
         })
@@ -45,12 +45,17 @@ troop.postpone(grocer, 'GruntConfig', function () {
             },
 
             /**
+             * @param {string} taskName
              * @param {grocer.GruntTask} task
              * @returns {grocer.GruntConfig}
              */
-            addTask: function (task) {
-                dessert.isGruntTask(task, "Invalid task");
-                this.tasks.setItem(task.taskName, task);
+            addTask: function (taskName, task) {
+                dessert
+                    .isString(taskName, "Invalid task name")
+                    .isGruntTask(task, "Invalid task");
+
+                this.tasks.setItem(taskName, task);
+
                 return this;
             },
 
@@ -85,13 +90,18 @@ troop.postpone(grocer, 'GruntConfig', function () {
                         .toCollection();
 
                 combinedTaskNames
+                    .mapKeys(function (taskName) {
+                        return taskName;
+                    })
                     .mapValues(function (taskName) {
-                        var currentTask = that.getTask(taskName) || grocer.GruntTask.create(taskName),
-                            remoteTask = remoteConfig.getTask(taskName) || grocer.GruntTask.create(taskName);
+                        var currentTask = that.getTask(taskName) || grocer.GruntTask.create(),
+                            remoteTask = remoteConfig.getTask(taskName) || grocer.GruntTask.create();
 
                         return currentTask.mergeWith(remoteTask, subTaskPrefix);
                     })
-                    .passEachItemTo(result.addTask, result);
+                    .forEachItem(function (task, taskName) {
+                        result.addTask(taskName, task);
+                    });
 
                 return result;
             }

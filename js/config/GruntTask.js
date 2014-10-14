@@ -8,7 +8,6 @@ troop.postpone(grocer, 'GruntTask', function () {
     /**
      * @name grocer.GruntTask.create
      * @function
-     * @param {string} taskName
      * @param {object} [taskNode]
      * @returns {grocer.GruntTask}
      */
@@ -20,17 +19,11 @@ troop.postpone(grocer, 'GruntTask', function () {
     grocer.GruntTask = self
         .addMethods(/** @lends grocer.GruntTask# */{
             /**
-             * @param {string} taskName
              * @param {object} [taskNode]
              * @ignore
              */
-            init: function (taskName, taskNode) {
-                dessert
-                    .isString(taskName, "Invalid task name")
-                    .isObjectOptional(taskNode, "Invalid task node");
-
-                /** @type {string} */
-                this.taskName = taskName;
+            init: function (taskNode) {
+                dessert.isObjectOptional(taskNode, "Invalid task node");
 
                 /** @type {sntls.Collection} */
                 this.subTasks = sntls.Collection.create(taskNode);
@@ -56,7 +49,7 @@ troop.postpone(grocer, 'GruntTask', function () {
                     .isGruntTask(remoteTask, "Invalid remote task")
                     .isStringOptional(subTaskPrefix, "Invalid sub-task prefix");
 
-                var result = this.getBase().create(this.taskName);
+                var result = this.getBase().create();
 
                 subTaskPrefix = subTaskPrefix || '';
 

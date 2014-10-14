@@ -7,26 +7,21 @@
 
     test("Instantiation", function () {
         raises(function () {
-            g$.GruntTask.create();
-        }, "should raise exception on missing arguments");
-
-        raises(function () {
-            g$.GruntTask.create('foo', 'bar');
+            g$.GruntTask.create('bar');
         }, "should raise exception on invalid arguments");
 
         var taskNode = {
                 dev : {},
                 prod: {}
             },
-            task = g$.GruntTask.create('foo', taskNode);
+            task = g$.GruntTask.create(taskNode);
 
-        equal(task.taskName, 'foo', "should set task name");
         ok(task.subTasks.isA(sntls.Collection), "should initialize subTasks property as collection");
         strictEqual(task.subTasks.items, taskNode, "should set subTasks' buffer to specified taskNode");
     });
 
     test("Sub-task addition", function () {
-        var task = g$.GruntTask.create('foo');
+        var task = g$.GruntTask.create();
 
         strictEqual(task.addSubTask('bar', {hello: "world"}), task, "should be chainable");
 
@@ -38,13 +33,13 @@
     });
 
     test("Task merge", function () {
-        var taskA = g$.GruntTask.create('copy', {
+        var taskA = g$.GruntTask.create({
                 dev : {
                     hello: "world"
                 },
                 prod: {}
             }),
-            taskB = g$.GruntTask.create('cssMin', {
+            taskB = g$.GruntTask.create({
                 dev : {
                     hi: "all"
                 },
