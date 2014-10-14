@@ -114,10 +114,10 @@
 
         result = config.getTasksWithTarget('dev');
         ok(result.isA(sntls.Hash), "should return Hash instance");
-        deepEqual(result.items, ['copy', 'cssMin'], "should return Hash with correct contents");
+        deepEqual(result.items, ['copy:dev', 'cssMin:dev'], "should return Hash with correct contents");
 
         result = config.getTasksWithTarget('prod');
-        deepEqual(result.items, ['copy'], "should return Hash with correct contents");
+        deepEqual(result.items, ['copy:prod'], "should return Hash with correct contents");
     });
 
     test("Config merge", function () {

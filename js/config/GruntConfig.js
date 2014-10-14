@@ -89,7 +89,10 @@ troop.postpone(grocer, 'GruntConfig', function () {
                     .filterBySelector(function (/**grocer.TaskConfig*/taskConfig) {
                         return taskConfig.hasTarget(targetName);
                     })
-                    .getKeysAsHash();
+                    .mapValues(function (taskConfig, taskName) {
+                        return taskName + ':' + targetName;
+                    })
+                    .getValuesAsHash();
             },
 
             /**
