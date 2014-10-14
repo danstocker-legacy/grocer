@@ -32,6 +32,15 @@
         });
     });
 
+    test("Target tester", function () {
+        var task = g$.TaskConfig.create({
+            foo: {}
+        });
+
+        ok(task.hasTarget('foo'), "should return true for existing target");
+        ok(!task.hasTarget('bar'), "should return false for missing target");
+    });
+
     test("Task merge", function () {
         var taskA = g$.TaskConfig.create({
                 dev : {

@@ -39,7 +39,7 @@ troop.postpone(grocer, 'GruntConfig', function () {
                 dessert.isObjectOptional(configNode, "Invalid config node");
 
                 /** @type {sntls.Collection} */
-                this.tasks = sntls.Collection.create();
+                this.taskConfigs = sntls.Collection.create();
 
                 this._parseConfigNode(configNode);
             },
@@ -60,7 +60,7 @@ troop.postpone(grocer, 'GruntConfig', function () {
                     .isString(taskName, "Invalid task name")
                     .isTaskConfig(task, "Invalid task");
 
-                this.tasks.setItem(taskName, task);
+                this.taskConfigs.setItem(taskName, task);
 
                 return this;
             },
@@ -70,14 +70,26 @@ troop.postpone(grocer, 'GruntConfig', function () {
              * @returns {grocer.TaskConfig}
              */
             getTask: function (taskName) {
-                return this.tasks.getItem(taskName);
+                return this.taskConfigs.getItem(taskName);
             },
 
             /** @returns {Object} */
             getConfigNode: function () {
-                return this.tasks.mapValues(function (/**grocer.TaskConfig*/task) {
+                return this.taskConfigs.mapValues(function (/**grocer.TaskConfig*/task) {
                     return task.targets.items;
                 }).items;
+            },
+
+            /**
+             * @param {string} targetName
+             * @returns {sntls.Hash}
+             */
+            getTasksWithTarget: function (targetName) {
+                return this.taskConfigs
+                    .filterBySelector(function (/**grocer.TaskConfig*/taskConfig) {
+                        return taskConfig.hasTarget(targetName);
+                    })
+                    .getKeysAsHash();
             },
 
             /**
@@ -90,8 +102,8 @@ troop.postpone(grocer, 'GruntConfig', function () {
 
                 var that = this,
                     result = this.getBase().create(),
-                    combinedTaskNames = this.tasks.toSet()
-                        .unionWith(remoteConfig.tasks.toSet())
+                    combinedTaskNames = this.taskConfigs.toSet()
+                        .unionWith(remoteConfig.taskConfigs.toSet())
                         .getKeysAsHash()
                         .toCollection();
 

@@ -26,7 +26,7 @@
 
         g$.GruntConfig.removeMocks();
 
-        ok(config.tasks.isA(sntls.Collection), "should initialize tasks property as collection");
+        ok(config.taskConfigs.isA(sntls.Collection), "should initialize tasks property as collection");
 
         deepEqual(addedTasks, [
             ['copy', g$.TaskConfig.create({})],
@@ -68,7 +68,7 @@
             config.addTask('foo', 'bar');
         }, "should raise exception on invalid argument");
 
-        config.tasks.addMocks({
+        config.taskConfigs.addMocks({
             setItem: function (taskName, task) {
                 equal(taskName, 'cssMin', "should specify task name as item key in tasks collection");
                 strictEqual(task, cssTask, "should set task in tasks collection");
@@ -99,6 +99,25 @@
                 prod: {}
             }
         }, "should return config node");
+    });
+
+    test("Getting tasks with specified target", function () {
+        var config = g$.GruntConfig.create()
+                .addTask('copy', g$.TaskConfig.create({
+                    dev : {},
+                    prod: {}
+                }))
+                .addTask('cssMin', g$.TaskConfig.create({
+                    dev: {}
+                })),
+            result;
+
+        result = config.getTasksWithTarget('dev');
+        ok(result.isA(sntls.Hash), "should return Hash instance");
+        deepEqual(result.items, ['copy', 'cssMin'], "should return Hash with correct contents");
+
+        result = config.getTasksWithTarget('prod');
+        deepEqual(result.items, ['copy'], "should return Hash with correct contents");
     });
 
     test("Config merge", function () {

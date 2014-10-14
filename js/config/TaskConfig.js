@@ -40,6 +40,14 @@ troop.postpone(grocer, 'TaskConfig', function () {
             },
 
             /**
+             * @param {string} targetName
+             * @returns {boolean}
+             */
+            hasTarget: function (targetName) {
+                return !!this.targets.getItem(targetName);
+            },
+
+            /**
              * @param {grocer.TaskConfig} remoteTask
              * @param {string} [targetPrefix]
              * @returns {grocer.TaskConfig}
