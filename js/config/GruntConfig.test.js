@@ -34,6 +34,30 @@
         ], "should add Task instances based on parsed config node");
     });
 
+    test("Config initialization", function () {
+        expect(3);
+
+        var config = g$.GruntConfig.create(),
+            configNode = {};
+
+        config.addMocks({
+            getConfigNode: function () {
+                ok(true, "should fetch config node");
+                return configNode;
+            }
+        });
+
+        g$.GruntProxy.addMocks({
+            initConfig: function (config) {
+                strictEqual(config, configNode, "should pass config node to grunt.initConfig()");
+            }
+        });
+
+        strictEqual(config.initConfig(), config, "should be chainable");
+
+        g$.GruntProxy.removeMocks();
+    });
+
     test("Task addition", function () {
         expect(4);
 
