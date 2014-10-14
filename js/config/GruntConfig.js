@@ -3,7 +3,8 @@ troop.postpone(grocer, 'GruntConfig', function () {
     "use strict";
 
     var base = troop.Base,
-        self = base.extend();
+        self = base.extend(),
+        slice = Array.prototype.slice;
 
     /**
      * @name grocer.GruntConfig.create
@@ -75,24 +76,51 @@ troop.postpone(grocer, 'GruntConfig', function () {
 
             /** @returns {Object} */
             getConfigNode: function () {
-                return this.taskConfigs.mapValues(function (/**grocer.TaskConfig*/task) {
-                    return task.targets.items;
-                }).items;
+                return this.getConfigNodeAsHash().items;
             },
 
-            /**
-             * @param {string} targetName
-             * @returns {sntls.Hash}
-             */
-            getTasksWithTarget: function (targetName) {
-                return this.taskConfigs
-                    .filterBySelector(function (/**grocer.TaskConfig*/taskConfig) {
-                        return taskConfig.hasTarget(targetName);
+            /** @returns {sntls.Collection} */
+            getConfigNodeAsHash: function () {
+                return this.taskConfigs.mapValues(function (/**grocer.TaskConfig*/task) {
+                    return task.targets.items;
+                });
+            },
+
+            /** @returns {sntls.Hash} */
+            getTasksGroupedByTarget: function () {
+                var args = slice.call(arguments);
+
+                return this.getConfigNodeAsHash()
+                    .toTree()
+                    .queryPathValuePairsAsHash(['|'.toKVP(), (args.length ? args : '|').toKVP()].toQuery())
+                    .toCollection()
+                    .mapValues(function (targetNode, path) {
+                        return path.toPath().getLastKey();
                     })
-                    .mapValues(function (taskConfig, taskName) {
-                        return taskName + ':' + targetName;
+                    .mapKeys(function (targetNode, path) {
+                        return path.toPath().asArray.join(':');
                     })
-                    .getValuesAsHash();
+                    .toStringDictionary()
+                    .reverse();
+            },
+
+            /** @returns {sntls.Collection} */
+            getAliasTasksGroupedByTarget: function () {
+                var groupedTasks = this.getTasksGroupedByTarget.apply(this, arguments);
+
+                return groupedTasks
+                    .toCollection()
+                    .mapValues(function (taskNames, targetName) {
+                        var aliasTask = targetName.toAliasTask();
+
+                        if (taskNames instanceof Array) {
+                            aliasTask.addSubTasks.apply(aliasTask, taskNames);
+                        } else {
+                            aliasTask.addSubTask(taskNames);
+                        }
+
+                        return aliasTask;
+                    });
             },
 
             /**
