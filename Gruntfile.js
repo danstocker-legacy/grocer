@@ -5,18 +5,18 @@ module.exports = function (grunt) {
     var params = {
         files: [
             'js/namespace.js',
-            'js/ClassPathParser.js',
-            'js/Asset.js',
-            'js/Script.js',
-            'js/Css.js',
-            'js/Assets.js',
-            'js/Module.js',
-            'js/Manifest.js',
+            'js/manifest/ClassPathParser.js',
+            'js/manifest/Asset.js',
+            'js/manifest/Script.js',
+            'js/manifest/Css.js',
+            'js/manifest/Assets.js',
+            'js/manifest/Module.js',
+            'js/manifest/Manifest.js',
             'js/exports.js'
         ],
 
         test: [
-            'js/jsTestDriver.conf'
+            'js/manifest/jsTestDriver.conf'
         ],
 
         globals: {
