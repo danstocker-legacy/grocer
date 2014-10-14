@@ -44,6 +44,12 @@ troop.postpone(grocer, 'GruntConfig', function () {
                 this._parseConfigNode(configNode);
             },
 
+            /** @returns {grocer.GruntConfig} */
+            initConfig: function () {
+                grocer.GruntProxy.create().initConfig(this.getConfigNode());
+                return this;
+            },
+
             /**
              * @param {string} taskName
              * @param {grocer.TaskConfig} task

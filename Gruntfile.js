@@ -12,6 +12,9 @@ module.exports = function (grunt) {
             'js/manifest/Assets.js',
             'js/manifest/Module.js',
             'js/manifest/Manifest.js',
+            'js/config/GruntProxy.js',
+            'js/config/GruntTask.js',
+            'js/config/AliasTask.js',
             'js/config/TaskConfig.js',
             'js/config/GruntConfig.js',
             'js/exports.js'
