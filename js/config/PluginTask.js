@@ -59,34 +59,6 @@ troop.postpone(grocer, 'PluginTask', function () {
             },
 
             /**
-             * @param {grocer.PluginTask} remoteTask
-             * @param {string} [targetPrefix]
-             * @returns {grocer.PluginTask}
-             */
-            mergeWith: function (remoteTask, targetPrefix) {
-                dessert
-                    .isPluginTask(remoteTask, "Invalid remote task")
-                    .assert(this.taskName === remoteTask.taskName, "Plugin name mismatch")
-                    .isStringOptional(targetPrefix, "Invalid target prefix");
-
-                var result = this.getBase().create(this.taskName);
-
-                targetPrefix = targetPrefix || '';
-
-                this.targets
-                    .forEachItem(function (targetNode, targetName) {
-                        result.addTarget(targetName, targetNode);
-                    });
-
-                remoteTask.targets
-                    .forEachItem(function (targetNode, targetName) {
-                        result.addTarget(targetPrefix + targetName, targetNode);
-                    });
-
-                return result;
-            },
-
-            /**
              * @param {string} taskName
              * @param {grocer.GruntConfig} config
              * @returns {grocer.PluginTask}
