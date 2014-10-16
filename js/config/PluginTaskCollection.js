@@ -22,9 +22,15 @@ troop.postpone(grocer, 'PluginTaskCollection', function () {
             /** @returns {Object|Array} */
             getConfigNode: function () {
                 return this.callOnEachItem('getConfigNode').items;
+            },
+
+            /** @returns {grocer.GruntConfig} */
+            toGruntConfig: function () {
+                return grocer.GruntConfig.create(this.getConfigNode());
             }
         });
 });
+
 troop.amendPostponed(sntls, 'Hash', function () {
     "use strict";
 

@@ -26,4 +26,16 @@
             {hi: "all"}
         ], "should return combined config nodes");
     });
+
+    test("Conversion to GruntConfig", function () {
+        var tasks = [
+                'foo'.toPluginTask({hello: "world"}),
+                'bar'.toPluginTask({hi: "all"})
+            ].toPluginTaskCollection(),
+            config = tasks.toGruntConfig();
+
+        ok(config.isA(g$.GruntConfig), "should return GruntConfig instance");
+        deepEqual(config.items, tasks.getConfigNode(),
+            "should set config contents to config node based on tasks");
+    });
 }());
