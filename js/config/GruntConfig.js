@@ -19,6 +19,30 @@ troop.postpone(grocer, 'GruntConfig', function () {
      */
     grocer.GruntConfig = self
         .addMethods(/** @lends grocer.GruntConfig# */{
+            /**
+             * @param {string} taskName
+             * @param {grocer.PluginTask} pluginTask
+             * @returns {grocer.GruntConfig}
+             */
+            addTask: function (taskName, pluginTask) {
+                dessert
+                    .isString(taskName, "Invalid task name")
+                    .isPluginTask(pluginTask, "Invalid plugin task");
+
+                this.toCollection()
+                    .setItem(taskName, pluginTask.getConfigNode());
+
+                return this;
+            },
+
+            /**
+             * @param {string} taskName
+             * @returns {Object|Array}
+             */
+            getTask: function (taskName) {
+                return this.toCollection().getItem(taskName);
+            },
+
             /** @returns {grocer.GruntConfig} */
             initConfig: function () {
                 grocer.GruntProxy.create().initConfig(this.items);

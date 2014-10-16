@@ -5,6 +5,42 @@
 
     module("GruntConfig");
 
+    test("Task addition", function () {
+        var config = g$.GruntConfig.create(),
+            task = 'foo'.toPluginTask({
+                hello: "world"
+            }),
+            taskConfigNode = {};
+
+        raises(function () {
+            config.addTask();
+        }, "should raise exception on missing arguments");
+
+        raises(function () {
+            config.addTask('foo');
+        }, "should raise exception on invalid arguments");
+
+        task.addMocks({
+            getConfigNode: function () {
+                return taskConfigNode;
+            }
+        });
+
+        strictEqual(config.addTask('bar', task), config, "should be chainable");
+
+        deepEqual(config.items, {
+            'bar': taskConfigNode
+        }, "should set task config node in config");
+    });
+
+    test("Task config getter", function () {
+        var config = g$.GruntConfig.create({
+            hello: "world"
+        });
+
+        equal(config.getTask('hello'), "world", "should return task config node");
+    });
+
     test("Config initialization", function () {
         expect(2);
 
