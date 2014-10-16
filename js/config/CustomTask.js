@@ -30,22 +30,22 @@ troop.postpone(grocer, 'CustomTask', function () {
             },
 
             /**
-             * @param {function} customHandler
-             * @returns {grocer.CustomTask}
-             */
-            setCustomHandler: function (customHandler) {
-                dessert.isFunction(customHandler, "Invalid custom handler");
-                this.customHandler = customHandler;
-                return this;
-            },
-
-            /**
              * @param {string} [description]
              * @returns {grocer.CustomTask}
              */
             registerTask: function (description) {
                 grocer.GruntProxy.create()
                     .registerTask(this.taskName, description, this.customHandler);
+                return this;
+            },
+
+            /**
+             * @param {function} customHandler
+             * @returns {grocer.CustomTask}
+             */
+            setCustomHandler: function (customHandler) {
+                dessert.isFunction(customHandler, "Invalid custom handler");
+                this.customHandler = customHandler;
                 return this;
             }
         });

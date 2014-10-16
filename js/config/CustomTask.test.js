@@ -19,20 +19,6 @@
         equal(task.taskName, 'foo', "should set task name");
     });
 
-    test("Setting handler", function () {
-        var task = g$.CustomTask.create('foo');
-
-        function customHandler() {
-        }
-
-        raises(function () {
-            task.setCustomHandler('foo');
-        }, "should raise exception on invalid argument");
-
-        strictEqual(task.setCustomHandler(customHandler), task, "should be chainable");
-        strictEqual(task.customHandler, customHandler, "should set customHandler property");
-    });
-
     test("Task registration", function () {
         expect(4);
 
@@ -51,5 +37,19 @@
         strictEqual(task.registerTask('bar'), task, "should be chainable");
 
         g$.GruntProxy.removeMocks();
+    });
+
+    test("Setting handler", function () {
+        var task = g$.CustomTask.create('foo');
+
+        function customHandler() {
+        }
+
+        raises(function () {
+            task.setCustomHandler('foo');
+        }, "should raise exception on invalid argument");
+
+        strictEqual(task.setCustomHandler(customHandler), task, "should be chainable");
+        strictEqual(task.customHandler, customHandler, "should set customHandler property");
     });
 }());

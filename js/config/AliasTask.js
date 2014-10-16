@@ -30,6 +30,16 @@ troop.postpone(grocer, 'AliasTask', function () {
             },
 
             /**
+             * @param {string} [description]
+             * @returns {grocer.AliasTask}
+             */
+            registerTask: function (description) {
+                grocer.GruntProxy.create()
+                    .registerTask(this.taskName, description, this.subTasks.getValues());
+                return this;
+            },
+
+            /**
              * @param {string} subTask
              * @returns {grocer.AliasTask}
              */
@@ -45,16 +55,6 @@ troop.postpone(grocer, 'AliasTask', function () {
                 for (i = 0; i < arguments.length; i++) {
                     this.addSubTask(arguments[i]);
                 }
-                return this;
-            },
-
-            /**
-             * @param {string} [description]
-             * @returns {grocer.AliasTask}
-             */
-            registerTask: function (description) {
-                grocer.GruntProxy.create()
-                    .registerTask(this.taskName, description, this.subTasks.getValues());
                 return this;
             }
         });

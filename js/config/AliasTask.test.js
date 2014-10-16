@@ -19,6 +19,25 @@
         equal(task.taskName, 'foo', "should set task name");
     });
 
+    test("Task registration", function () {
+        expect(4);
+
+        var task = g$.AliasTask.create('foo')
+            .addSubTasks('hello', 'world');
+
+        g$.GruntProxy.addMocks({
+            registerTask: function (name, description, taskList) {
+                equal(name, 'foo', "should specify task name");
+                equal(description, 'bar', "should pass description");
+                deepEqual(taskList, ['hello', 'world'], "should pass task names");
+            }
+        });
+
+        strictEqual(task.registerTask('bar'), task, "should be chainable");
+
+        g$.GruntProxy.removeMocks();
+    });
+
     test("Sub-task addition", function () {
         var task = g$.AliasTask.create('foo');
 
@@ -37,24 +56,5 @@
             bar: 'bar',
             baz: 'baz'
         }, "should set task names as collection item");
-    });
-
-    test("Task registration", function () {
-        expect(4);
-
-        var task = g$.AliasTask.create('foo')
-            .addSubTasks('hello', 'world');
-
-        g$.GruntProxy.addMocks({
-            registerTask: function (name, description, taskList) {
-                equal(name, 'foo', "should specify task name");
-                equal(description, 'bar', "should pass description");
-                deepEqual(taskList, ['hello', 'world'], "should pass task names");
-            }
-        });
-
-        strictEqual(task.registerTask('bar'), task, "should be chainable");
-
-        g$.GruntProxy.removeMocks();
     });
 }());
