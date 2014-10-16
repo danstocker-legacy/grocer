@@ -25,6 +25,15 @@
 
         ok(pluginTask.isA(g$.PluginTask), "should return PluginTask instance");
         equal(pluginTask.taskName, 'foo', "should set task (plugin) name");
+        equal(pluginTask.targets.getKeyCount(), 0, "should set targets property to empty collection");
+
+        pluginTask = 'foo'.toPluginTask({
+            foo: {}
+        });
+
+        deepEqual(pluginTask.targets.items, {
+            foo: {}
+        }, "should set targets property to collection having the specified config node");
     });
 
     test("Target addition", function () {
@@ -46,5 +55,14 @@
 
         ok(task.hasTarget('foo'), "should return true for existing target");
         ok(!task.hasTarget('bar'), "should return false for missing target");
+    });
+
+    test("Config node getter", function () {
+        var task = 'foo'.toPluginTask()
+            .addTarget('foo', {
+                bar: 'baz'
+            });
+
+        strictEqual(task.getConfigNode(), task.targets.items, "should return targets buffer");
     });
 }());

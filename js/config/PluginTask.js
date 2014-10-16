@@ -58,6 +58,11 @@ troop.postpone(grocer, 'PluginTask', function () {
                 return !!this.targets.getItem(targetName);
             },
 
+            /** @returns {Object|Array} */
+            getConfigNode: function () {
+                return this.targets.items;
+            },
+
             /**
              * @param {string} taskName
              * @param {grocer.GruntConfig} config
