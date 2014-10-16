@@ -17,6 +17,7 @@ module.exports = function (grunt) {
             'js/config/AliasTask.js',
             'js/config/CustomTask.js',
             'js/config/PluginTask.js',
+            'js/config/PluginTaskCollection.js',
             'js/config/TaskConfig.js',
             'js/config/GruntConfig.js',
             'js/config/GruntPlugin.js',
