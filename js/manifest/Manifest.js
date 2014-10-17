@@ -54,12 +54,6 @@ troop.postpone(grocer, 'Manifest', function () {
                     .toAssets(assetType);
             },
 
-            /** @returns {grocer.Manifest} */
-            forEachModule: function () {
-                this.modules.forEachItem.apply(this.modules, arguments);
-                return this;
-            },
-
             /**
              * @param {string} moduleName
              * @param {string} assetType
