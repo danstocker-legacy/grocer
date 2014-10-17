@@ -89,6 +89,19 @@ troop.postpone(grocer, 'PluginTask', function () {
                 config.addTask(taskName, this);
 
                 return this;
+            },
+
+            /**
+             * @param {grocer.PluginTaskCollection} pluginTaskCollection
+             * @param {string} taskName
+             * @returns {grocer.PluginTask}
+             */
+            addToCollection: function (pluginTaskCollection, taskName) {
+                dessert
+                    .isPluginTaskCollection(pluginTaskCollection, "Invalid plugin task collection")
+                    .isString(taskName, "Invalid task name");
+                pluginTaskCollection.setItem(taskName, this);
+                return this;
             }
         });
 });

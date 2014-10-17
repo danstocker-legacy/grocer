@@ -71,9 +71,9 @@
             "should return targets buffer when no target prefix is specified");
 
         deepEqual(task.getConfigNode('_'), {
-           _foo: {
-               bar: 'baz'
-           }
+            _foo: {
+                bar: 'baz'
+            }
         }, "should return task config node with prefixed targets when prefix is specified");
     });
 
@@ -81,9 +81,9 @@
         expect(5);
 
         var task = 'foo'.toPluginTask()
-            .addTarget('foo', {
-                bar: 'baz'
-            }),
+                .addTarget('foo', {
+                    bar: 'baz'
+                }),
             config = g$.GruntConfig.create();
 
         raises(function () {
@@ -102,5 +102,33 @@
         });
 
         strictEqual(task.addToConfig(config, 'bar'), task, "should be chainable");
+    });
+
+    test("Adding to collection", function () {
+        expect(6);
+
+        var task = 'grunt-foo'.toPluginTask(),
+            collection = g$.PluginTaskCollection.create();
+
+        raises(function () {
+            task.addToCollection();
+        }, "should raise exception on missing arguments");
+
+        raises(function () {
+            task.addToCollection('foo');
+        }, "should raise exception on invalid collection argument");
+
+        raises(function () {
+            task.addToCollection(collection, 1);
+        }, "should raise exception on invalid task name argument");
+
+        collection.addMocks({
+            setItem: function (itemName, itemValue) {
+                strictEqual(itemValue, task, "should set task as item in collection");
+                equal(itemName, 'foo', "should set task by specified name in collection");
+            }
+        });
+
+        strictEqual(task.addToCollection(collection, 'foo'), task, "should be chainable");
     });
 }());

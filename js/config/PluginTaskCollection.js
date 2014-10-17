@@ -61,4 +61,17 @@ troop.amendPostponed(sntls, 'Hash', function () {
         },
         false, false, false
     );
+
+    dessert.addTypes(/** @lends dessert */{
+        /** @param {grocer.PluginTaskCollection} expr */
+        isPluginTaskCollection: function (expr) {
+            return grocer.PluginTaskCollection.isBaseOf(expr);
+        },
+
+        /** @param {grocer.PluginTaskCollection} expr */
+        isPluginTaskCollectionOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   grocer.PluginTaskCollection.isBaseOf(expr);
+        }
+    });
 }());
