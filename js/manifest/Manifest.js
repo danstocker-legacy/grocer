@@ -3,7 +3,8 @@ troop.postpone(grocer, 'Manifest', function () {
     "use strict";
 
     var base = troop.Base,
-        self = base.extend();
+        self = base.extend(),
+        slice = Array.prototype.slice;
 
     /**
      * @name grocer.Manifest.create
@@ -80,6 +81,14 @@ troop.postpone(grocer, 'Manifest', function () {
                     });
 
                 return result.toHash().toAssetCollection();
+            },
+
+            /** @returns {grocer.Manifest} */
+            filterByModuleNames: function () {
+                var filteredModules = this.modules
+                    .filterByKeys(slice.apply(arguments));
+
+                return this.getBase().create(filteredModules.items);
             }
         });
 });

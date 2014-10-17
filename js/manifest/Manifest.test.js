@@ -120,4 +120,15 @@
             '',
             "should return empty string for invalid type");
     });
+
+    test("Filtering by module names", function () {
+        var manifest = g$.Manifest.create(manifestNode),
+            filteredManifest = manifest.filterByModuleNames('libraries', 'common');
+
+        ok(filteredManifest.isA(g$.Manifest), "should return Manifest instance");
+        deepEqual(
+            filteredManifest.modules.getKeys().sort(),
+            ['libraries', 'common'].sort(),
+            "should filter down to specified modules");
+    });
 }());
