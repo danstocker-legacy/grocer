@@ -19,5 +19,7 @@
     test("Conversion from string", function () {
         var asset = 'foo/bar'.toAsset('js');
         ok(asset.isA(g$.Asset), "should return Asset instance");
+        equal(asset.assetId, 'foo/bar', "should set asset ID");
+        equal(asset.assetType, 'js', "should set asset type");
     });
 }());
