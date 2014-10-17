@@ -102,4 +102,45 @@
             prod: 'prod'.toAliasTask().addSubTask('copy:prod')
         }, "should return collection of AliasTask instances");
     });
+
+    test("Config merge", function () {
+        var tasks = g$.PluginTaskCollection.create(),
+            configA = g$.GruntConfig.create({
+                copy  : {
+                    dev : {foo: "baz"},
+                    prod: {hello: "all"}
+                },
+                cssMin: {
+                    dev: {}
+                }
+            }),
+            configMerged;
+
+        'grunt-copy'.toPluginTask({
+            dev : {foo: "bar"},
+            prod: {hello: "world"}
+        }).addToCollection(tasks, 'copy');
+
+        'grunt-css-min'.toPluginTask({
+            dev : {foo: "baz"},
+            prod: {hello: "all"}
+        }).addToCollection(tasks, 'cssMin');
+
+        configMerged = configA.mergeWith(tasks.toGruntConfig('_'));
+
+        ok(configMerged.isA(g$.GruntConfig), "should return GruntConfig instance");
+        deepEqual(configMerged.items, {
+            copy  : {
+                dev  : {foo: "baz"},
+                prod : {hello: "all"},
+                _dev : {foo: "bar"},
+                _prod: {hello: "world"}
+            },
+            cssMin: {
+                dev  : {},
+                _dev : {foo: "baz"},
+                _prod: {hello: "all"}
+            }
+        }, "should return merged config");
+    });
 }());

@@ -83,6 +83,38 @@ troop.postpone(grocer, 'GruntConfig', function () {
 
                         return aliasTask;
                     });
+            },
+
+            /**
+             * Merges current config with remote config on the target level.
+             * In case of conflict re. task/target combinations, the current config will win.
+             * (Unless a suitable conflict resolver function is passed.)
+             * @param {grocer.GruntConfig} remoteConfig
+             * @param {function} [conflictResolver]
+             * @returns {grocer.GruntConfig}
+             * @see sntls.Collection#mergeWith
+             */
+            mergeWith: function (remoteConfig, conflictResolver) {
+                dessert.isGruntConfig(remoteConfig, "Invalid grunt config");
+
+                var targetQuery = '|>|'.toQuery(),
+
+                // obtaining flattened targets for current config
+                    currentTargets = this.queryPathValuePairsAsHash(targetQuery).toCollection(),
+
+                // obtaining flattened targets for remote config
+                    remoteTargets = remoteConfig.queryPathValuePairsAsHash(targetQuery).toCollection(),
+
+                // merging target collections
+                    mergedTargets = currentTargets.mergeWith(remoteTargets, conflictResolver),
+                    mergedConfig = this.getBase().create();
+
+                // inflating merged flattened target structure back into tree
+                mergedTargets.forEachItem(function (targetConfigNode, targetPath) {
+                    mergedConfig.setNode(targetPath.toPath(), targetConfigNode);
+                });
+
+                return mergedConfig;
             }
         });
 });
