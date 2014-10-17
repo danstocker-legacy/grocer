@@ -8,6 +8,7 @@ troop.postpone(grocer, 'Module', function () {
     /**
      * @name grocer.Module.create
      * @function
+     * @param {string} moduleName
      * @param {object} moduleNode
      * @returns {grocer.Module}
      */
@@ -19,15 +20,21 @@ troop.postpone(grocer, 'Module', function () {
     grocer.Module = self
         .addMethods(/** @lends grocer.Module# */{
             /**
+             * @param {string} moduleName
              * @param {object} moduleNode
              * @ignore
              */
-            init: function (moduleNode) {
-                dessert.isObject(moduleNode, "Invalid module node");
+            init: function (moduleName, moduleNode) {
+                dessert
+                    .isString(moduleName, "Invalid module name")
+                    .isObject(moduleNode, "Invalid module node");
 
                 /** @type {sntls.Tree} moduleNode */
                 var moduleDescriptor = sntls.Tree.create(moduleNode),
                     classPath = moduleDescriptor.getNode('classPath'.toPath());
+
+                /** @type {string} */
+                this.moduleName = moduleName;
 
                 /** @type {sntls.Path} */
                 this.classPath = classPath ?
@@ -62,6 +69,35 @@ troop.postpone(grocer, 'Module', function () {
                 return assets ?
                     assets.getAssetList() :
                     [];
+            },
+
+            /**
+             * @param {string} assetType
+             * @returns {grocer.Asset}
+             */
+            toAsset: function (assetType) {
+                dessert
+                    .isString(assetType, "Invalid asset type")
+                    .assert(this.assetsCollection.getItem(assetType), "Invalid assetType");
+                return (this.moduleName + '.' + assetType).toAsset(assetType);
             }
         });
 });
+
+(function () {
+    "use strict";
+
+    troop.Properties.addProperties.call(
+        String.prototype,
+        /** @lends String# */{
+            /**
+             * @param {object} [moduleNode]
+             * @returns {grocer.Module}
+             */
+            toModule: function (moduleNode) {
+                return grocer.Module.create(this.valueOf(), moduleNode);
+            }
+        },
+        false, false, false
+    );
+}());

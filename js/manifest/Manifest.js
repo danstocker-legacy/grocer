@@ -27,7 +27,9 @@ troop.postpone(grocer, 'Manifest', function () {
 
                 /** @type {sntls.Collection} */
                 this.modules = sntls.Collection.create(manifestNode)
-                    .createWithEachItem(grocer.Module);
+                    .mapValues(function (moduleNode, moduleName) {
+                        return grocer.Module.create(moduleName, moduleNode);
+                    });
             },
 
             /**
@@ -50,6 +52,12 @@ troop.postpone(grocer, 'Manifest', function () {
                         return assetId + '.' + assetType;
                     })
                     .toAssets(assetType);
+            },
+
+            /** @returns {grocer.Manifest} */
+            forEachModule: function () {
+                this.modules.forEachItem.apply(this.modules, arguments);
+                return this;
             },
 
             /**

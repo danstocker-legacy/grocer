@@ -75,6 +75,24 @@
             "should fetch modules as individual assets");
     });
 
+    test("Iterating over modules", function () {
+        expect(3);
+
+        var manifest = g$.Manifest.create(manifestNode),
+            iterationContext = {};
+
+        function onItem() {}
+
+        manifest.modules.addMocks({
+            forEachItem: function (handler, context) {
+                strictEqual(handler, onItem, "should pass handler to Collection.forEachItem");
+                strictEqual(context, iterationContext, "should pass context to Collection.forEachItem");
+            }
+        });
+
+        strictEqual(manifest.forEachModule(onItem, iterationContext), manifest, "should be chainable");
+    });
+
     test("Asset list getter for module", function () {
         var manifest = g$.Manifest.create(manifestNode);
 

@@ -11,15 +11,17 @@
         }, "should raise exception on absent arguments");
 
         raises(function () {
-            g$.Module.create('foo');
+            g$.Module.create('foo', 'bar');
         }, "should raise exception on invalid arguments");
 
-        var module = g$.Module.create({
+        var module = g$.Module.create('foo', {
             classPath: 'foo["bar"].baz',
             assets   : {
                 js: ['hello.js', 'world.js']
             }
         });
+
+        equal(module.moduleName, 'foo', "should set moduleName property");
 
         ok(module.classPath.isA(sntls.Path), "initializes classPath as Path instance");
         ok(module.classPath.toString(), 'foo>bar>baz', "should set class path based on value in module node");
@@ -28,8 +30,20 @@
         equal(module.assetsCollection.getKeyCount(), 1, "should set 1 Assets instance in collection");
     });
 
+    test("Conversion from string", function () {
+        var module = 'foo'.toModule({
+            classPath: 'foo["bar"].baz',
+            assets   : {
+                js: ['hello.js', 'world.js']
+            }
+        });
+
+        ok(module.isA(g$.Module), "should return Module instance");
+        equal(module.moduleName, 'foo', "should set module name");
+    });
+
     test("Getting assets by type", function () {
-        var module = g$.Module.create({
+        var module = 'foo'.toModule({
                 classPath: 'foo["bar"].baz',
                 assets   : {
                     js: ['hello.js', 'world.js']
@@ -45,7 +59,7 @@
     });
 
     test("Getting asset list by type", function () {
-        var module = g$.Module.create({
+        var module = 'foo'.toModule({
                 classPath: 'foo["bar"].baz',
                 assets   : {
                     js: ['hello.js', 'world.js']
@@ -67,5 +81,32 @@
         scriptList = module.getAssetList('foo');
 
         deepEqual(scriptList, [], "should return undefined for non-existing asset type");
+    });
+
+    test("Conversion to asset", function () {
+        var module = 'foo'.toModule({
+            classPath: 'foo["bar"].baz',
+            assets   : {
+                js: ['hello.js', 'world.js']
+            }
+        }),
+            result;
+
+        raises(function () {
+            module.toAsset();
+        }, "should raise exception on missing argument");
+
+        raises(function () {
+            module.toAsset('4');
+        }, "should raise exception on invalid argument");
+
+        raises(function () {
+            module.toAsset('css');
+        }, "should raise exception on invalid asset type argument");
+
+        result = module.toAsset('js');
+        ok(result.isA(g$.Asset), "should return Asset instance");
+        equal(result.assetId, 'foo.js', "should set asset ID");
+        equal(result.assetType, 'js', "should set asset type");
     });
 }());
