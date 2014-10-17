@@ -55,47 +55,31 @@ troop.postpone(grocer, 'Manifest', function () {
             /**
              * @param {string} moduleName
              * @param {string} assetType
-             * @returns {string[]}
+             * @returns {grocer.AssetCollection}
              */
-            getAssetListForModule: function (moduleName, assetType) {
+            getAssetsForModule: function (moduleName, assetType) {
                 var module = this.getModule(moduleName);
                 return module ?
-                    module.getAssetList(assetType) :
-                    [];
+                    module.getAssets(assetType) :
+                    undefined;
             },
 
             /**
              * @param {string} assetType
-             * @returns {string[]}
+             * @returns {grocer.AssetCollection}
              */
-            getAssetList: function (assetType) {
-                var result = [];
-
-                this.modules
-                    .callOnEachItem('getAssetList', assetType)
-                    .forEachItem(function (assetList) {
-                        result = result.concat(assetList);
-                    });
-
-                return result;
-            },
-
-            /**
-             * @param {string} assetType
-             * @returns {string}
-             */
-            getSerializedAssetList: function (assetType) {
+            getAssets: function (assetType) {
                 var result = [];
 
                 this.modules
                     .callOnEachItem('getAssets', assetType)
-                    .forEachItem(function (/**grocer.AssetCollection*/assets) {
-                        if (assets) {
-                            result.push(assets.toString());
+                    .forEachItem(function (assetCollection) {
+                        if (assetCollection) {
+                            result = result.concat(assetCollection.items);
                         }
                     });
 
-                return result.join('\n');
+                return result.toHash().toAssetCollection();
             }
         });
 });

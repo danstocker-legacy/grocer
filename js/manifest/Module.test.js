@@ -26,8 +26,8 @@
         ok(module.classPath.isA(sntls.Path), "initializes classPath as Path instance");
         ok(module.classPath.toString(), 'foo>bar>baz', "should set class path based on value in module node");
 
-        ok(module.assetsCollection.isA(sntls.Collection), "should initialize collection of assets");
-        equal(module.assetsCollection.getKeyCount(), 1, "should set 1 AssetCollection instance in collection");
+        ok(module.assetCollections.isA(sntls.Collection), "should initialize collection of assets");
+        equal(module.assetCollections.getKeyCount(), 1, "should set 1 AssetCollection instance in collection");
     });
 
     test("Conversion from string", function () {
