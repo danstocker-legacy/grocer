@@ -34,6 +34,15 @@ troop.postpone(grocer, 'Asset', function () {
 
                 /** @type {string} */
                 this.assetType = assetType;
+            },
+
+            /**
+             * @param {string} assetPrefix
+             * @returns {grocer.Asset}
+             */
+            addPrefix: function (assetPrefix) {
+                this.assetId = assetPrefix + this.assetId;
+                return this;
             }
 
             /**

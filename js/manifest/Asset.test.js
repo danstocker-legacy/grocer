@@ -22,4 +22,11 @@
         equal(asset.assetId, 'foo/bar', "should set asset ID");
         equal(asset.assetType, 'js', "should set asset type");
     });
+
+    test("Prefixing", function () {
+        var asset = 'foo/bar'.toAsset('js');
+
+        strictEqual(asset.addPrefix('baz/'), asset, "should be chainable");
+        equal(asset.assetId, 'baz/foo/bar', "should prefix asset ID");
+    });
 }());
