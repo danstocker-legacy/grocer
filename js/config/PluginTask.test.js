@@ -63,7 +63,18 @@
                 bar: 'baz'
             });
 
-        strictEqual(task.getConfigNode(), task.targets.items, "should return targets buffer");
+        raises(function () {
+            task.getConfigNode(4);
+        }, "should raise exception on invalid argument");
+
+        strictEqual(task.getConfigNode(), task.targets.items,
+            "should return targets buffer when no target prefix is specified");
+
+        deepEqual(task.getConfigNode('_'), {
+           _foo: {
+               bar: 'baz'
+           }
+        }, "should return task config node with prefixed targets when prefix is specified");
     });
 
     test("Addition to config", function () {

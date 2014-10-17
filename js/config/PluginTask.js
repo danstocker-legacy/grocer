@@ -58,9 +58,22 @@ troop.postpone(grocer, 'PluginTask', function () {
                 return !!this.targets.getItem(targetName);
             },
 
-            /** @returns {Object|Array} */
-            getConfigNode: function () {
-                return this.targets.items;
+            /**
+             * @param {string} [targetPrefix]
+             * @returns {Object|Array}
+             */
+            getConfigNode: function (targetPrefix) {
+                dessert.isStringOptional(targetPrefix, "Invalid target prefix");
+
+                if (targetPrefix) {
+                    return this.targets
+                        .mapKeys(function (targetConfig, targetName) {
+                            return targetPrefix + targetName;
+                        })
+                        .items;
+                } else {
+                    return this.targets.items;
+                }
             },
 
             /**
