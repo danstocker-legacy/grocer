@@ -96,7 +96,7 @@
             result;
 
         result = config.getAliasTasksGroupedByTarget();
-        ok(result.isA(sntls.Collection), "should return Collection instance");
+        ok(result.isA(g$.GruntTaskCollection), "should return GruntTaskCollection instance");
         deepEqual(result.items, {
             dev : 'dev'.toAliasTask().addSubTasks('copy:dev', 'cssMin:dev'),
             prod: 'prod'.toAliasTask().addSubTask('copy:prod')

@@ -49,7 +49,10 @@ troop.postpone(grocer, 'GruntConfig', function () {
                 return this;
             },
 
-            /** @returns {sntls.Hash} */
+            /**
+             * Returns a dictionary of unique targets as task names associated with all tasks for each target.
+             * @returns {sntls.StringDictionary}
+             */
             getTasksGroupedByTarget: function () {
                 var args = slice.call(arguments),
                     query = ['|'.toKVP(), (args.length ? args : '|').toKVP()].toQuery();
@@ -66,7 +69,10 @@ troop.postpone(grocer, 'GruntConfig', function () {
                     .reverse();
             },
 
-            /** @returns {sntls.Collection} */
+            /**
+             * Returns a typed collection with alias tasks for all targets.
+             * @returns {grocer.GruntTaskCollection}
+             */
             getAliasTasksGroupedByTarget: function () {
                 var groupedTasks = this.getTasksGroupedByTarget.apply(this, arguments);
 
@@ -82,7 +88,7 @@ troop.postpone(grocer, 'GruntConfig', function () {
                         }
 
                         return aliasTask;
-                    });
+                    }, undefined, grocer.GruntTaskCollection);
             },
 
             /**
