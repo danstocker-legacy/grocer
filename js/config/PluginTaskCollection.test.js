@@ -15,6 +15,17 @@
             "should preserve contents");
     });
 
+    test("Conversion from Hash", function () {
+        var hash = [1, 2, 3].toHash(),
+            tasks = hash.toPluginTaskCollection();
+
+        ok(tasks.isA(g$.PluginTaskCollection), "should return PluginTaskCollection instance");
+        deepEqual(
+            tasks.items,
+            [1, 2, 3],
+            "should preserve contents");
+    });
+
     test("Config node getter", function () {
         var tasks = [
             'foo'.toPluginTask({hello: "world"}),
