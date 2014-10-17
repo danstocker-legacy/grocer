@@ -33,7 +33,7 @@ troop.postpone(grocer, 'CustomTask', function () {
              * @param {string} [description]
              * @returns {grocer.CustomTask}
              */
-            registerTask: function (description) {
+            applyTask: function (description) {
                 grocer.GruntProxy.create()
                     .registerTask(this.taskName, description, this.customHandler);
                 return this;

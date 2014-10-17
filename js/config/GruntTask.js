@@ -34,7 +34,7 @@ troop.postpone(grocer, 'GruntTask', function () {
              * Override in subclasses.
              * @returns {grocer.GruntTask}
              */
-            registerTask: function () {
+            applyTask: function () {
                 return this;
             }
         });

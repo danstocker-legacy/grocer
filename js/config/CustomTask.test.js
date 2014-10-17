@@ -34,7 +34,7 @@
             }
         });
 
-        strictEqual(task.registerTask('bar'), task, "should be chainable");
+        strictEqual(task.applyTask('bar'), task, "should be chainable");
 
         g$.GruntProxy.removeMocks();
     });

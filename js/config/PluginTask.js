@@ -34,7 +34,7 @@ troop.postpone(grocer, 'PluginTask', function () {
             },
 
             /** @returns {grocer.PluginTask} */
-            registerTask: function () {
+            applyTask: function () {
                 this.taskName.toGruntPlugin()
                     .loadPlugin();
                 return this;
