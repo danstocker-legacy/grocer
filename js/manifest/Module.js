@@ -46,13 +46,13 @@ troop.postpone(grocer, 'Module', function () {
                     .getNodeAsHash('assets'.toPath())
                     .toCollection()
                     .mapValues(function (assetList, assetType) {
-                        return grocer.Assets.create(assetList, assetType);
+                        return assetList.toAssetCollection(assetType);
                     });
             },
 
             /**
              * @param {string} assetType
-             * @returns {grocer.Assets}
+             * @returns {grocer.AssetCollection}
              */
             getAssets: function (assetType) {
                 dessert.isString(assetType, "Invalid asset type");

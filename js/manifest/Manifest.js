@@ -43,15 +43,13 @@ troop.postpone(grocer, 'Manifest', function () {
 
             /**
              * @param {string} assetType
-             * @returns {grocer.Assets}
+             * @returns {grocer.AssetCollection}
              */
             getModulesAsAssets: function (assetType) {
-                return this.modules.getKeysAsHash()
-                    .toCollection()
-                    .mapValues(function (assetId) {
-                        return assetId + '.' + assetType;
-                    })
-                    .toAssets(assetType);
+                return this.modules
+                    .callOnEachItem('toAsset', assetType)
+                    .getValuesAsHash()
+                    .toAssetCollection();
             },
 
             /**
@@ -91,7 +89,7 @@ troop.postpone(grocer, 'Manifest', function () {
 
                 this.modules
                     .callOnEachItem('getAssets', assetType)
-                    .forEachItem(function (/**grocer.Assets*/assets) {
+                    .forEachItem(function (/**grocer.AssetCollection*/assets) {
                         if (assets) {
                             result.push(assets.toString());
                         }

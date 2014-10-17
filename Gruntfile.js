@@ -9,7 +9,7 @@ module.exports = function (grunt) {
             'js/manifest/Asset.js',
             'js/manifest/Script.js',
             'js/manifest/Css.js',
-            'js/manifest/Assets.js',
+            'js/manifest/AssetCollection.js',
             'js/manifest/Module.js',
             'js/manifest/Manifest.js',
             'js/config/GruntProxy.js',

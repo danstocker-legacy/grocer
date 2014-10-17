@@ -27,7 +27,7 @@
         ok(module.classPath.toString(), 'foo>bar>baz', "should set class path based on value in module node");
 
         ok(module.assetsCollection.isA(sntls.Collection), "should initialize collection of assets");
-        equal(module.assetsCollection.getKeyCount(), 1, "should set 1 Assets instance in collection");
+        equal(module.assetsCollection.getKeyCount(), 1, "should set 1 AssetCollection instance in collection");
     });
 
     test("Conversion from string", function () {
@@ -51,10 +51,10 @@
             }),
             scripts = module.getAssets('js');
 
-        ok(scripts.isA(g$.Assets), "should return Assets instance");
+        ok(scripts.isA(g$.AssetCollection), "should return AssetCollection instance");
         deepEqual(
             scripts,
-            ['hello.js', 'world.js'].toAssets('js'),
+            ['hello.js', 'world.js'].toAssetCollection('js'),
             "should return assets of specified type");
     });
 

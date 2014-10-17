@@ -55,8 +55,8 @@
         deepEqual(
             module.assetsCollection,
             sntls.Collection.create({
-                js : [ "src/app.js" ].toAssets('js'),
-                css: [ "src/app.css"].toAssets('css')
+                js : [ "src/app.js" ].toAssetCollection('js'),
+                css: [ "src/app.css"].toAssetCollection('css')
             }));
     });
 
