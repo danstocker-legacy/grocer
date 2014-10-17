@@ -43,9 +43,17 @@ troop.postpone(grocer, 'GruntConfig', function () {
                 return this.toCollection().getItem(taskName);
             },
 
-            /** @returns {grocer.GruntConfig} */
-            initConfig: function () {
-                grocer.GruntProxy.create().initConfig(this.items);
+            /**
+             * @param {boolean} [wipe]
+             * @returns {grocer.GruntConfig}
+             */
+            applyConfig: function (wipe) {
+                var gruntProxy = grocer.GruntProxy.create();
+                if (wipe) {
+                    gruntProxy.configInit(this.items);
+                } else {
+                    gruntProxy.configMerge(this.items);
+                }
                 return this;
             },
 

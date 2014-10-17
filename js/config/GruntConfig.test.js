@@ -42,17 +42,28 @@
     });
 
     test("Config initialization", function () {
-        expect(2);
+        expect(3);
 
         var config = g$.GruntConfig.create();
 
         g$.GruntProxy.addMocks({
-            initConfig: function (configNode) {
-                strictEqual(configNode, config.items, "should pass config node to grunt.initConfig()");
+            configMerge: function (configNode) {
+                strictEqual(configNode, config.items, "should pass config node to grunt.config.merge()");
             }
         });
 
-        strictEqual(config.initConfig(), config, "should be chainable");
+        strictEqual(config.applyConfig(), config, "should be chainable");
+
+        g$.GruntProxy.removeMocks();
+
+        g$.GruntProxy.addMocks({
+            configInit: function (configNode) {
+                strictEqual(configNode, config.items,
+                    "should pass config node to grunt.config.init() when wipe argument is set");
+            }
+        });
+
+        config.applyConfig(true);
 
         g$.GruntProxy.removeMocks();
     });
