@@ -36,6 +36,11 @@
             {hello: "world"},
             {hi: "all"}
         ], "should return combined config nodes");
+
+        deepEqual(tasks.getConfigNode('_'), [
+            {_hello: "world"},
+            {_hi: "all"}
+        ], "should return combined config nodes with targets optionally prefixed");
     });
 
     test("Conversion to GruntConfig", function () {
@@ -46,7 +51,14 @@
             config = tasks.toGruntConfig();
 
         ok(config.isA(g$.GruntConfig), "should return GruntConfig instance");
-        deepEqual(config.items, tasks.getConfigNode(),
-            "should set config contents to config node based on tasks");
+        deepEqual(config.items, [
+            {hello: "world"},
+            {hi: "all"}
+        ], "should set config contents to config node based on tasks");
+
+        deepEqual(tasks.toGruntConfig('_').items, [
+            {_hello: "world"},
+            {_hi: "all"}
+        ], "should set config contents with targets optionally prefixed");
     });
 }());

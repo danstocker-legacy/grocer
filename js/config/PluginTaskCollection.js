@@ -19,14 +19,20 @@ troop.postpone(grocer, 'PluginTaskCollection', function () {
      */
     grocer.PluginTaskCollection = self
         .addMethods(/** @lends grocer.PluginTaskCollection# */{
-            /** @returns {Object|Array} */
-            getConfigNode: function () {
-                return this.callOnEachItem('getConfigNode').items;
+            /**
+             * @param {string} [targetPrefix]
+             * @returns {Object|Array}
+             */
+            getConfigNode: function (targetPrefix) {
+                return this.callOnEachItem('getConfigNode', targetPrefix).items;
             },
 
-            /** @returns {grocer.GruntConfig} */
-            toGruntConfig: function () {
-                return grocer.GruntConfig.create(this.getConfigNode());
+            /**
+             * @param {string} [targetPrefix]
+             * @returns {grocer.GruntConfig}
+             */
+            toGruntConfig: function (targetPrefix) {
+                return grocer.GruntConfig.create(this.getConfigNode(targetPrefix));
             }
         });
 });
