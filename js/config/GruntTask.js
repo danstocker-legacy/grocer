@@ -27,13 +27,15 @@ troop.postpone(grocer, 'GruntTask', function () {
 
                 /** @type {string} */
                 this.taskName = taskName;
-            }
+            },
 
             /**
-             * @name grocer.GruntTask#registerTask
-             * @function
-             * @param {string} [description]
+             * Dummy super method just to be picked up by GruntTaskCollection.
+             * Override in subclasses.
              * @returns {grocer.GruntTask}
              */
+            registerTask: function () {
+                return this;
+            }
         });
 });
