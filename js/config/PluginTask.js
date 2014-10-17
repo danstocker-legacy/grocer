@@ -64,14 +64,14 @@ troop.postpone(grocer, 'PluginTask', function () {
             },
 
             /**
-             * @param {string} taskName
              * @param {grocer.GruntConfig} config
+             * @param {string} taskName
              * @returns {grocer.PluginTask}
              */
-            addToConfig: function (taskName, config) {
+            addToConfig: function (config, taskName) {
                 dessert
-                    .isString(taskName, "Invalid task name")
-                    .isGruntConfig(config, "Invalid grunt config");
+                    .isGruntConfig(config, "Invalid grunt config")
+                    .isString(taskName, "Invalid task name");
 
                 config.addTask(taskName, this);
 

@@ -65,4 +65,31 @@
 
         strictEqual(task.getConfigNode(), task.targets.items, "should return targets buffer");
     });
+
+    test("Addition to config", function () {
+        expect(5);
+
+        var task = 'foo'.toPluginTask()
+            .addTarget('foo', {
+                bar: 'baz'
+            }),
+            config = g$.GruntConfig.create();
+
+        raises(function () {
+            task.addToConfig();
+        }, "should raise exception on missing arguments");
+
+        raises(function () {
+            task.addToConfig('foo', 'bar');
+        }, "should raise exception on invalid arguments");
+
+        config.addMocks({
+            addTask: function (taskName, pluginTask) {
+                strictEqual(pluginTask, task, "should add task to config using config API");
+                equal(taskName, 'bar', "should pass task name to task adder on config");
+            }
+        });
+
+        strictEqual(task.addToConfig(config, 'bar'), task, "should be chainable");
+    });
 }());
