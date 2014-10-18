@@ -19,6 +19,9 @@ troop.postpone(grocer, 'Module', function () {
 
     /**
      * The Module class represents the assets that make up a single module of the application.
+     * A Module may also point to a symbol through which the application can use it.
+     * (Eg. a page class that needs to be instantiated before opening that page, assuming that
+     * modules correspond to pages.)
      * @class
      * @extends troop.Base
      */
@@ -77,7 +80,7 @@ troop.postpone(grocer, 'Module', function () {
             },
 
             /**
-             * Fetches all assets in the
+             * Retrieves an array of asset names based on the contents of the module.
              * @param {string} assetType
              * @returns {string[]}
              */
@@ -90,6 +93,11 @@ troop.postpone(grocer, 'Module', function () {
             },
 
             /**
+             * Converts module to a single asset.
+             * To be used for reducing all assets within the module to a single file ie.
+             * via concatenation, minification, etc.
+             * @example
+             * 'foo'.toModule({hello: 'world'}).toAsset() // 'foo.js'.toAsset('js')
              * @param {string} assetType
              * @returns {grocer.Asset}
              */

@@ -7,13 +7,17 @@ troop.postpone(grocer, 'Manifest', function () {
         slice = Array.prototype.slice;
 
     /**
+     * Creates a Manifest instance.
      * @name grocer.Manifest.create
      * @function
-     * @param {object} manifestNode
+     * @param {object} manifestNode Object that holds the manifest in a pre-defined format.
      * @returns {grocer.Manifest}
+     * @see The sample manifest file included in the repo. (/manifest/manifest-sample.json)
      */
 
     /**
+     * The Manifest class describes the modularity and assets of an application.
+     * Organizes assets (usually JS and CSS files that make up the application) into modules.
      * @class
      * @extends troop.Base
      */
@@ -26,7 +30,11 @@ troop.postpone(grocer, 'Manifest', function () {
             init: function (manifestNode) {
                 dessert.isObject(manifestNode, "Invalid manifest node");
 
-                /** @type {sntls.Collection} */
+                /**
+                 * Defines and maintains the modules of the application.
+                 * Collection holds Module instances.
+                 * @type {sntls.Collection}
+                 */
                 this.modules = sntls.Collection.create(manifestNode)
                     .mapValues(function (moduleNode, moduleName) {
                         return grocer.Module.create(moduleName, moduleNode);
@@ -34,7 +42,8 @@ troop.postpone(grocer, 'Manifest', function () {
             },
 
             /**
-             * @param {string} moduleName
+             * Fetches the specified Module instance from the manifest.
+             * @param {string} moduleName Name of module to be retrieved.
              * @returns {grocer.Module}
              */
             getModule: function (moduleName) {
@@ -43,7 +52,10 @@ troop.postpone(grocer, 'Manifest', function () {
             },
 
             /**
-             * @param {string} assetType
+             * Retrieves all modules as single assets of the specified asset type.
+             * Only those modules will be included in the result that have such assets.
+             * Generally used to generate production asset list.
+             * @param {string} assetType Type of assets to be retrieved.
              * @returns {grocer.AssetCollection}
              */
             getModulesAsAssets: function (assetType) {
@@ -54,8 +66,9 @@ troop.postpone(grocer, 'Manifest', function () {
             },
 
             /**
-             * @param {string} moduleName
-             * @param {string} assetType
+             * Retrieves all assets of the specified asset type for the specified module.
+             * @param {string} moduleName Name of module to retrieve assets from.
+             * @param {string} assetType Type of assets to be retrieved.
              * @returns {grocer.AssetCollection}
              */
             getAssetsForModule: function (moduleName, assetType) {
@@ -66,7 +79,8 @@ troop.postpone(grocer, 'Manifest', function () {
             },
 
             /**
-             * @param {string} assetType
+             * Retrieves assets from all modules matching the specified asset type.
+             * @param {string} assetType Type of assets to be retrieved.
              * @returns {grocer.AssetCollection}
              */
             getAssets: function (assetType) {
@@ -83,7 +97,13 @@ troop.postpone(grocer, 'Manifest', function () {
                 return result.toHash().toAssetCollection();
             },
 
-            /** @returns {grocer.Manifest} */
+            /**
+             * Filters manifest down to a set of modules. Returns a new manifest instance
+             * containing only the specified modules.
+             * @example
+             * manifest.filterByModuleNames('third-party', 'common', 'login')
+             * @returns {grocer.Manifest}
+             */
             filterByModuleNames: function () {
                 var filteredModules = this.modules
                     .filterByKeys(slice.apply(arguments));
