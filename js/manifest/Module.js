@@ -37,7 +37,7 @@ troop.postpone(grocer, 'Module', function () {
                     .isString(moduleName, "Invalid module name")
                     .isObject(moduleNode, "Invalid module node");
 
-                /** @type {sntls.Tree} moduleNode */
+                /** @type {sntls.Tree} */
                 var moduleDescriptor = sntls.Tree.create(moduleNode),
                     classPath = moduleDescriptor.getNode('classPath'.toPath());
 

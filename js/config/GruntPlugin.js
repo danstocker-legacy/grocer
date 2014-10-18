@@ -15,7 +15,7 @@ troop.postpone(grocer, 'GruntPlugin', function () {
      * @function
      * @param {string} packageName Name of the NPM package associated with the grunt plugin.
      * @returns {grocer.GruntPlugin}
-     * @see String#toGruntPlugin()
+     * @see String#toGruntPlugin
      */
 
     /**

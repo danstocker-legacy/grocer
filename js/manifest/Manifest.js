@@ -8,11 +8,11 @@ troop.postpone(grocer, 'Manifest', function () {
 
     /**
      * Creates a Manifest instance.
+     * See the sample manifest file included in the repo. (/manifest/manifest-sample.json)
      * @name grocer.Manifest.create
      * @function
      * @param {object} manifestNode Object that holds the manifest in a pre-defined format.
      * @returns {grocer.Manifest}
-     * @see The sample manifest file included in the repo. (/manifest/manifest-sample.json)
      */
 
     /**
