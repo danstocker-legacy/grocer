@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: manifest/Module.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: manifest/Module.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, grocer */
+troop.postpone(grocer, 'Module', function () {
+    "use strict";
+
+    var base = troop.Base,
+        self = base.extend();
+
+    /**
+     * Creates a Module instance.
+     * Module instances may also be created via conversion from string. The string in this case is
+     * interpreted as the name of the module.
+     * @name grocer.Module.create
+     * @function
+     * @param {string} moduleName
+     * @param {object} moduleNode
+     * @returns {grocer.Module}
+     * @see String#toModule
+     */
+
+    /**
+     * The Module class represents the assets that make up a single module of the application.
+     * A Module may also point to a symbol through which the application can use it.
+     * (Eg. a page class that needs to be instantiated before opening that page, assuming that
+     * modules correspond to pages.)
+     * @class
+     * @extends troop.Base
+     */
+    grocer.Module = self
+        .addMethods(/** @lends grocer.Module# */{
+            /**
+             * @param {string} moduleName
+             * @param {object} moduleNode
+             * @ignore
+             */
+            init: function (moduleName, moduleNode) {
+                dessert
+                    .isString(moduleName, "Invalid module name")
+                    .isObject(moduleNode, "Invalid module node");
+
+                /** @type {sntls.Tree} */
+                var moduleDescriptor = sntls.Tree.create(moduleNode),
+                    classPath = moduleDescriptor.getNode('classPath'.toPath());
+
+                /**
+                 * Name of the module. The module name must be unique within the application.
+                 * @type {string}
+                 */
+                this.moduleName = moduleName;
+
+                /**
+                 * Class path associated with the module. The class path identifies the module's
+                 * main symbol (object, function, class, etc.) relative to the global object.
+                 * @type {sntls.Path}
+                 */
+                this.classPath = classPath ?
+                    classPath.toPathFromClassPath() :
+                    undefined;
+
+                /**
+                 * Collection of asset collections. Within a module, there's an asset collection associated
+                 * with each available asset type.
+                 * @type {sntls.Collection}
+                 */
+                this.assetCollections = moduleDescriptor
+                    .getNodeAsHash('assets'.toPath())
+                    .toCollection()
+                    .mapValues(function (/**Array*/assets, assetType) {
+                        return assets.toAssetCollection(assetType);
+                    });
+            },
+
+            /**
+             * Fetches all assets in the module for the specified asset type.
+             * @param {string} assetType
+             * @returns {grocer.AssetCollection}
+             */
+            getAssets: function (assetType) {
+                dessert.isString(assetType, "Invalid asset type");
+                return this.assetCollections.getItem(assetType);
+            },
+
+            /**
+             * Retrieves an array of asset names based on the contents of the module.
+             * @param {string} assetType
+             * @returns {string[]}
+             */
+            getAssetNames: function (assetType) {
+                dessert.isString(assetType, "Invalid asset type");
+                var assets = this.assetCollections.getItem(assetType);
+                return assets ?
+                    assets.getAssetNames() :
+                    [];
+            },
+
+            /**
+             * Converts module to a single asset.
+             * To be used for reducing all assets within the module to a single file ie.
+             * via concatenation, minification, etc.
+             * @example
+             * 'foo'.toModule({hello: 'world'}).toAsset() // 'foo.js'.toAsset('js')
+             * @param {string} assetType
+             * @returns {grocer.Asset}
+             */
+            toAsset: function (assetType) {
+                dessert
+                    .isString(assetType, "Invalid asset type")
+                    .assert(this.assetCollections.getItem(assetType), "Invalid assetType");
+                return (this.moduleName + '.' + assetType).toAsset(assetType);
+            }
+        });
+});
+
+(function () {
+    "use strict";
+
+    troop.Properties.addProperties.call(
+        String.prototype,
+        /** @lends String# */{
+            /**
+             * @param {object} [moduleNode]
+             * @returns {grocer.Module}
+             */
+            toModule: function (moduleNode) {
+                return grocer.Module.create(this.valueOf(), moduleNode);
+            }
+        },
+        false, false, false
+    );
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="grocer.AliasTask.html">AliasTask</a></li><li><a href="grocer.Asset.html">Asset</a></li><li><a href="grocer.AssetCollection.html">AssetCollection</a></li><li><a href="grocer.ClassPathParser.html">ClassPathParser</a></li><li><a href="grocer.Css.html">Css</a></li><li><a href="grocer.CustomTask.html">CustomTask</a></li><li><a href="grocer.GruntConfig.html">GruntConfig</a></li><li><a href="grocer.GruntPlugin.html">GruntPlugin</a></li><li><a href="grocer.GruntProxy.html">GruntProxy</a></li><li><a href="grocer.GruntTask.html">GruntTask</a></li><li><a href="grocer.GruntTaskCollection.html">GruntTaskCollection</a></li><li><a href="grocer.Manifest.html">Manifest</a></li><li><a href="grocer.Module.html">Module</a></li><li><a href="grocer.MultiTask.html">MultiTask</a></li><li><a href="grocer.MultiTaskCollection.html">MultiTaskCollection</a></li><li><a href="grocer.Script.html">Script</a></li><li><a href="Number.html">Number</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="grocer.html">grocer</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Oct 18 2014 11:56:42 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

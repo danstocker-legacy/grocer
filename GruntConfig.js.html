@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: config/GruntConfig.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: config/GruntConfig.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, evan, grocer */
+troop.postpone(grocer, 'GruntConfig', function () {
+    "use strict";
+
+    var base = sntls.Tree,
+        self = base.extend(),
+        slice = Array.prototype.slice;
+
+    /**
+     * Creates a GruntConfig instance.
+     * @name grocer.GruntConfig.create
+     * @function
+     * @param {object} [items]
+     * @returns {grocer.GruntConfig}
+     */
+
+    /**
+     * The GruntConfig class represents and manages grunt config objects, including adding tasks to,
+     * applying, merging configs.
+     * @class
+     * @extends sntls.Tree
+     */
+    grocer.GruntConfig = self
+        .addPrivateMethods(/** @lends grocer.GruntConfig# */{
+            /**
+             * Returns a dictionary of unique targets as task names associated with task names for each target.
+             * @returns {sntls.StringDictionary}
+             * @private
+             */
+            _getAliasTaskAssociations: function () {
+                var args = slice.call(arguments),
+                    query = ['|'.toKVP(), (args.length ? args : '|').toKVP()].toQuery();
+
+                return this.queryPathValuePairsAsHash(query)
+                    .toCollection()
+                    .mapValues(function (targetNode, path) {
+                        return path.toPath().getLastKey();
+                    })
+                    .mapKeys(function (targetNode, path) {
+                        return path.toPath().asArray.join(':');
+                    })
+                    .toStringDictionary()
+                    .reverse();
+            }
+        })
+        .addMethods(/** @lends grocer.GruntConfig# */{
+            /**
+             * Adds a (multi-)task to the config.
+             * @param {grocer.MultiTask} multiTask Task to be added to config.
+             * @returns {grocer.GruntConfig}
+             */
+            addMultiTask: function (multiTask) {
+                dessert.isMultiTask(multiTask, "Invalid multi task");
+
+                this.toCollection()
+                    .setItem(multiTask.taskName, multiTask.getConfigNode());
+
+                return this;
+            },
+
+            /**
+             * Fetches the config node for the specified task.
+             * @param {string} taskName
+             * @returns {Object|Array}
+             */
+            getTaskConfig: function (taskName) {
+                return this.toCollection().getItem(taskName);
+            },
+
+            /**
+             * Applies config by merging or initializing it via the grunt API. (Merges by default.)
+             * @param {boolean} [wipe] Optional argument telling whether previously set config should be wiped.
+             * @returns {grocer.GruntConfig}
+             */
+            applyConfig: function (wipe) {
+                var gruntProxy = grocer.GruntProxy.create();
+                if (wipe) {
+                    gruntProxy.configInit(this.items);
+                } else {
+                    gruntProxy.configMerge(this.items);
+                }
+                return this;
+            },
+
+            /**
+             * Returns a typed collection with alias tasks for the specified targets (as arguments),
+             * or all targets (no arguments).
+             * @returns {grocer.GruntTaskCollection}
+             */
+            getAliasTasksGroupedByTarget: function () {
+                var groupedTasks = this._getAliasTaskAssociations.apply(this, arguments);
+
+                return groupedTasks
+                    .toCollection()
+                    .mapValues(function (taskNames, targetName) {
+                        var aliasTask = targetName.toAliasTask();
+
+                        if (taskNames instanceof Array) {
+                            aliasTask.addSubTasks.apply(aliasTask, taskNames);
+                        } else {
+                            aliasTask.addSubTask(taskNames);
+                        }
+
+                        return aliasTask;
+                    }, undefined, grocer.GruntTaskCollection);
+            },
+
+            /**
+             * Merges current config with remote config on the target level.
+             * In case of conflict re. task/target combinations, the current config will win.
+             * (Unless a suitable conflict resolver function is passed.)
+             * @param {grocer.GruntConfig} remoteConfig
+             * @param {function} [conflictResolver]
+             * @returns {grocer.GruntConfig}
+             * @see sntls.Collection#mergeWith
+             */
+            mergeWith: function (remoteConfig, conflictResolver) {
+                dessert.isGruntConfig(remoteConfig, "Invalid grunt config");
+
+                var targetQuery = '|>|'.toQuery(),
+
+                // obtaining flattened targets for current config
+                    currentTargets = this.queryPathValuePairsAsHash(targetQuery).toCollection(),
+
+                // obtaining flattened targets for remote config
+                    remoteTargets = remoteConfig.queryPathValuePairsAsHash(targetQuery).toCollection(),
+
+                // merging target collections
+                    mergedTargets = currentTargets.mergeWith(remoteTargets, conflictResolver),
+                    mergedConfig = this.getBase().create();
+
+                // inflating merged flattened target structure back into tree
+                mergedTargets.forEachItem(function (targetConfigNode, targetPath) {
+                    mergedConfig.setNode(targetPath.toPath(), targetConfigNode);
+                });
+
+                return mergedConfig;
+            }
+        });
+});
+
+(function () {
+    "use strict";
+
+    dessert.addTypes(/** @lends dessert */{
+        /** @param {grocer.GruntConfig} expr */
+        isGruntConfig: function (expr) {
+            return grocer.GruntConfig.isBaseOf(expr);
+        },
+
+        /** @param {grocer.GruntConfig} expr */
+        isGruntConfigOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   grocer.GruntConfig.isBaseOf(expr);
+        }
+    });
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="grocer.AliasTask.html">AliasTask</a></li><li><a href="grocer.Asset.html">Asset</a></li><li><a href="grocer.AssetCollection.html">AssetCollection</a></li><li><a href="grocer.ClassPathParser.html">ClassPathParser</a></li><li><a href="grocer.Css.html">Css</a></li><li><a href="grocer.CustomTask.html">CustomTask</a></li><li><a href="grocer.GruntConfig.html">GruntConfig</a></li><li><a href="grocer.GruntPlugin.html">GruntPlugin</a></li><li><a href="grocer.GruntProxy.html">GruntProxy</a></li><li><a href="grocer.GruntTask.html">GruntTask</a></li><li><a href="grocer.GruntTaskCollection.html">GruntTaskCollection</a></li><li><a href="grocer.Manifest.html">Manifest</a></li><li><a href="grocer.Module.html">Module</a></li><li><a href="grocer.MultiTask.html">MultiTask</a></li><li><a href="grocer.MultiTaskCollection.html">MultiTaskCollection</a></li><li><a href="grocer.Script.html">Script</a></li><li><a href="Number.html">Number</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="grocer.html">grocer</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Oct 18 2014 11:56:41 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: config/GruntProxy.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: config/GruntProxy.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, evan, grocer */
+troop.postpone(grocer, 'GruntProxy', function () {
+    "use strict";
+
+    var base = troop.Base,
+        self = base.extend();
+
+    /**
+     * Creates or retrieves a GruntProxy instance.
+     * @name grocer.GruntProxy.create
+     * @function
+     * @returns {grocer.GruntProxy}
+     */
+
+    /**
+     * The GruntProxy singleton provides a testable API to communicate with grunt.
+     * @class
+     * @extends troop.Base
+     */
+    grocer.GruntProxy = self
+        .setInstanceMapper(function () {
+            return 'singleton';
+        })
+        .addMethods(/** @lends grocer.GruntProxy# */{
+            /** @ignore */
+            init: function () {
+                /**
+                 * Reference to the grunt object.
+                 * @type {object}
+                 */
+                this.grunt = undefined;
+            },
+
+            /**
+             * Sets grunt object. This must be called at least once in order to use
+             * the config management part of grocer.
+             * @param {object} grunt
+             * @returns {grocer.GruntProxy}
+             */
+            setGruntObject: function (grunt) {
+                dessert.isObject(grunt, "Invalid grunt object");
+                this.grunt = grunt;
+                return this;
+            },
+
+            /**
+             * Proxy for grunt.config.init().
+             * @param {object} config Config object to be passed to grunt.
+             * @returns {*}
+             */
+            configInit: function (config) {
+                dessert.assert(!!this.grunt, "Grunt reference not set");
+                return this.grunt.config.init(config);
+            },
+
+            /**
+             * Proxy for grunt.config.merge().
+             * @param {object} config Config object to be passed to grunt.
+             * @returns {*}
+             */
+            configMerge: function (config) {
+                dessert.assert(!!this.grunt, "Grunt reference not set");
+                return this.grunt.config.merge(config);
+            },
+
+            /**
+             * Proxy for grunt.registerTask().
+             * @returns {*}
+             */
+            registerTask: function () {
+                dessert.assert(!!this.grunt, "Grunt reference not set");
+                return this.grunt.registerTask.apply(this.grunt, arguments);
+            },
+
+            /**
+             * Proxy for grunt.loadNpmTasks().
+             * returns {*}
+             */
+            loadNpmTasks: function () {
+                dessert.assert(!!this.grunt, "Grunt reference not set");
+                return this.grunt.loadNpmTasks.apply(this.grunt, arguments);
+            }
+        });
+});
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="grocer.AliasTask.html">AliasTask</a></li><li><a href="grocer.Asset.html">Asset</a></li><li><a href="grocer.AssetCollection.html">AssetCollection</a></li><li><a href="grocer.ClassPathParser.html">ClassPathParser</a></li><li><a href="grocer.Css.html">Css</a></li><li><a href="grocer.CustomTask.html">CustomTask</a></li><li><a href="grocer.GruntConfig.html">GruntConfig</a></li><li><a href="grocer.GruntPlugin.html">GruntPlugin</a></li><li><a href="grocer.GruntProxy.html">GruntProxy</a></li><li><a href="grocer.GruntTask.html">GruntTask</a></li><li><a href="grocer.GruntTaskCollection.html">GruntTaskCollection</a></li><li><a href="grocer.Manifest.html">Manifest</a></li><li><a href="grocer.Module.html">Module</a></li><li><a href="grocer.MultiTask.html">MultiTask</a></li><li><a href="grocer.MultiTaskCollection.html">MultiTaskCollection</a></li><li><a href="grocer.Script.html">Script</a></li><li><a href="Number.html">Number</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="grocer.html">grocer</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Oct 18 2014 11:56:42 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

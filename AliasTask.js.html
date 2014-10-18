@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: config/AliasTask.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: config/AliasTask.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, evan, shoeshine, grocer */
+troop.postpone(grocer, 'AliasTask', function () {
+    "use strict";
+
+    var base = grocer.GruntTask,
+        self = base.extend();
+
+    /**
+     * Creates an AliasTask instance.
+     * AliasTask instances may also be created via conversion from String,
+     * where the string is treated as the name of the task.
+     * @name grocer.AliasTask.create
+     * @function
+     * @param {string} taskName Name of alias task.
+     * @returns {grocer.AliasTask}
+     * @see String#toAliasTask
+     */
+
+    /**
+     * The AliasTask implements an 'alias' grunt task.
+     * Alias grunt tasks group other tasks into a single task.
+     * @class
+     * @extends grocer.GruntTask
+     * @see http://gruntjs.com/creating-tasks#alias-tasks
+     */
+    grocer.AliasTask = self
+        .addMethods(/** @lends grocer.AliasTask# */{
+            /**
+             * @param {string} taskName
+             * @ignore
+             */
+            init: function (taskName) {
+                base.init.call(this, taskName);
+
+                /**
+                 * Collection of task names that the current alias task groups together.
+                 * @type {sntls.Collection}
+                 */
+                this.subTasks = sntls.Collection.create();
+            },
+
+            /**
+             * Applies task by registering it via the grunt API.
+             * @param {string} [description] Optional description of the task.
+             * @returns {grocer.AliasTask}
+             */
+            applyTask: function (description) {
+                grocer.GruntProxy.create()
+                    .registerTask(this.taskName, description, this.subTasks.getValues());
+                return this;
+            },
+
+            /**
+             * Adds sub-task to the current alias task.
+             * @param {string} taskName Name of sub-task to be added.
+             * @returns {grocer.AliasTask}
+             */
+            addSubTask: function (taskName) {
+                dessert.isString(taskName, "Invalid sub-task name");
+                this.subTasks.setItem(taskName, taskName);
+                return this;
+            },
+
+            /**
+             * Adds multiple sub-tasks. Each argument represents a sub-task.
+             * @returns {grocer.AliasTask}
+             */
+            addSubTasks: function () {
+                var i;
+                for (i = 0; i &lt; arguments.length; i++) {
+                    this.addSubTask(arguments[i]);
+                }
+                return this;
+            }
+        });
+});
+
+(function () {
+    "use strict";
+
+    troop.Properties.addProperties.call(
+        String.prototype,
+        /** @lends String# */{
+            /**
+             * Converts string to AliasTask, treating the string as task name.
+             * @returns {grocer.AliasTask}
+             */
+            toAliasTask: function () {
+                return grocer.AliasTask.create(this.valueOf());
+            }
+        },
+        false, false, false
+    );
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="grocer.AliasTask.html">AliasTask</a></li><li><a href="grocer.Asset.html">Asset</a></li><li><a href="grocer.AssetCollection.html">AssetCollection</a></li><li><a href="grocer.ClassPathParser.html">ClassPathParser</a></li><li><a href="grocer.Css.html">Css</a></li><li><a href="grocer.CustomTask.html">CustomTask</a></li><li><a href="grocer.GruntConfig.html">GruntConfig</a></li><li><a href="grocer.GruntPlugin.html">GruntPlugin</a></li><li><a href="grocer.GruntProxy.html">GruntProxy</a></li><li><a href="grocer.GruntTask.html">GruntTask</a></li><li><a href="grocer.GruntTaskCollection.html">GruntTaskCollection</a></li><li><a href="grocer.Manifest.html">Manifest</a></li><li><a href="grocer.Module.html">Module</a></li><li><a href="grocer.MultiTask.html">MultiTask</a></li><li><a href="grocer.MultiTaskCollection.html">MultiTaskCollection</a></li><li><a href="grocer.Script.html">Script</a></li><li><a href="Number.html">Number</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="grocer.html">grocer</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Oct 18 2014 11:56:41 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

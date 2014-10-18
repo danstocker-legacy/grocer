@@ -1,4 +1,0 @@
-Grocer
-======
-
-*Asset list management*

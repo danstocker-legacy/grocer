@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: config/MultiTask.js</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Source: config/MultiTask.js</h1>
+    
+    
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source"><code>/*global dessert, troop, sntls, evan, shoeshine, grocer */
+troop.postpone(grocer, 'MultiTask', function () {
+    "use strict";
+
+    var base = grocer.GruntTask,
+        self = base.extend();
+
+    /**
+     * Creates a MultiTask instance.
+     * MultiTask instances may also be created via conversion from String,
+     * where the string is treated as the name of the task.
+     * @name grocer.MultiTask.create
+     * @function
+     * @param {string} taskName Name of multi task.
+     * @param {object} [taskNode]
+     * @returns {grocer.MultiTask}
+     */
+
+    /**
+     * The MultiTask implements a 'multi' grunt task.
+     * Multi grunt tasks are loaded via plugins and are configurable.
+     * @class
+     * @extends grocer.GruntTask
+     * @see http://gruntjs.com/creating-tasks#multi-tasks
+     */
+    grocer.MultiTask = self
+        .addMethods(/** @lends grocer.MultiTask# */{
+            /**
+             * @param {string} taskName
+             * @param {object} [configNode]
+             * @ignore
+             */
+            init: function (taskName, configNode) {
+                dessert.isObjectOptional(configNode, "Invalid task config node");
+
+                base.init.call(this, taskName);
+
+                /**
+                 * Grunt plugin associated with multi task.
+                 * @type {grocer.GruntPlugin}
+                 */
+                this.gruntPlugin = undefined;
+
+                /**
+                 * Collection of target configurations.
+                 * Structure: target name - target config object.
+                 * @type {sntls.Collection}
+                 */
+                this.targets = sntls.Collection.create(configNode);
+            },
+
+            /**
+             * Applies task by loading the plugin via the grunt API.
+             * @returns {grocer.MultiTask}
+             */
+            applyTask: function () {
+                dessert.assert(!!this.gruntPlugin, "Task has no associated plugin");
+                this.gruntPlugin.loadPlugin();
+                return this;
+            },
+
+            /**
+             * Sets NPM package name for the plugin associated with the current task.
+             * @param {string} packageName Name of NPM package for the plugin.
+             * @returns {grocer.MultiTask}
+             */
+            setPackageName: function (packageName) {
+                dessert.isString(packageName, "Invalid packahe name");
+                this.gruntPlugin = packageName.toGruntPlugin();
+                return this;
+            },
+
+            /**
+             * Adds a target to the task.
+             * @param {string} targetName Name of target, eg. 'development'.
+             * @param {object} targetConfigNode
+             * @returns {grocer.MultiTask}
+             */
+            addTarget: function (targetName, targetConfigNode) {
+                this.targets.setItem(targetName, targetConfigNode);
+                return this;
+            },
+
+            /**
+             * Tells whether the task has the specified target.
+             * @param {string} targetName
+             * @returns {boolean}
+             */
+            hasTarget: function (targetName) {
+                return !!this.targets.getItem(targetName);
+            },
+
+            /**
+             * Fetches config node for the whole task, with each target prefixed optionally.
+             * @param {string} [targetPrefix] Optional prefix for targets.
+             * @returns {Object|Array}
+             */
+            getConfigNode: function (targetPrefix) {
+                dessert.isStringOptional(targetPrefix, "Invalid target prefix");
+
+                if (targetPrefix) {
+                    return this.targets
+                        .mapKeys(function (targetConfig, targetName) {
+                            return targetPrefix + targetName;
+                        })
+                        .items;
+                } else {
+                    return this.targets.items;
+                }
+            },
+
+            /**
+             * Adds task to the specified GruntConfig instance.
+             * @param {grocer.GruntConfig} config Config to add the task to.
+             * @returns {grocer.MultiTask}
+             */
+            addToConfig: function (config) {
+                dessert.isGruntConfig(config, "Invalid grunt config");
+                config.addMultiTask(this);
+                return this;
+            },
+
+            /**
+             * Adds current multi task to a collection of multi tasks.
+             * @param {grocer.MultiTaskCollection} multiTaskCollection Collection to add the task to.
+             * @returns {grocer.MultiTask}
+             */
+            addToCollection: function (multiTaskCollection) {
+                dessert.isMultiTaskCollection(multiTaskCollection, "Invalid multi task collection");
+                multiTaskCollection.setItem(this.taskName, this);
+                return this;
+            }
+        });
+});
+
+(function () {
+    "use strict";
+
+    troop.Properties.addProperties.call(
+        String.prototype,
+        /** @lends String# */{
+            /**
+             * Converts string to MultiTask, treating the string as the plugin name.
+             * @param {object} [configNode] Optional task config.
+             * @returns {grocer.MultiTask}
+             */
+            toMultiTask: function (configNode) {
+                return grocer.MultiTask.create(this.valueOf(), configNode);
+            }
+        },
+        false, false, false
+    );
+
+    dessert.addTypes(/** @lends dessert */{
+        /** @param {grocer.MultiTask} expr */
+        isMultiTask: function (expr) {
+            return grocer.MultiTask.isBaseOf(expr);
+        },
+
+        /** @param {grocer.MultiTask} expr */
+        isMultiTaskOptional: function (expr) {
+            return typeof expr === 'undefined' ||
+                   grocer.MultiTask.isBaseOf(expr);
+        }
+    });
+}());
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="grocer.AliasTask.html">AliasTask</a></li><li><a href="grocer.Asset.html">Asset</a></li><li><a href="grocer.AssetCollection.html">AssetCollection</a></li><li><a href="grocer.ClassPathParser.html">ClassPathParser</a></li><li><a href="grocer.Css.html">Css</a></li><li><a href="grocer.CustomTask.html">CustomTask</a></li><li><a href="grocer.GruntConfig.html">GruntConfig</a></li><li><a href="grocer.GruntPlugin.html">GruntPlugin</a></li><li><a href="grocer.GruntProxy.html">GruntProxy</a></li><li><a href="grocer.GruntTask.html">GruntTask</a></li><li><a href="grocer.GruntTaskCollection.html">GruntTaskCollection</a></li><li><a href="grocer.Manifest.html">Manifest</a></li><li><a href="grocer.Module.html">Module</a></li><li><a href="grocer.MultiTask.html">MultiTask</a></li><li><a href="grocer.MultiTaskCollection.html">MultiTaskCollection</a></li><li><a href="grocer.Script.html">Script</a></li><li><a href="Number.html">Number</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="grocer.html">grocer</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Oct 18 2014 11:56:41 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>

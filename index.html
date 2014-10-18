@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Index</title>
+    
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+    
+    <h1 class="page-title">Index</h1>
+    
+    
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Grocer</h1>
+
+<p><em>Front end asset manager</em></p>
+
+<p><a href="http://danstocker.github.io/grocer/">Reference</a></p>
+
+<p>The purpose of Grocer is to provide an API to</p>
+
+<ol><li>build, manage, and initialize Grunt config files based on a manifest file</li><li>impose modularity on the application, each module having an optional main object (function, class, etc.) that the application can invoke when the module is loaded</li></ol>
+
+<h2>Manifest structure</h2>
+
+<p>The top level defines the modules. Within each module, there is a container for assets, separated by function (eg. JavaScript or CSS). Optionally, modules might define a <code>classPath</code>, that identifies the path (relative to the global object) that the application is supposed to invoke after loading the module.</p>
+
+<pre><code>{
+    &quot;libraries&quot;: {
+        &quot;assets&quot;: {
+            &quot;js&quot;: [ &quot;src/jquery.js&quot; ]
+        }
+    },
+    &quot;common&quot;: {
+        &quot;assets&quot;: {
+            &quot;js&quot;: [ &quot;src/app.js&quot; ],
+            &quot;css&quot;: [ &quot;src/app.css&quot; ]
+        }
+    },
+    &quot;users&quot;: {
+        &quot;classPath&quot;: &quot;app[\&quot;pages\&quot;].Users&quot;,
+        &quot;assets&quot;: {
+            &quot;js&quot;: [ &quot;src/Users.js&quot; ],
+            &quot;css&quot;: [ &quot;src/Users.css&quot; ]
+        }
+    }
+}</code></pre>
+
+<h2>Using the manifest API</h2>
+
+<p>Initializing manifest</p>
+
+<pre><code>var manifest = grocer.Manifest.create(manifestJson);</code></pre>
+
+<p>Fetching asset list for module</p>
+
+<pre><code>manifest.getAssetsForModule(&#39;common&#39;, &#39;js&#39;).getAssetNames();
+
+/*
+[ &quot;src/app.js&quot; ]
+*/</code></pre>
+
+<p>Fetching all assets from manifest</p>
+
+<pre><code>manifest.getAssets(&#39;js&#39;).getAssetNames();
+
+/*
+[ &quot;src/jquery.js&quot;, &quot;src/app.js&quot;, &quot;src/Users.js&quot; ]
+*/</code></pre>
+
+<p>Fetching script tag list from manifest</p>
+
+<pre><code>manifest.getAssets(&#39;js&#39;).toString();
+
+/*
+&lt;script src=&quot;src/jquery.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;src/app.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;src/Users.js&quot;&gt;&lt;/script&gt;
+*/
+
+manifest.getAssets(&#39;css&#39;).toString();
+
+/*
+&lt;link rel=&quot;stylesheet&quot; href=&quot;src/app.css&quot;&gt;
+&lt;link rel=&quot;stylesheet&quot; href=&quot;src/Users.css&quot;&gt;
+*/</code></pre>
+
+<h2>Using the config API</h2>
+
+<p>Creating and loading a <em>multi</em> task:</p>
+
+<pre><code>&#39;foo&#39;
+    // setting task config
+    .toMultiTask({
+        target1: {},
+        target2: {}
+    })
+
+    // associating NPM package
+    .setPackageName(&#39;grunt-foo&#39;)
+
+    // loading package
+    .applyTask();</code></pre>
+
+<p>Creating and registering an <em>alias</em> task:</p>
+
+<pre><code>&#39;foo&#39;.toAliasTask()
+    // adding subtasks
+    .addSubTasks(&#39;copy:dev&#39;, &#39;uglify:dev&#39;)
+
+    // registering task
+    .applyTask();</code></pre>
+
+<p>Creating multi tasks w/ alias tasks for each target</p>
+
+<pre><code>var multiTasks = [
+    &#39;foo&#39;.toMultiTask({dev: {}, prod: {}})
+        .setPackageName(&#39;grunt-foo&#39;),
+    &#39;bar&#39;.toMultiTask({dev: {}, prod: {}})
+        .setPackageName(&#39;grunt-bar&#39;)
+].toMultiTaskCollection();
+
+multiTasks.toGruntConfig()
+    // applying (initializing/merging) config
+    .applyConfig()
+
+    // obtaining and adding alias tasks for each target
+    .getAliasTasksGroupedByTarget()
+    .mergeWith(multiTasks.toGruntTaskCollection())
+
+    // applying (registering/loading) each task
+    .applyTask();</code></pre>
+
+<p>As a result of the above, there will be a separate task for targets <code>dev</code> and <code>prod</code>, grouping all tasks that have those targets.</p>
+
+<p>Eg. after setting up the Gruntfile like that, you may issue <code>grunt dev</code> or <code>grunt prod</code> to run all associated tasks.</p></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="grocer.AliasTask.html">AliasTask</a></li><li><a href="grocer.Asset.html">Asset</a></li><li><a href="grocer.AssetCollection.html">AssetCollection</a></li><li><a href="grocer.ClassPathParser.html">ClassPathParser</a></li><li><a href="grocer.Css.html">Css</a></li><li><a href="grocer.CustomTask.html">CustomTask</a></li><li><a href="grocer.GruntConfig.html">GruntConfig</a></li><li><a href="grocer.GruntPlugin.html">GruntPlugin</a></li><li><a href="grocer.GruntProxy.html">GruntProxy</a></li><li><a href="grocer.GruntTask.html">GruntTask</a></li><li><a href="grocer.GruntTaskCollection.html">GruntTaskCollection</a></li><li><a href="grocer.Manifest.html">Manifest</a></li><li><a href="grocer.Module.html">Module</a></li><li><a href="grocer.MultiTask.html">MultiTask</a></li><li><a href="grocer.MultiTaskCollection.html">MultiTaskCollection</a></li><li><a href="grocer.Script.html">Script</a></li><li><a href="Number.html">Number</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="grocer.html">grocer</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+</nav>
+
+<br clear="both">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Oct 18 2014 11:56:42 GMT+0100 (BST)
+</footer>
+
+<script> prettyPrint(); </script>
+</body>
+</html>
