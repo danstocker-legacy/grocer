@@ -7,6 +7,7 @@ troop.postpone(grocer, 'GruntConfig', function () {
         slice = Array.prototype.slice;
 
     /**
+     * Creates a GruntConfig instance.
      * @name grocer.GruntConfig.create
      * @function
      * @param {object} [items]
@@ -14,54 +15,19 @@ troop.postpone(grocer, 'GruntConfig', function () {
      */
 
     /**
+     * The GruntConfig class represents and manages grunt config objects, including adding tasks to,
+     * applying, merging configs.
      * @class
      * @extends sntls.Tree
      */
     grocer.GruntConfig = self
-        .addMethods(/** @lends grocer.GruntConfig# */{
+        .addPrivateMethods(/** @lends grocer.GruntConfig# */{
             /**
-             * @param {string} taskName
-             * @param {grocer.MultiTask} multiTask
-             * @returns {grocer.GruntConfig}
-             */
-            addTask: function (taskName, multiTask) {
-                dessert
-                    .isString(taskName, "Invalid task name")
-                    .isMultiTask(multiTask, "Invalid multi task");
-
-                this.toCollection()
-                    .setItem(taskName, multiTask.getConfigNode());
-
-                return this;
-            },
-
-            /**
-             * @param {string} taskName
-             * @returns {Object|Array}
-             */
-            getTask: function (taskName) {
-                return this.toCollection().getItem(taskName);
-            },
-
-            /**
-             * @param {boolean} [wipe]
-             * @returns {grocer.GruntConfig}
-             */
-            applyConfig: function (wipe) {
-                var gruntProxy = grocer.GruntProxy.create();
-                if (wipe) {
-                    gruntProxy.configInit(this.items);
-                } else {
-                    gruntProxy.configMerge(this.items);
-                }
-                return this;
-            },
-
-            /**
-             * Returns a dictionary of unique targets as task names associated with all tasks for each target.
+             * Returns a dictionary of unique targets as task names associated with task names for each target.
              * @returns {sntls.StringDictionary}
+             * @private
              */
-            getTasksGroupedByTarget: function () {
+            _getAliasTaskAssociations: function () {
                 var args = slice.call(arguments),
                     query = ['|'.toKVP(), (args.length ? args : '|').toKVP()].toQuery();
 
@@ -75,14 +41,54 @@ troop.postpone(grocer, 'GruntConfig', function () {
                     })
                     .toStringDictionary()
                     .reverse();
+            }
+        })
+        .addMethods(/** @lends grocer.GruntConfig# */{
+            /**
+             * Adds a (multi-)task to the config.
+             * @param {grocer.MultiTask} multiTask Task to be added to config.
+             * @returns {grocer.GruntConfig}
+             */
+            addMultiTask: function (multiTask) {
+                dessert.isMultiTask(multiTask, "Invalid multi task");
+
+                this.toCollection()
+                    .setItem(multiTask.taskName, multiTask.getConfigNode());
+
+                return this;
             },
 
             /**
-             * Returns a typed collection with alias tasks for all targets.
+             * Fetches the config node for the specified task.
+             * @param {string} taskName
+             * @returns {Object|Array}
+             */
+            getTaskConfig: function (taskName) {
+                return this.toCollection().getItem(taskName);
+            },
+
+            /**
+             * Applies config by merging or initializing it via the grunt API. (Merges by default.)
+             * @param {boolean} [wipe] Optional argument telling whether previously set config should be wiped.
+             * @returns {grocer.GruntConfig}
+             */
+            applyConfig: function (wipe) {
+                var gruntProxy = grocer.GruntProxy.create();
+                if (wipe) {
+                    gruntProxy.configInit(this.items);
+                } else {
+                    gruntProxy.configMerge(this.items);
+                }
+                return this;
+            },
+
+            /**
+             * Returns a typed collection with alias tasks for the specified targets (as arguments),
+             * or all targets (no arguments).
              * @returns {grocer.GruntTaskCollection}
              */
             getAliasTasksGroupedByTarget: function () {
-                var groupedTasks = this.getTasksGroupedByTarget.apply(this, arguments);
+                var groupedTasks = this._getAliasTaskAssociations.apply(this, arguments);
 
                 return groupedTasks
                     .toCollection()

@@ -116,7 +116,7 @@ troop.postpone(grocer, 'MultiTask', function () {
              */
             addToConfig: function (config) {
                 dessert.isGruntConfig(config, "Invalid grunt config");
-                config.addTask(this.taskName, this);
+                config.addMultiTask(this);
                 return this;
             },
 

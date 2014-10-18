@@ -104,7 +104,7 @@
     });
 
     test("Addition to config", function () {
-        expect(5);
+        expect(4);
 
         var task = 'foo'.toMultiTask()
                 .addTarget('foo', {
@@ -121,9 +121,8 @@
         }, "should raise exception on invalid argument");
 
         config.addMocks({
-            addTask: function (taskName, multiTask) {
+            addMultiTask: function (multiTask) {
                 strictEqual(multiTask, task, "should add task to config using config API");
-                equal(taskName, 'foo', "should pass task name to task adder on config");
             }
         });
 

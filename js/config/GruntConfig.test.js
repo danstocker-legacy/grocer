@@ -13,11 +13,11 @@
             taskConfigNode = {};
 
         raises(function () {
-            config.addTask();
+            config.addMultiTask();
         }, "should raise exception on missing arguments");
 
         raises(function () {
-            config.addTask('foo');
+            config.addMultiTask('foo');
         }, "should raise exception on invalid arguments");
 
         task.addMocks({
@@ -26,10 +26,10 @@
             }
         });
 
-        strictEqual(config.addTask('bar', task), config, "should be chainable");
+        strictEqual(config.addMultiTask(task), config, "should be chainable");
 
         deepEqual(config.items, {
-            'bar': taskConfigNode
+            'foo': taskConfigNode
         }, "should set task config node in config");
     });
 
@@ -38,7 +38,7 @@
             hello: "world"
         });
 
-        equal(config.getTask('hello'), "world", "should return task config node");
+        equal(config.getTaskConfig('hello'), "world", "should return task config node");
     });
 
     test("Config initialization", function () {
@@ -68,7 +68,7 @@
         g$.GruntProxy.removeMocks();
     });
 
-    test("Getting tasks grouped by target", function () {
+    test("Getting alias task association", function () {
         var config = g$.GruntConfig.create({
                 copy  : {
                     dev : {},
@@ -80,14 +80,14 @@
             }),
             result;
 
-        result = config.getTasksGroupedByTarget('dev');
+        result = config._getAliasTaskAssociations('dev');
         ok(result.isA(sntls.Hash), "should return Hash instance");
         deepEqual(result.items, {dev: ['copy:dev', 'cssMin:dev']}, "should return Hash with correct contents");
 
-        result = config.getTasksGroupedByTarget('prod');
+        result = config._getAliasTaskAssociations('prod');
         deepEqual(result.items, {prod: 'copy:prod'}, "should return Hash with correct contents");
 
-        result = config.getTasksGroupedByTarget();
+        result = config._getAliasTaskAssociations();
         deepEqual(result.items, {
             dev : ['copy:dev', 'cssMin:dev'],
             prod: 'copy:prod'
