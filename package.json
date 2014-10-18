@@ -5,7 +5,8 @@
     "keywords"       : [
         "asset", "asset file", "asset list",
         "manifest",
-        "script list"
+        "script list",
+        "grunt", "task", "task management"
     ],
     "author"         : "Dan Stocker <dan@kwaia.com>",
     "copyright"      : "Copyright (c) 2014 Dan Stocker",

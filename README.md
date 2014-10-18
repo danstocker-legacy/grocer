@@ -3,6 +3,8 @@ Grocer
 
 *Front end asset manager*
 
+[Reference](http://danstocker.github.io/grocer/)
+
 The purpose of Grocer is to provide an API to
 
 1. build, manage, and initialize Grunt config files based on a manifest file
@@ -34,8 +36,8 @@ The top level defines the modules. Within each module, there is a container for 
         }
     }
 
-Usage
------
+Using the manifest API
+----------------------
 
 Initializing manifest
 
@@ -73,3 +75,54 @@ Fetching script tag list from manifest
     <link rel="stylesheet" href="src/app.css">
     <link rel="stylesheet" href="src/Users.css">
     */
+
+Using the config API
+--------------------
+
+Creating and loading a *multi* task:
+
+    'foo'
+        // setting task config
+        .toMultiTask({
+            target1: {},
+            target2: {}
+        })
+
+        // associating NPM package
+        .setPackageName('grunt-foo')
+
+        // loading package
+        .applyTask();
+
+Creating and registering an *alias* task:
+
+    'foo'.toAliasTask()
+        // adding subtasks
+        .addSubTasks('copy:dev', 'uglify:dev')
+
+        // registering task
+        .applyTask();
+
+Creating multi tasks w/ alias tasks for each target
+
+    var multiTasks = [
+        'foo'.toMultiTask({dev: {}, prod: {}})
+            .setPackageName('grunt-foo'),
+        'bar'.toMultiTask({dev: {}, prod: {}})
+            .setPackageName('grunt-bar')
+    ].toMultiTaskCollection();
+
+    multiTasks.toGruntConfig()
+        // applying (initializing/merging) config
+        .applyConfig()
+
+        // obtaining and adding alias tasks for each target
+        .getAliasTasksGroupedByTarget()
+        .mergeWith(multiTasks.toGruntTaskCollection())
+
+        // applying (registering/loading) each task
+        .applyTask();
+
+As a result of the above, there will be a separate task for targets `dev` and `prod`, grouping all tasks that have those targets.
+
+Eg. after setting up the Gruntfile like that, you may issue `grunt dev` or `grunt prod` to run all associated tasks.
