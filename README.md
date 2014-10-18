@@ -5,7 +5,7 @@ Grocer
 
 The purpose of Grocer is to provide an API to
 
-1. build Grunt config files based on a manifest file
+1. build, manage, and initialize Grunt config files based on a manifest file
 2. impose modularity on the application, each module having an optional main object (function, class, etc.) that the application can invoke when the module is loaded
 
 Manifest structure
@@ -43,7 +43,7 @@ Initializing manifest
 
 Fetching asset list for module
 
-    manifest.getAssetListForModule('common', 'js');
+    manifest.getAssetsForModule('common', 'js').getAssetNames();
 
     /*
     [ "src/app.js" ]
@@ -51,7 +51,7 @@ Fetching asset list for module
 
 Fetching all assets from manifest
 
-    manifest.getAssetList('js');
+    manifest.getAssets('js').getAssetNames();
 
     /*
     [ "src/jquery.js", "src/app.js", "src/Users.js" ]
@@ -59,7 +59,7 @@ Fetching all assets from manifest
 
 Fetching script tag list from manifest
 
-    manifest.getSerializedAssetList('js');
+    manifest.getAssets('js').toString();
 
     /*
     <script src="src/jquery.js"></script>
@@ -67,7 +67,7 @@ Fetching script tag list from manifest
     <script src="src/Users.js"></script>
     */
 
-    manifest.getSerializedAssetList('css');
+    manifest.getAssets('css').toString();
 
     /*
     <link rel="stylesheet" href="src/app.css">
