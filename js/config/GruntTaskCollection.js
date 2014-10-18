@@ -3,13 +3,20 @@ troop.postpone(grocer, 'GruntTaskCollection', function () {
     "use strict";
 
     /**
+     * Creates a GruntTaskCollection instance.
+     * GruntTaskCollection instances may also be created via conversion from Array and Hash.
+     * (In fact those are favorable to .create().)
      * @name grocer.GruntTaskCollection.create
      * @function
      * @param {Object|Array} items
      * @returns {grocer.GruntTaskCollection}
+     * @see Array#toGruntTaskCollection
+     * @see sntls.Hash#toGruntTaskCollection
      */
 
     /**
+     * The GruntTaskCollection class implements a typed collection for storing and managing
+     * GruntTask instances.
      * @class
      * @extends sntls.Collection
      * @extends grocer.GruntTask
@@ -21,7 +28,10 @@ troop.amendPostponed(sntls, 'Hash', function () {
     "use strict";
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
-        /** @returns {grocer.GruntTaskCollection} */
+        /**
+         * Converts Hash to GruntTaskCollection. Hash items must be GruntTask instances.
+         * @returns {grocer.GruntTaskCollection}
+         */
         toGruntTaskCollection: function () {
             return grocer.GruntTaskCollection.create(this.items);
         }
@@ -34,7 +44,10 @@ troop.amendPostponed(sntls, 'Hash', function () {
     troop.Properties.addProperties.call(
         Array.prototype,
         /** @lends Array# */{
-            /** @returns {grocer.GruntTaskCollection} */
+            /**
+             * Converts Array to GruntTaskCollection. Array items must be GruntTask instances.
+             * @returns {grocer.GruntTaskCollection}
+             */
             toGruntTaskCollection: function () {
                 return grocer.GruntTaskCollection.create(this);
             }

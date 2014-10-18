@@ -6,13 +6,8 @@ troop.postpone(grocer, 'GruntTask', function () {
         self = base.extend();
 
     /**
-     * @name grocer.GruntTask.create
-     * @function
-     * @param {string} taskName
-     * @returns {grocer.GruntTask}
-     */
-
-    /**
+     * The BruntTask is a base class for specific grunt tasks.
+     * Not to be instantiated on its own.
      * @class
      * @extends troop.Base
      */
@@ -25,13 +20,16 @@ troop.postpone(grocer, 'GruntTask', function () {
             init: function (taskName) {
                 dessert.isString(taskName, "Invalid task name");
 
-                /** @type {string} */
+                /**
+                 * Name of the grunt task.
+                 * @type {string}
+                 */
                 this.taskName = taskName;
             },
 
             /**
              * Dummy super method just to be picked up by GruntTaskCollection.
-             * Override in subclasses.
+             * Do not invoke. Override in subclasses.
              * @returns {grocer.GruntTask}
              */
             applyTask: function () {
