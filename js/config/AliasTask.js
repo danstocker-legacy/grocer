@@ -6,15 +6,22 @@ troop.postpone(grocer, 'AliasTask', function () {
         self = base.extend();
 
     /**
+     * Creates an AliasTask instance.
+     * AliasTask instances may also be created via conversion from String,
+     * where the string is treated as the name of the task.
      * @name grocer.AliasTask.create
      * @function
-     * @param {string} taskName
+     * @param {string} taskName Name of alias task.
      * @returns {grocer.AliasTask}
+     * @see String#toAliasTask
      */
 
     /**
+     * The AliasTask implements an 'alias' grunt task.
+     * Alias grunt tasks group other tasks into a single task.
      * @class
      * @extends grocer.GruntTask
+     * @see http://gruntjs.com/creating-tasks#alias-tasks
      */
     grocer.AliasTask = self
         .addMethods(/** @lends grocer.AliasTask# */{
@@ -25,12 +32,16 @@ troop.postpone(grocer, 'AliasTask', function () {
             init: function (taskName) {
                 base.init.call(this, taskName);
 
-                /** @type {sntls.Collection} */
+                /**
+                 * Collection of task names that the current alias task groups together.
+                 * @type {sntls.Collection}
+                 */
                 this.subTasks = sntls.Collection.create();
             },
 
             /**
-             * @param {string} [description]
+             * Applies task by registering it via the grunt API.
+             * @param {string} [description] Optional description of the task.
              * @returns {grocer.AliasTask}
              */
             applyTask: function (description) {
@@ -40,16 +51,20 @@ troop.postpone(grocer, 'AliasTask', function () {
             },
 
             /**
-             * @param {string} subTask
+             * Adds sub-task to the current alias task.
+             * @param {string} taskName Name of sub-task to be added.
              * @returns {grocer.AliasTask}
              */
-            addSubTask: function (subTask) {
-                dessert.isString(subTask, "Invalid sub-task name");
-                this.subTasks.setItem(subTask, subTask);
+            addSubTask: function (taskName) {
+                dessert.isString(taskName, "Invalid sub-task name");
+                this.subTasks.setItem(taskName, taskName);
                 return this;
             },
 
-            /** @returns {grocer.AliasTask} */
+            /**
+             * Adds multiple sub-tasks. Each argument represents a sub-task.
+             * @returns {grocer.AliasTask}
+             */
             addSubTasks: function () {
                 var i;
                 for (i = 0; i < arguments.length; i++) {
@@ -66,7 +81,10 @@ troop.postpone(grocer, 'AliasTask', function () {
     troop.Properties.addProperties.call(
         String.prototype,
         /** @lends String# */{
-            /** @returns {grocer.AliasTask} */
+            /**
+             * Converts string to AliasTask, treating the string as task name.
+             * @returns {grocer.AliasTask}
+             */
             toAliasTask: function () {
                 return grocer.AliasTask.create(this.valueOf());
             }
