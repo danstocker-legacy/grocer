@@ -26,14 +26,20 @@ troop.postpone(grocer, 'MultiTask', function () {
     grocer.MultiTask = self
         .addMethods(/** @lends grocer.MultiTask# */{
             /**
-             * @param {string} pluginName
+             * @param {string} taskName
              * @param {object} [configNode]
              * @ignore
              */
-            init: function (pluginName, configNode) {
+            init: function (taskName, configNode) {
                 dessert.isObjectOptional(configNode, "Invalid task config node");
 
-                base.init.call(this, pluginName);
+                base.init.call(this, taskName);
+
+                /**
+                 * Grunt plugin associated with multi task.
+                 * @type {grocer.GruntPlugin}
+                 */
+                this.gruntPlugin = undefined;
 
                 /**
                  * Collection of target configurations.
@@ -48,8 +54,19 @@ troop.postpone(grocer, 'MultiTask', function () {
              * @returns {grocer.MultiTask}
              */
             applyTask: function () {
-                this.taskName.toGruntPlugin()
-                    .loadPlugin();
+                dessert.assert(!!this.gruntPlugin, "Task has no associated plugin");
+                this.gruntPlugin.loadPlugin();
+                return this;
+            },
+
+            /**
+             * Sets NPM package name for the plugin associated with the current task.
+             * @param {string} packageName Name of NPM package for the plugin.
+             * @returns {grocer.MultiTask}
+             */
+            setPackageName: function (packageName) {
+                dessert.isString(packageName, "Invalid packahe name");
+                this.gruntPlugin = packageName.toGruntPlugin();
                 return this;
             },
 
@@ -94,32 +111,23 @@ troop.postpone(grocer, 'MultiTask', function () {
 
             /**
              * Adds task to the specified GruntConfig instance.
-             * TODO: Refactor taskName vs. pluginName.
              * @param {grocer.GruntConfig} config Config to add the task to.
-             * @param {string} taskName Name of task in the context of the config.
              * @returns {grocer.MultiTask}
              */
-            addToConfig: function (config, taskName) {
-                dessert
-                    .isGruntConfig(config, "Invalid grunt config")
-                    .isString(taskName, "Invalid task name");
-
-                config.addTask(taskName, this);
-
+            addToConfig: function (config) {
+                dessert.isGruntConfig(config, "Invalid grunt config");
+                config.addTask(this.taskName, this);
                 return this;
             },
 
             /**
              * Adds current multi task to a collection of multi tasks.
              * @param {grocer.MultiTaskCollection} multiTaskCollection Collection to add the task to.
-             * @param {string} taskName Name of task in the context of the collection.
              * @returns {grocer.MultiTask}
              */
-            addToCollection: function (multiTaskCollection, taskName) {
-                dessert
-                    .isMultiTaskCollection(multiTaskCollection, "Invalid multi task collection")
-                    .isString(taskName, "Invalid task name");
-                multiTaskCollection.setItem(taskName, this);
+            addToCollection: function (multiTaskCollection) {
+                dessert.isMultiTaskCollection(multiTaskCollection, "Invalid multi task collection");
+                multiTaskCollection.setItem(this.taskName, this);
                 return this;
             }
         });

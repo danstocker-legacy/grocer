@@ -127,15 +127,15 @@
             }),
             configMerged;
 
-        'grunt-copy'.toMultiTask({
+        'copy'.toMultiTask({
             dev : {foo: "bar"},
             prod: {hello: "world"}
-        }).addToCollection(tasks, 'copy');
+        }).addToCollection(tasks);
 
-        'grunt-css-min'.toMultiTask({
+        'cssMin'.toMultiTask({
             dev : {foo: "baz"},
             prod: {hello: "all"}
-        }).addToCollection(tasks, 'cssMin');
+        }).addToCollection(tasks);
 
         configMerged = configA.mergeWith(tasks.toGruntConfig('_'));
 

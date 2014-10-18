@@ -23,8 +23,11 @@
     test("Conversion from string", function () {
         var multiTask = 'foo'.toMultiTask();
 
+        ok(multiTask.hasOwnProperty('gruntPlugin'), "should add gruntPlugin property");
+        equal(typeof multiTask.gruntPlugin, 'undefined', "should initialize gruntPlugin property to undefined");
+
         ok(multiTask.isA(g$.MultiTask), "should return MultiTask instance");
-        equal(multiTask.taskName, 'foo', "should set task (plugin) name");
+        equal(multiTask.taskName, 'foo', "should set task name");
         equal(multiTask.targets.getKeyCount(), 0, "should set targets property to empty collection");
 
         multiTask = 'foo'.toMultiTask({
@@ -34,6 +37,29 @@
         deepEqual(multiTask.targets.items, {
             foo: {}
         }, "should set targets property to collection having the specified config node");
+    });
+
+    test("Setting package name", function () {
+        var task = 'foo'.toMultiTask();
+
+        strictEqual(task.setPackageName('grunt-foo'), task, "should be chainable");
+        ok(task.gruntPlugin.isA(g$.GruntPlugin), "should set a GruntPlugin instance");
+        equal(task.gruntPlugin.packageName, 'grunt-foo', "should set package name for plugin");
+    });
+
+    test("Applying task", function () {
+        var task = 'foo'.toMultiTask()
+            .setPackageName('grunt-foo');
+
+        g$.GruntProxy.addMocks({
+            loadNpmTasks: function (taskName) {
+                equal(taskName, 'grunt-foo', "should load plugin");
+            }
+        });
+
+        strictEqual(task.applyTask(), task, "should be chainable");
+
+        g$.GruntProxy.removeMocks();
     });
 
     test("Target addition", function () {
@@ -88,47 +114,43 @@
 
         raises(function () {
             task.addToConfig();
-        }, "should raise exception on missing arguments");
+        }, "should raise exception on missing argument");
 
         raises(function () {
-            task.addToConfig('foo', 'bar');
-        }, "should raise exception on invalid arguments");
+            task.addToConfig('foo');
+        }, "should raise exception on invalid argument");
 
         config.addMocks({
             addTask: function (taskName, multiTask) {
                 strictEqual(multiTask, task, "should add task to config using config API");
-                equal(taskName, 'bar', "should pass task name to task adder on config");
+                equal(taskName, 'foo', "should pass task name to task adder on config");
             }
         });
 
-        strictEqual(task.addToConfig(config, 'bar'), task, "should be chainable");
+        strictEqual(task.addToConfig(config), task, "should be chainable");
     });
 
     test("Adding to collection", function () {
-        expect(6);
+        expect(5);
 
-        var task = 'grunt-foo'.toMultiTask(),
+        var task = 'foo'.toMultiTask(),
             collection = g$.MultiTaskCollection.create();
 
         raises(function () {
             task.addToCollection();
-        }, "should raise exception on missing arguments");
+        }, "should raise exception on missing argument");
 
         raises(function () {
             task.addToCollection('foo');
         }, "should raise exception on invalid collection argument");
 
-        raises(function () {
-            task.addToCollection(collection, 1);
-        }, "should raise exception on invalid task name argument");
-
         collection.addMocks({
             setItem: function (itemName, itemValue) {
                 strictEqual(itemValue, task, "should set task as item in collection");
-                equal(itemName, 'foo', "should set task by specified name in collection");
+                equal(itemName, 'foo', "should set task by task name in collection");
             }
         });
 
-        strictEqual(task.addToCollection(collection, 'foo'), task, "should be chainable");
+        strictEqual(task.addToCollection(collection), task, "should be chainable");
     });
 }());
