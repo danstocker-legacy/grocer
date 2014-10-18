@@ -6,6 +6,10 @@ troop.postpone(grocer, 'Script', function () {
         self = base.extend();
 
     /**
+     * Creates a Script asset instance.
+     * Script assets may also be created via conversion from string.
+     * @example
+     * var css = 'foo.js'.toAsset('js');
      * @name grocer.Script.create
      * @function
      * @param {string} assetPath
@@ -13,6 +17,7 @@ troop.postpone(grocer, 'Script', function () {
      */
 
     /**
+     * The Script class represents a JavaScript asset file.
      * @class
      * @extends grocer.Asset
      */
@@ -26,9 +31,12 @@ troop.postpone(grocer, 'Script', function () {
                 base.init.call(this, assetPath, 'js');
             },
 
-            /** @returns {string} */
+            /**
+             * Generates a string based on the current script asset, for inclusion in HTML files.
+             * @returns {string}
+             */
             toString: function () {
-                return '<script src="' + this.assetId + '"></script>';
+                return '<script src="' + this.assetName + '"></script>';
             }
         });
 });

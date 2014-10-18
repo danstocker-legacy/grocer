@@ -6,6 +6,7 @@ troop.postpone(grocer, 'ClassPathParser', function () {
         self = base.extend();
 
     /**
+     * The ClassPathParser has the sole purpose of parsing class path string expressions.
      * @class
      * @extends troop.Base
      */
@@ -17,8 +18,10 @@ troop.postpone(grocer, 'ClassPathParser', function () {
              */
             RE_CLASS_PATH_DELIMITER: /[^0-9a-z_$]+/i
         })
-        .addMethods(/** @lends grocer.ClassPathParser# */{
+        .addMethods(/** @lends grocer.ClassPathParser */{
             /**
+             * Parses class path. The class path is a path delimited by any character that is
+             * not word character, numeric, underscore, or dollar sign.
              * @param {string} classPath
              * @returns {sntls.Path}
              */
@@ -35,6 +38,7 @@ troop.postpone(grocer, 'ClassPathParser', function () {
         String.prototype,
         /** @lends String# */{
             /**
+             * Converts string to Path, treating the string as class path.
              * @returns {sntls.Path}
              */
             toPathFromClassPath: function () {

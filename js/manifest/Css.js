@@ -6,6 +6,10 @@ troop.postpone(grocer, 'Css', function () {
         self = base.extend();
 
     /**
+     * Creates a Css asset instance.
+     * Css assets may also be created via conversion from string.
+     * @example
+     * var css = 'foo.css'.toAsset('css');
      * @name grocer.Css.create
      * @function
      * @param {string} assetPath
@@ -13,6 +17,7 @@ troop.postpone(grocer, 'Css', function () {
      */
 
     /**
+     * The Css class represents a style sheet asset file.
      * @class
      * @extends grocer.Asset
      */
@@ -26,9 +31,12 @@ troop.postpone(grocer, 'Css', function () {
                 base.init.call(this, assetPath, 'css');
             },
 
-            /** @returns {string} */
+            /**
+             * Generates a string based on the current CSS asset, for inclusion in HTML files.
+             * @returns {string}
+             */
             toString: function () {
-                return '<link rel="stylesheet" href="' + this.assetId + '" />';
+                return '<link rel="stylesheet" href="' + this.assetName + '" />';
             }
         });
 });

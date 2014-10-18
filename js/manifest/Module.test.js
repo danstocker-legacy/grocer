@@ -68,17 +68,17 @@
             scriptList;
 
         raises(function () {
-            scriptList.getAssetList();
+            scriptList.getAssetNames();
         }, "should raise exception on missing arguments");
 
-        scriptList = module.getAssetList('js');
+        scriptList = module.getAssetNames('js');
 
         deepEqual(
             scriptList,
             ['hello.js', 'world.js'],
-            "should return array of asset IDs of the specified type");
+            "should return array of asset names of the specified type");
 
-        scriptList = module.getAssetList('foo');
+        scriptList = module.getAssetNames('foo');
 
         deepEqual(scriptList, [], "should return undefined for non-existing asset type");
     });
@@ -106,7 +106,7 @@
 
         result = module.toAsset('js');
         ok(result.isA(g$.Asset), "should return Asset instance");
-        equal(result.assetId, 'foo.js', "should set asset ID");
+        equal(result.assetName, 'foo.js', "should set asset name");
         equal(result.assetType, 'js', "should set asset type");
     });
 }());

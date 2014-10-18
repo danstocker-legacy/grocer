@@ -6,46 +6,59 @@ troop.postpone(grocer, 'Asset', function () {
         self = base.extend();
 
     /**
+     * Creates an Asset instance.
+     * Assets may also be created via conversion from string.
      * @name grocer.Asset.create
      * @function
-     * @param {string} assetPath
-     * @param {string} assetType
+     * @param {string} assetName Asset name, usually a relative path.
+     * @param {string} assetType Asset type, eg. 'css', 'js', etc.
      * @returns {grocer.Asset}
+     * @see String#toAsset
      */
 
     /**
+     * The Asset class represents a single asset (file) of the application.
      * @class
      * @extends troop.Base
      */
     grocer.Asset = self
         .addMethods(/** @lends grocer.Asset# */{
             /**
-             * @param {string} assetId
+             * @param {string} assetName
              * @param {string} assetType
              * @ignore
              */
-            init: function (assetId, assetType) {
+            init: function (assetName, assetType) {
                 dessert
-                    .isString(assetId, "Invalid asset ID")
+                    .isString(assetName, "Invalid asset name")
                     .isString(assetType, "Invalid asset type");
 
-                /** @type {string} */
-                this.assetId = assetId;
+                /**
+                 * Asset name, usually a path relative to the project root.
+                 * @type {string}
+                 */
+                this.assetName = assetName;
 
-                /** @type {string} */
+                /**
+                 * Asset type, eg. 'css', 'js', etc.
+                 * @type {string}
+                 */
                 this.assetType = assetType;
             },
 
             /**
+             * Adds prefix to the asset name.
              * @param {string} assetPrefix
              * @returns {grocer.Asset}
              */
             addPrefix: function (assetPrefix) {
-                this.assetId = assetPrefix + this.assetId;
+                this.assetName = assetPrefix + this.assetName;
                 return this;
             }
 
             /**
+             * Serializes the asset to string.
+             * Typically used for inclusion in a project file, eg. index.html.
              * @name grocer.Asset#toString
              * @function
              * @returns {string}
@@ -60,6 +73,7 @@ troop.postpone(grocer, 'Asset', function () {
         String.prototype,
         /** @lends String# */{
             /**
+             * Converts string to Asset, interpreting the string as asset name.
              * @param {string} assetType
              * @returns {grocer.Asset}
              */

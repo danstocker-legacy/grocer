@@ -37,9 +37,9 @@
 
     test("Asset list getter", function () {
         var assets = ['foo/bar', 'hello/world'].toAssetCollection('baz'),
-            assetList = assets.getAssetList();
+            assetNames = assets.getAssetNames();
 
-        deepEqual(assetList, ['foo/bar', 'hello/world'], "should retrieve asset list array");
+        deepEqual(assetNames, ['foo/bar', 'hello/world'], "should retrieve asset list array");
     });
 
     test("Serialization", function () {

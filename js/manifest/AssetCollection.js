@@ -8,11 +8,12 @@ troop.postpone(grocer, 'AssetCollection', function () {
     /**
      * @name grocer.AssetCollection.create
      * @function
-     * @param {string[]} assetPathList
+     * @param {Asset[]} items
      * @returns {grocer.AssetCollection}
      */
 
     /**
+     * The AssetCollection offers an API to perform uniform operations on a set of Asset instances.
      * @class
      * @extends troop.Base
      */
@@ -27,16 +28,23 @@ troop.postpone(grocer, 'AssetCollection', function () {
                 base.init.call(this, items);
             },
 
-            /** @returns {string[]} */
-            getAssetList: function () {
+            /**
+             * Retrieves an array of asset names based on the assets in the collection.
+             * @returns {string[]}
+             */
+            getAssetNames: function () {
                 return this
                     .mapValues(function (/**grocer.Asset*/asset) {
-                        return asset.assetId;
+                        return asset.assetName;
                     })
                     .items;
             },
 
-            /** @returns {string} */
+            /**
+             * Serializes all assets in the collection.
+             * @returns {string}
+             * @see grocer.Asset#toString
+             */
             toString: function () {
                 return this.items.join('\n');
             }

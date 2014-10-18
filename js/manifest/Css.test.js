@@ -8,7 +8,7 @@
     test("Instantiation", function () {
         var asset = g$.Css.create('foo/bar');
 
-        equal(asset.assetId, 'foo/bar', "should set asset ID");
+        equal(asset.assetName, 'foo/bar', "should set asset name");
         equal(asset.assetType, 'css', "should set asset type to css");
     });
 
