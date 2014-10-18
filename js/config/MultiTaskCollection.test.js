@@ -3,12 +3,12 @@
 (function () {
     "use strict";
 
-    module("PluginTaskCollection");
+    module("MultiTaskCollection");
 
     test("Conversion from Array", function () {
-        var tasks = [1, 2, 3].toPluginTaskCollection();
+        var tasks = [1, 2, 3].toMultiTaskCollection();
 
-        ok(tasks.isA(g$.PluginTaskCollection), "should return PluginTaskCollection instance");
+        ok(tasks.isA(g$.MultiTaskCollection), "should return MultiTaskCollection instance");
         deepEqual(
             tasks.items,
             [1, 2, 3],
@@ -17,9 +17,9 @@
 
     test("Conversion from Hash", function () {
         var hash = [1, 2, 3].toHash(),
-            tasks = hash.toPluginTaskCollection();
+            tasks = hash.toMultiTaskCollection();
 
-        ok(tasks.isA(g$.PluginTaskCollection), "should return PluginTaskCollection instance");
+        ok(tasks.isA(g$.MultiTaskCollection), "should return MultiTaskCollection instance");
         deepEqual(
             tasks.items,
             [1, 2, 3],
@@ -28,9 +28,9 @@
 
     test("Config node getter", function () {
         var tasks = [
-            'foo'.toPluginTask({hello: "world"}),
-            'bar'.toPluginTask({hi: "all"})
-        ].toPluginTaskCollection();
+            'foo'.toMultiTask({hello: "world"}),
+            'bar'.toMultiTask({hi: "all"})
+        ].toMultiTaskCollection();
 
         deepEqual(tasks.getConfigNode(), [
             {hello: "world"},
@@ -45,9 +45,9 @@
 
     test("Conversion to GruntConfig", function () {
         var tasks = [
-                'foo'.toPluginTask({hello: "world"}),
-                'bar'.toPluginTask({hi: "all"})
-            ].toPluginTaskCollection(),
+                'foo'.toMultiTask({hello: "world"}),
+                'bar'.toMultiTask({hi: "all"})
+            ].toMultiTaskCollection(),
             config = tasks.toGruntConfig();
 
         ok(config.isA(g$.GruntConfig), "should return GruntConfig instance");

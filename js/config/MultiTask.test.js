@@ -3,41 +3,41 @@
 (function () {
     "use strict";
 
-    module("PluginTask");
+    module("MultiTask");
 
     test("Instantiation", function () {
         raises(function () {
-            g$.PluginTask.create('foo', 'bar');
+            g$.MultiTask.create('foo', 'bar');
         }, "should raise exception on invalid arguments");
 
         var taskNode = {
                 dev : {},
                 prod: {}
             },
-            task = g$.PluginTask.create('foo', taskNode);
+            task = g$.MultiTask.create('foo', taskNode);
 
         ok(task.targets.isA(sntls.Collection), "should initialize targets property as collection");
         strictEqual(task.targets.items, taskNode, "should set targets' buffer to specified taskNode");
     });
 
     test("Conversion from string", function () {
-        var pluginTask = 'foo'.toPluginTask();
+        var multiTask = 'foo'.toMultiTask();
 
-        ok(pluginTask.isA(g$.PluginTask), "should return PluginTask instance");
-        equal(pluginTask.taskName, 'foo', "should set task (plugin) name");
-        equal(pluginTask.targets.getKeyCount(), 0, "should set targets property to empty collection");
+        ok(multiTask.isA(g$.MultiTask), "should return MultiTask instance");
+        equal(multiTask.taskName, 'foo', "should set task (plugin) name");
+        equal(multiTask.targets.getKeyCount(), 0, "should set targets property to empty collection");
 
-        pluginTask = 'foo'.toPluginTask({
+        multiTask = 'foo'.toMultiTask({
             foo: {}
         });
 
-        deepEqual(pluginTask.targets.items, {
+        deepEqual(multiTask.targets.items, {
             foo: {}
         }, "should set targets property to collection having the specified config node");
     });
 
     test("Target addition", function () {
-        var task = 'foo'.toPluginTask();
+        var task = 'foo'.toMultiTask();
 
         strictEqual(task.addTarget('bar', {hello: "world"}), task, "should be chainable");
 
@@ -49,7 +49,7 @@
     });
 
     test("Target tester", function () {
-        var task = g$.PluginTask.create('foo', {
+        var task = g$.MultiTask.create('foo', {
             foo: {}
         });
 
@@ -58,7 +58,7 @@
     });
 
     test("Config node getter", function () {
-        var task = 'foo'.toPluginTask()
+        var task = 'foo'.toMultiTask()
             .addTarget('foo', {
                 bar: 'baz'
             });
@@ -80,7 +80,7 @@
     test("Addition to config", function () {
         expect(5);
 
-        var task = 'foo'.toPluginTask()
+        var task = 'foo'.toMultiTask()
                 .addTarget('foo', {
                     bar: 'baz'
                 }),
@@ -95,8 +95,8 @@
         }, "should raise exception on invalid arguments");
 
         config.addMocks({
-            addTask: function (taskName, pluginTask) {
-                strictEqual(pluginTask, task, "should add task to config using config API");
+            addTask: function (taskName, multiTask) {
+                strictEqual(multiTask, task, "should add task to config using config API");
                 equal(taskName, 'bar', "should pass task name to task adder on config");
             }
         });
@@ -107,8 +107,8 @@
     test("Adding to collection", function () {
         expect(6);
 
-        var task = 'grunt-foo'.toPluginTask(),
-            collection = g$.PluginTaskCollection.create();
+        var task = 'grunt-foo'.toMultiTask(),
+            collection = g$.MultiTaskCollection.create();
 
         raises(function () {
             task.addToCollection();

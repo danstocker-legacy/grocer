@@ -21,16 +21,16 @@ troop.postpone(grocer, 'GruntConfig', function () {
         .addMethods(/** @lends grocer.GruntConfig# */{
             /**
              * @param {string} taskName
-             * @param {grocer.PluginTask} pluginTask
+             * @param {grocer.MultiTask} multiTask
              * @returns {grocer.GruntConfig}
              */
-            addTask: function (taskName, pluginTask) {
+            addTask: function (taskName, multiTask) {
                 dessert
                     .isString(taskName, "Invalid task name")
-                    .isPluginTask(pluginTask, "Invalid plugin task");
+                    .isMultiTask(multiTask, "Invalid multi task");
 
                 this.toCollection()
-                    .setItem(taskName, pluginTask.getConfigNode());
+                    .setItem(taskName, multiTask.getConfigNode());
 
                 return this;
             },

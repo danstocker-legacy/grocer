@@ -7,7 +7,7 @@
 
     test("Task addition", function () {
         var config = g$.GruntConfig.create(),
-            task = 'foo'.toPluginTask({
+            task = 'foo'.toMultiTask({
                 hello: "world"
             }),
             taskConfigNode = {};
@@ -115,7 +115,7 @@
     });
 
     test("Config merge", function () {
-        var tasks = g$.PluginTaskCollection.create(),
+        var tasks = g$.MultiTaskCollection.create(),
             configA = g$.GruntConfig.create({
                 copy  : {
                     dev : {foo: "baz"},
@@ -127,12 +127,12 @@
             }),
             configMerged;
 
-        'grunt-copy'.toPluginTask({
+        'grunt-copy'.toMultiTask({
             dev : {foo: "bar"},
             prod: {hello: "world"}
         }).addToCollection(tasks, 'copy');
 
-        'grunt-css-min'.toPluginTask({
+        'grunt-css-min'.toMultiTask({
             dev : {foo: "baz"},
             prod: {hello: "all"}
         }).addToCollection(tasks, 'cssMin');

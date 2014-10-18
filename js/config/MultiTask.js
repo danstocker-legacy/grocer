@@ -1,24 +1,24 @@
 /*global dessert, troop, sntls, evan, shoeshine, grocer */
-troop.postpone(grocer, 'PluginTask', function () {
+troop.postpone(grocer, 'MultiTask', function () {
     "use strict";
 
     var base = grocer.GruntTask,
         self = base.extend();
 
     /**
-     * @name grocer.PluginTask.create
+     * @name grocer.MultiTask.create
      * @function
      * @param {string} taskName
      * @param {object} [taskNode]
-     * @returns {grocer.PluginTask}
+     * @returns {grocer.MultiTask}
      */
 
     /**
      * @class
      * @extends grocer.GruntTask
      */
-    grocer.PluginTask = self
-        .addMethods(/** @lends grocer.PluginTask# */{
+    grocer.MultiTask = self
+        .addMethods(/** @lends grocer.MultiTask# */{
             /**
              * @param {string} pluginName
              * @param {object} [configNode]
@@ -33,7 +33,7 @@ troop.postpone(grocer, 'PluginTask', function () {
                 this.targets = sntls.Collection.create(configNode);
             },
 
-            /** @returns {grocer.PluginTask} */
+            /** @returns {grocer.MultiTask} */
             applyTask: function () {
                 this.taskName.toGruntPlugin()
                     .loadPlugin();
@@ -43,7 +43,7 @@ troop.postpone(grocer, 'PluginTask', function () {
             /**
              * @param {string} targetName
              * @param {object} targetNode
-             * @returns {grocer.PluginTask}
+             * @returns {grocer.MultiTask}
              */
             addTarget: function (targetName, targetNode) {
                 this.targets.setItem(targetName, targetNode);
@@ -79,7 +79,7 @@ troop.postpone(grocer, 'PluginTask', function () {
             /**
              * @param {grocer.GruntConfig} config
              * @param {string} taskName
-             * @returns {grocer.PluginTask}
+             * @returns {grocer.MultiTask}
              */
             addToConfig: function (config, taskName) {
                 dessert
@@ -92,15 +92,15 @@ troop.postpone(grocer, 'PluginTask', function () {
             },
 
             /**
-             * @param {grocer.PluginTaskCollection} pluginTaskCollection
+             * @param {grocer.MultiTaskCollection} multiTaskCollection
              * @param {string} taskName
-             * @returns {grocer.PluginTask}
+             * @returns {grocer.MultiTask}
              */
-            addToCollection: function (pluginTaskCollection, taskName) {
+            addToCollection: function (multiTaskCollection, taskName) {
                 dessert
-                    .isPluginTaskCollection(pluginTaskCollection, "Invalid plugin task collection")
+                    .isMultiTaskCollection(multiTaskCollection, "Invalid multi task collection")
                     .isString(taskName, "Invalid task name");
-                pluginTaskCollection.setItem(taskName, this);
+                multiTaskCollection.setItem(taskName, this);
                 return this;
             }
         });
@@ -114,25 +114,25 @@ troop.postpone(grocer, 'PluginTask', function () {
         /** @lends String# */{
             /**
              * @param {object} [configNode]
-             * @returns {grocer.PluginTask}
+             * @returns {grocer.MultiTask}
              */
-            toPluginTask: function (configNode) {
-                return grocer.PluginTask.create(this.valueOf(), configNode);
+            toMultiTask: function (configNode) {
+                return grocer.MultiTask.create(this.valueOf(), configNode);
             }
         },
         false, false, false
     );
 
     dessert.addTypes(/** @lends dessert */{
-        /** @param {grocer.PluginTask} expr */
-        isPluginTask: function (expr) {
-            return grocer.PluginTask.isBaseOf(expr);
+        /** @param {grocer.MultiTask} expr */
+        isMultiTask: function (expr) {
+            return grocer.MultiTask.isBaseOf(expr);
         },
 
-        /** @param {grocer.PluginTask} expr */
-        isPluginTaskOptional: function (expr) {
+        /** @param {grocer.MultiTask} expr */
+        isMultiTaskOptional: function (expr) {
             return typeof expr === 'undefined' ||
-                   grocer.PluginTask.isBaseOf(expr);
+                   grocer.MultiTask.isBaseOf(expr);
         }
     });
 }());

@@ -1,24 +1,24 @@
 /*global dessert, troop, sntls, evan, shoeshine, grocer */
-troop.postpone(grocer, 'PluginTaskCollection', function () {
+troop.postpone(grocer, 'MultiTaskCollection', function () {
     "use strict";
 
-    var base = sntls.Collection.of(grocer.PluginTask),
+    var base = sntls.Collection.of(grocer.MultiTask),
         self = base.extend();
 
     /**
-     * @name grocer.PluginTaskCollection.create
+     * @name grocer.MultiTaskCollection.create
      * @function
      * @param {Object|Array} items
-     * @returns {grocer.PluginTaskCollection}
+     * @returns {grocer.MultiTaskCollection}
      */
 
     /**
      * @class
      * @extends sntls.Collection
-     * @extends grocer.PluginTask
+     * @extends grocer.MultiTask
      */
-    grocer.PluginTaskCollection = self
-        .addMethods(/** @lends grocer.PluginTaskCollection# */{
+    grocer.MultiTaskCollection = self
+        .addMethods(/** @lends grocer.MultiTaskCollection# */{
             /**
              * @param {string} [targetPrefix]
              * @returns {Object|Array}
@@ -41,9 +41,9 @@ troop.amendPostponed(sntls, 'Hash', function () {
     "use strict";
 
     sntls.Hash.addMethods(/** @lends sntls.Hash# */{
-        /** @returns {grocer.PluginTaskCollection} */
-        toPluginTaskCollection: function () {
-            return grocer.PluginTaskCollection.create(this.items);
+        /** @returns {grocer.MultiTaskCollection} */
+        toMultiTaskCollection: function () {
+            return grocer.MultiTaskCollection.create(this.items);
         }
     });
 });
@@ -54,24 +54,24 @@ troop.amendPostponed(sntls, 'Hash', function () {
     troop.Properties.addProperties.call(
         Array.prototype,
         /** @lends Array# */{
-            /** @returns {grocer.PluginTaskCollection} */
-            toPluginTaskCollection: function () {
-                return grocer.PluginTaskCollection.create(this);
+            /** @returns {grocer.MultiTaskCollection} */
+            toMultiTaskCollection: function () {
+                return grocer.MultiTaskCollection.create(this);
             }
         },
         false, false, false
     );
 
     dessert.addTypes(/** @lends dessert */{
-        /** @param {grocer.PluginTaskCollection} expr */
-        isPluginTaskCollection: function (expr) {
-            return grocer.PluginTaskCollection.isBaseOf(expr);
+        /** @param {grocer.MultiTaskCollection} expr */
+        isMultiTaskCollection: function (expr) {
+            return grocer.MultiTaskCollection.isBaseOf(expr);
         },
 
-        /** @param {grocer.PluginTaskCollection} expr */
-        isPluginTaskCollectionOptional: function (expr) {
+        /** @param {grocer.MultiTaskCollection} expr */
+        isMultiTaskCollectionOptional: function (expr) {
             return typeof expr === 'undefined' ||
-                   grocer.PluginTaskCollection.isBaseOf(expr);
+                   grocer.MultiTaskCollection.isBaseOf(expr);
         }
     });
 }());
