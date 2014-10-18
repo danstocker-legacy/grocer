@@ -6,12 +6,14 @@ troop.postpone(grocer, 'GruntProxy', function () {
         self = base.extend();
 
     /**
+     * Creates or retrieves a GruntProxy instance.
      * @name grocer.GruntProxy.create
      * @function
      * @returns {grocer.GruntProxy}
      */
 
     /**
+     * The GruntProxy singleton provides a testable API to communicate with grunt.
      * @class
      * @extends troop.Base
      */
@@ -22,11 +24,16 @@ troop.postpone(grocer, 'GruntProxy', function () {
         .addMethods(/** @lends grocer.GruntProxy# */{
             /** @ignore */
             init: function () {
-                /** @type {object} */
+                /**
+                 * Reference to the grunt object.
+                 * @type {object}
+                 */
                 this.grunt = undefined;
             },
 
             /**
+             * Sets grunt object. This must be called at least once in order to use
+             * the config management part of grocer.
              * @param {object} grunt
              * @returns {grocer.GruntProxy}
              */
@@ -37,7 +44,8 @@ troop.postpone(grocer, 'GruntProxy', function () {
             },
 
             /**
-             * @param {object} config
+             * Proxy for grunt.config.init().
+             * @param {object} config Config object to be passed to grunt.
              * @returns {*}
              */
             configInit: function (config) {
@@ -46,7 +54,8 @@ troop.postpone(grocer, 'GruntProxy', function () {
             },
 
             /**
-             * @param {object} config
+             * Proxy for grunt.config.merge().
+             * @param {object} config Config object to be passed to grunt.
              * @returns {*}
              */
             configMerge: function (config) {
@@ -54,13 +63,19 @@ troop.postpone(grocer, 'GruntProxy', function () {
                 return this.grunt.config.merge(config);
             },
 
-            /** @returns {*} */
+            /**
+             * Proxy for grunt.registerTask().
+             * @returns {*}
+             */
             registerTask: function () {
                 dessert.assert(!!this.grunt, "Grunt reference not set");
                 return this.grunt.registerTask.apply(this.grunt, arguments);
             },
 
-            /** @returns {*} */
+            /**
+             * Proxy for grunt.loadNpmTasks().
+             * returns {*}
+             */
             loadNpmTasks: function () {
                 dessert.assert(!!this.grunt, "Grunt reference not set");
                 return this.grunt.loadNpmTasks.apply(this.grunt, arguments);
