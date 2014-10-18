@@ -43,18 +43,6 @@ var sntls = sntls || require('sntls');
  */
 
 /**
- * Native DOM element class.
- * @name Element
- * @class
- */
-
-/**
- * Native DOM event class.
- * @name Event
- * @class
- */
-
-/**
  * @name sntls.Hash
  * @class
  */
