@@ -41,7 +41,7 @@ troop.amendPostponed(sntls, 'Path', function () {
     "use strict";
 
     sntls.Path
-        .addMethods(/** @lends sntls.Path */{
+        .addMethods(/** @lends sntls.Path# */{
             /**
              * Converts Path to a class path string.
              * @returns {string}

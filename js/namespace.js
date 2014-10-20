@@ -25,12 +25,6 @@ var troop = troop || require('troop');
 var sntls = sntls || require('sntls');
 
 /**
- * Native number class.
- * @name Number
- * @class
- */
-
-/**
  * Native string class.
  * @name String
  * @class
@@ -44,5 +38,10 @@ var sntls = sntls || require('sntls');
 
 /**
  * @name sntls.Hash
+ * @class
+ */
+
+/**
+ * @name sntls.Path
  * @class
  */
