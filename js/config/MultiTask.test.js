@@ -47,7 +47,9 @@
         equal(task.gruntPlugin.packageName, 'grunt-foo', "should set package name for plugin");
     });
 
-    test("Applying task", function () {
+    test("Applying plugin-based task", function () {
+        expect(2);
+
         var task = 'foo'.toMultiTask()
             .setPackageName('grunt-foo');
 
@@ -58,6 +60,26 @@
         });
 
         strictEqual(task.applyTask(), task, "should be chainable");
+
+        g$.GruntProxy.removeMocks();
+    });
+
+    test("Applying handler-based task", function () {
+        expect(4);
+
+        var task = 'foo'.toMultiTask()
+            .setTaskHandler(function () {
+            });
+
+        g$.GruntProxy.addMocks({
+            registerMultiTask: function (taskName, description, handler) {
+                equal(taskName, 'foo', "should register multi task");
+                equal(description, 'bar', "should pass description to registration");
+                strictEqual(handler, task.taskHandler, "should pass task handler to registration");
+            }
+        });
+
+        strictEqual(task.applyTask('bar'), task, "should be chainable");
 
         g$.GruntProxy.removeMocks();
     });

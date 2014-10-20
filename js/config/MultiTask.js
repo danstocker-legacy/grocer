@@ -50,12 +50,23 @@ troop.postpone(grocer, 'MultiTask', function () {
             },
 
             /**
-             * Applies task by loading the plugin via the grunt API.
+             * Applies task by either loading the plugin or registering it with the provided handler.
+             * @param {string} [description]
              * @returns {grocer.MultiTask}
              */
-            applyTask: function () {
-                dessert.assert(!!this.gruntPlugin, "Task has no associated plugin");
-                this.gruntPlugin.loadPlugin();
+            applyTask: function (description) {
+                var gruntPlugin = this.gruntPlugin,
+                    taskHandler = this.taskHandler;
+
+                dessert.assert(!!gruntPlugin || !!taskHandler, "Task has no associated plugin or handler");
+
+                if (gruntPlugin) {
+                    gruntPlugin.loadPlugin();
+                } else {
+                    grocer.GruntProxy.create()
+                        .registerMultiTask(this.taskName, description, this.taskHandler);
+                }
+
                 return this;
             },
 
