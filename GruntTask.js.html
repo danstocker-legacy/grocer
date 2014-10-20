@@ -33,10 +33,23 @@ troop.postpone(grocer, 'GruntTask', function () {
         self = base.extend();
 
     /**
-     * The BruntTask is a base class for specific grunt tasks.
-     * Not to be instantiated on its own.
+     * Creates a GruntTask instance.
+     * GruntTask instances may also be created via conversion from String,
+     * where the string is treated as the name of the task.
+     * @name grocer.CustomTask.create
+     * @function
+     * @param {string} taskName Name of the task.
+     * @returns {grocer.CustomTask}
+     * @see String#toGruntTask
+     */
+
+    /**
+     * The GruntTask implements a basic grunt task.
+     * Basic tasks allow the user to implement tasks with a custom task handler.
      * @class
      * @extends troop.Base
+     * @see http://gruntjs.com/creating-tasks#basic-tasks
+     * @see http://gruntjs.com/creating-tasks#custom-tasks
      */
     grocer.GruntTask = self
         .addMethods(/** @lends grocer.GruntTask# */{
@@ -52,18 +65,55 @@ troop.postpone(grocer, 'GruntTask', function () {
                  * @type {string}
                  */
                 this.taskName = taskName;
+
+                /**
+                 * Function that implements the task.
+                 * @type {undefined}
+                 */
+                this.taskHandler = undefined;
             },
 
             /**
-             * Dummy super method just to be picked up by GruntTaskCollection.
-             * Do not invoke. Override in subclasses.
+             * Applies task by registering it via the grunt API.
+             * @param {string} [description]
              * @returns {grocer.GruntTask}
              */
-            applyTask: function () {
+            applyTask: function (description) {
+                grocer.GruntProxy.create()
+                    .registerTask(this.taskName, description, this.taskHandler);
+                return this;
+            },
+
+            /**
+             * Sets task handler. Overwrites previously set handler.
+             * @param {function} taskHandler Function that implements the task.
+             * @returns {grocer.GruntTask}
+             */
+            setTaskHandler: function (taskHandler) {
+                dessert.isFunction(taskHandler, "Invalid task handler");
+                this.taskHandler = taskHandler;
                 return this;
             }
         });
 });
+
+(function () {
+    "use strict";
+
+    troop.Properties.addProperties.call(
+        String.prototype,
+        /** @lends String# */{
+            /**
+             * Converts string to GruntTask, treating the string as task name.
+             * @returns {grocer.GruntTask}
+             */
+            toGruntTask: function () {
+                return grocer.GruntTask.create(this.valueOf());
+            }
+        },
+        false, false, false
+    );
+}());
 </code></pre>
         </article>
     </section>
@@ -74,13 +124,13 @@ troop.postpone(grocer, 'GruntTask', function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="grocer.AliasTask.html">AliasTask</a></li><li><a href="grocer.Asset.html">Asset</a></li><li><a href="grocer.AssetCollection.html">AssetCollection</a></li><li><a href="grocer.ClassPathParser.html">ClassPathParser</a></li><li><a href="grocer.Css.html">Css</a></li><li><a href="grocer.CustomTask.html">CustomTask</a></li><li><a href="grocer.GruntConfig.html">GruntConfig</a></li><li><a href="grocer.GruntPlugin.html">GruntPlugin</a></li><li><a href="grocer.GruntProxy.html">GruntProxy</a></li><li><a href="grocer.GruntTask.html">GruntTask</a></li><li><a href="grocer.GruntTaskCollection.html">GruntTaskCollection</a></li><li><a href="grocer.Manifest.html">Manifest</a></li><li><a href="grocer.Module.html">Module</a></li><li><a href="grocer.MultiTask.html">MultiTask</a></li><li><a href="grocer.MultiTaskCollection.html">MultiTaskCollection</a></li><li><a href="grocer.Script.html">Script</a></li><li><a href="Number.html">Number</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="grocer.html">grocer</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="grocer.AliasTask.html">AliasTask</a></li><li><a href="grocer.Asset.html">Asset</a></li><li><a href="grocer.AssetCollection.html">AssetCollection</a></li><li><a href="grocer.ClassPathParser.html">ClassPathParser</a></li><li><a href="grocer.Css.html">Css</a></li><li><a href="grocer.GruntConfig.html">GruntConfig</a></li><li><a href="grocer.GruntPlugin.html">GruntPlugin</a></li><li><a href="grocer.GruntProxy.html">GruntProxy</a></li><li><a href="grocer.GruntTask.html">GruntTask</a></li><li><a href="grocer.GruntTaskCollection.html">GruntTaskCollection</a></li><li><a href="grocer.Manifest.html">Manifest</a></li><li><a href="grocer.Module.html">Module</a></li><li><a href="grocer.MultiTask.html">MultiTask</a></li><li><a href="grocer.MultiTaskCollection.html">MultiTaskCollection</a></li><li><a href="grocer.Script.html">Script</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="grocer.html">grocer</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Oct 18 2014 11:56:41 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Oct 20 2014 21:01:18 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>

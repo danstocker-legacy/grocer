@@ -30,7 +30,8 @@ troop.postpone(grocer, 'MultiTask', function () {
     "use strict";
 
     var base = grocer.GruntTask,
-        self = base.extend();
+        self = base.extend(),
+        validators = dessert.validators;
 
     /**
      * Creates a MultiTask instance.
@@ -39,7 +40,7 @@ troop.postpone(grocer, 'MultiTask', function () {
      * @name grocer.MultiTask.create
      * @function
      * @param {string} taskName Name of multi task.
-     * @param {object} [taskNode]
+     * @param {object|function} [configNode]
      * @returns {grocer.MultiTask}
      */
 
@@ -51,14 +52,27 @@ troop.postpone(grocer, 'MultiTask', function () {
      * @see http://gruntjs.com/creating-tasks#multi-tasks
      */
     grocer.MultiTask = self
+        .addPrivateMethods(/** @lends grocer.MultiTask# */{
+            /**
+             * @returns {object}
+             * @private
+             */
+            _getConfigNode: function () {
+                return typeof this.configNode === 'function' ?
+                       this.configNode() :
+                       this.configNode;
+            }
+        })
         .addMethods(/** @lends grocer.MultiTask# */{
             /**
              * @param {string} taskName
-             * @param {object} [configNode]
+             * @param {object|function} [configNode]
              * @ignore
              */
             init: function (taskName, configNode) {
-                dessert.isObjectOptional(configNode, "Invalid task config node");
+                dessert.assert(
+                    !configNode || validators.isFunction(configNode) || validators.isObject(configNode),
+                    "Invalid task config node");
 
                 base.init.call(this, taskName);
 
@@ -69,20 +83,30 @@ troop.postpone(grocer, 'MultiTask', function () {
                 this.gruntPlugin = undefined;
 
                 /**
-                 * Collection of target configurations.
-                 * Structure: target name - target config object.
-                 * @type {sntls.Collection}
+                 * Config node object or function that generates it.
+                 * @type {object|function}
                  */
-                this.targets = sntls.Collection.create(configNode);
+                this.configNode = configNode || {};
             },
 
             /**
-             * Applies task by loading the plugin via the grunt API.
+             * Applies task by either loading the plugin or registering it with the provided handler.
+             * @param {string} [description]
              * @returns {grocer.MultiTask}
              */
-            applyTask: function () {
-                dessert.assert(!!this.gruntPlugin, "Task has no associated plugin");
-                this.gruntPlugin.loadPlugin();
+            applyTask: function (description) {
+                var gruntPlugin = this.gruntPlugin,
+                    taskHandler = this.taskHandler;
+
+                dessert.assert(!!gruntPlugin || !!taskHandler, "Task has no associated plugin or handler");
+
+                if (gruntPlugin) {
+                    gruntPlugin.loadPlugin();
+                } else {
+                    grocer.GruntProxy.create()
+                        .registerMultiTask(this.taskName, description, this.taskHandler);
+                }
+
                 return this;
             },
 
@@ -98,26 +122,6 @@ troop.postpone(grocer, 'MultiTask', function () {
             },
 
             /**
-             * Adds a target to the task.
-             * @param {string} targetName Name of target, eg. 'development'.
-             * @param {object} targetConfigNode
-             * @returns {grocer.MultiTask}
-             */
-            addTarget: function (targetName, targetConfigNode) {
-                this.targets.setItem(targetName, targetConfigNode);
-                return this;
-            },
-
-            /**
-             * Tells whether the task has the specified target.
-             * @param {string} targetName
-             * @returns {boolean}
-             */
-            hasTarget: function (targetName) {
-                return !!this.targets.getItem(targetName);
-            },
-
-            /**
              * Fetches config node for the whole task, with each target prefixed optionally.
              * @param {string} [targetPrefix] Optional prefix for targets.
              * @returns {Object|Array}
@@ -125,14 +129,16 @@ troop.postpone(grocer, 'MultiTask', function () {
             getConfigNode: function (targetPrefix) {
                 dessert.isStringOptional(targetPrefix, "Invalid target prefix");
 
+                var configNode = this._getConfigNode();
+
                 if (targetPrefix) {
-                    return this.targets
+                    return sntls.Collection.create(configNode)
                         .mapKeys(function (targetConfig, targetName) {
                             return targetPrefix + targetName;
                         })
                         .items;
                 } else {
-                    return this.targets.items;
+                    return configNode;
                 }
             },
 
@@ -201,13 +207,13 @@ troop.postpone(grocer, 'MultiTask', function () {
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="grocer.AliasTask.html">AliasTask</a></li><li><a href="grocer.Asset.html">Asset</a></li><li><a href="grocer.AssetCollection.html">AssetCollection</a></li><li><a href="grocer.ClassPathParser.html">ClassPathParser</a></li><li><a href="grocer.Css.html">Css</a></li><li><a href="grocer.CustomTask.html">CustomTask</a></li><li><a href="grocer.GruntConfig.html">GruntConfig</a></li><li><a href="grocer.GruntPlugin.html">GruntPlugin</a></li><li><a href="grocer.GruntProxy.html">GruntProxy</a></li><li><a href="grocer.GruntTask.html">GruntTask</a></li><li><a href="grocer.GruntTaskCollection.html">GruntTaskCollection</a></li><li><a href="grocer.Manifest.html">Manifest</a></li><li><a href="grocer.Module.html">Module</a></li><li><a href="grocer.MultiTask.html">MultiTask</a></li><li><a href="grocer.MultiTaskCollection.html">MultiTaskCollection</a></li><li><a href="grocer.Script.html">Script</a></li><li><a href="Number.html">Number</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="grocer.html">grocer</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="grocer.AliasTask.html">AliasTask</a></li><li><a href="grocer.Asset.html">Asset</a></li><li><a href="grocer.AssetCollection.html">AssetCollection</a></li><li><a href="grocer.ClassPathParser.html">ClassPathParser</a></li><li><a href="grocer.Css.html">Css</a></li><li><a href="grocer.GruntConfig.html">GruntConfig</a></li><li><a href="grocer.GruntPlugin.html">GruntPlugin</a></li><li><a href="grocer.GruntProxy.html">GruntProxy</a></li><li><a href="grocer.GruntTask.html">GruntTask</a></li><li><a href="grocer.GruntTaskCollection.html">GruntTaskCollection</a></li><li><a href="grocer.Manifest.html">Manifest</a></li><li><a href="grocer.Module.html">Module</a></li><li><a href="grocer.MultiTask.html">MultiTask</a></li><li><a href="grocer.MultiTaskCollection.html">MultiTaskCollection</a></li><li><a href="grocer.Script.html">Script</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="grocer.html">grocer</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sat Oct 18 2014 11:56:41 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Oct 20 2014 21:01:18 GMT+0100 (BST)
 </footer>
 
 <script> prettyPrint(); </script>
