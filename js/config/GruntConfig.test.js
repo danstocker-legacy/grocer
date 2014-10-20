@@ -44,15 +44,23 @@
     test("Config initialization", function () {
         expect(3);
 
-        var config = g$.GruntConfig.create();
+        var config = g$.GruntConfig.create({
+                foo: {hello: "world"},
+                bar: {hi: "all"}
+            }),
+            tasks = [];
 
         g$.GruntProxy.addMocks({
-            configMerge: function (configNode) {
-                strictEqual(configNode, config.items, "should pass config node to grunt.config.merge()");
+            configSet: function (taskName, configNode) {
+                tasks.push([taskName, configNode]);
             }
         });
 
         strictEqual(config.applyConfig(), config, "should be chainable");
+        deepEqual(tasks, [
+            ['foo', {hello:"world"}],
+            ['bar', {hi:"all"}]
+        ], "should set config nodes in grunt config object");
 
         g$.GruntProxy.removeMocks();
 
@@ -64,6 +72,22 @@
         });
 
         config.applyConfig(true);
+
+        g$.GruntProxy.removeMocks();
+    });
+
+    test("Config merge", function () {
+        expect(2);
+
+        var config = g$.GruntConfig.create();
+
+        g$.GruntProxy.addMocks({
+            configMerge: function (configNode) {
+                strictEqual(configNode, config.items, "should pass config node to grunt.config.merge()");
+            }
+        });
+
+        strictEqual(config.mergeConfig(), config, "should be chainable");
 
         g$.GruntProxy.removeMocks();
     });
@@ -114,7 +138,7 @@
         }, "should return collection of AliasTask instances");
     });
 
-    test("Config merge", function () {
+    test("Merging with other config", function () {
         var tasks = g$.MultiTaskCollection.create(),
             configA = g$.GruntConfig.create({
                 copy  : {

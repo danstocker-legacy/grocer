@@ -64,6 +64,17 @@ troop.postpone(grocer, 'GruntProxy', function () {
             },
 
             /**
+             * Proxy for grunt.config.set().
+             * @param {string} propertyName
+             * @param {*} config
+             * @returns {*}
+             */
+            configSet: function (propertyName, config) {
+                dessert.assert(!!this.grunt, "Grunt reference not set");
+                return this.grunt.config.set(propertyName, config);
+            },
+
+            /**
              * Proxy for grunt.registerTask().
              * @returns {*}
              */

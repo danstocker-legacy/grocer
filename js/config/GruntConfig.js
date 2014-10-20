@@ -68,8 +68,10 @@ troop.postpone(grocer, 'GruntConfig', function () {
             },
 
             /**
-             * Applies config by merging or initializing it via the grunt API. (Merges by default.)
-             * @param {boolean} [wipe] Optional argument telling whether previously set config should be wiped.
+             * Applies config via the grunt API. Overwrites tasks in the current config.
+             * When the optional `wipe` argument is set, it also removes all other tasks leaving only those
+             * being applied.
+             * @param {boolean} [wipe] Whether to remove tasks not in current config.
              * @returns {grocer.GruntConfig}
              */
             applyConfig: function (wipe) {
@@ -77,8 +79,21 @@ troop.postpone(grocer, 'GruntConfig', function () {
                 if (wipe) {
                     gruntProxy.configInit(this.items);
                 } else {
-                    gruntProxy.configMerge(this.items);
+                    this.toCollection()
+                        .forEachItem(function (taskConfigNode, taskName) {
+                            gruntProxy.configSet(taskName, taskConfigNode);
+                        });
                 }
+                return this;
+            },
+
+            /**
+             * Applies config by merging current config to previously applied config(s) via the grunt API.
+             * @returns {grocer.GruntConfig}
+             */
+            mergeConfig: function () {
+                var gruntProxy = grocer.GruntProxy.create();
+                gruntProxy.configMerge(this.items);
                 return this;
             },
 
