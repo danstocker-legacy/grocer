@@ -83,6 +83,21 @@
         deepEqual(scriptList, [], "should return undefined for non-existing asset type");
     });
 
+    test("Module node getter", function () {
+        var module = 'foo'.toModule({
+            classPath: 'foo["bar"].baz',
+            assets   : {
+                js: ['hello.js', 'world.js']
+            }
+        });
+
+        deepEqual(module.getModuleNode(), {
+            assets   : {
+                js: ['hello.js', 'world.js']
+            }
+        }, "should return asset list part of node");
+    });
+
     test("Conversion to asset", function () {
         var module = 'foo'.toModule({
             classPath: 'foo["bar"].baz',

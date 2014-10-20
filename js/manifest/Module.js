@@ -93,6 +93,20 @@ troop.postpone(grocer, 'Module', function () {
             },
 
             /**
+             *
+             * @returns {object}
+             */
+            getModuleNode: function () {
+                return {
+                    assets: this.assetCollections
+                        .mapValues(function (assetCollection) {
+                            return assetCollection.getAssetNames();
+                        })
+                        .items
+                };
+            },
+
+            /**
              * Converts module to a single asset.
              * To be used for reducing all assets within the module to a single file ie.
              * via concatenation, minification, etc.
