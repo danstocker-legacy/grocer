@@ -122,13 +122,34 @@
     });
 
     test("Filtering by module names", function () {
-        var manifest = g$.Manifest.create(manifestNode),
-            filteredManifest = manifest.filterByModuleNames('libraries', 'common');
+        expect(2);
 
-        ok(filteredManifest.isA(g$.Manifest), "should return Manifest instance");
-        deepEqual(
-            filteredManifest.modules.getKeys().sort(),
-            ['libraries', 'common'].sort(),
-            "should filter down to specified modules");
+        var manifest = g$.Manifest.create(manifestNode),
+            result = {};
+
+        g$.Manifest.addMocks({
+            create: function (manifestNode) {
+                deepEqual(manifestNode, {
+                    "libraries": {
+                        "assets": {
+                            "js": [ "src/jquery.js" ]
+                        }
+                    },
+                    "users"    : {
+                        "classPath": "app.pages.Users",
+                        "assets"   : {
+                            "js" : [ "src/Users.js" ],
+                            "css": [ "src/Users.css" ]
+                        }
+                    }
+                }, "should pass filtered manifest node to constructor");
+                return result;
+            }
+        });
+
+        strictEqual(manifest.filterByModuleNames('libraries', 'users'), result,
+            "return new Manifest instance based on filtered manifest node");
+
+        g$.Manifest.removeMocks();
     });
 }());

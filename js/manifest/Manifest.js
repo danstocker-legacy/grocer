@@ -74,8 +74,8 @@ troop.postpone(grocer, 'Manifest', function () {
             getAssetsForModule: function (moduleName, assetType) {
                 var module = this.getModule(moduleName);
                 return module ?
-                    module.getAssets(assetType) :
-                    undefined;
+                       module.getAssets(assetType) :
+                       undefined;
             },
 
             /**
@@ -106,9 +106,12 @@ troop.postpone(grocer, 'Manifest', function () {
              */
             filterByModuleNames: function () {
                 var filteredModules = this.modules
-                    .filterByKeys(slice.apply(arguments));
+                        .filterByKeys(slice.apply(arguments)),
+                    filteredManifestNode = filteredModules
+                        .callOnEachItem('getModuleNode')
+                        .items;
 
-                return this.getBase().create(filteredModules.items);
+                return this.getBase().create(filteredManifestNode);
             }
         });
 });
