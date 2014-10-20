@@ -3,6 +3,8 @@ Grocer
 
 *Front end asset manager*
 
+[Wiki](https://github.com/danstocker/grocer/wiki)
+
 [Reference](http://danstocker.github.io/grocer/)
 
 The purpose of Grocer is to provide an API to
