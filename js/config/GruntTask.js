@@ -6,10 +6,23 @@ troop.postpone(grocer, 'GruntTask', function () {
         self = base.extend();
 
     /**
-     * The BruntTask is a base class for specific grunt tasks.
-     * Not to be instantiated on its own.
+     * Creates a GruntTask instance.
+     * GruntTask instances may also be created via conversion from String,
+     * where the string is treated as the name of the task.
+     * @name grocer.CustomTask.create
+     * @function
+     * @param {string} taskName Name of the task.
+     * @returns {grocer.CustomTask}
+     * @see String#toGruntTask
+     */
+
+    /**
+     * The GruntTask implements a basic grunt task.
+     * Basic tasks allow the user to implement tasks with a custom task handler.
      * @class
      * @extends troop.Base
+     * @see http://gruntjs.com/creating-tasks#basic-tasks
+     * @see http://gruntjs.com/creating-tasks#custom-tasks
      */
     grocer.GruntTask = self
         .addMethods(/** @lends grocer.GruntTask# */{
@@ -25,15 +38,52 @@ troop.postpone(grocer, 'GruntTask', function () {
                  * @type {string}
                  */
                 this.taskName = taskName;
+
+                /**
+                 * Function that implements the task.
+                 * @type {undefined}
+                 */
+                this.taskHandler = undefined;
             },
 
             /**
-             * Dummy super method just to be picked up by GruntTaskCollection.
-             * Do not invoke. Override in subclasses.
+             * Applies task by registering it via the grunt API.
+             * @param {string} [description]
              * @returns {grocer.GruntTask}
              */
-            applyTask: function () {
+            applyTask: function (description) {
+                grocer.GruntProxy.create()
+                    .registerTask(this.taskName, description, this.taskHandler);
+                return this;
+            },
+
+            /**
+             * Sets task handler. Overwrites previously set handler.
+             * @param {function} taskHandler Function that implements the task.
+             * @returns {grocer.GruntTask}
+             */
+            setTaskHandler: function (taskHandler) {
+                dessert.isFunction(taskHandler, "Invalid task handler");
+                this.taskHandler = taskHandler;
                 return this;
             }
         });
 });
+
+(function () {
+    "use strict";
+
+    troop.Properties.addProperties.call(
+        String.prototype,
+        /** @lends String# */{
+            /**
+             * Converts string to GruntTask, treating the string as task name.
+             * @returns {grocer.GruntTask}
+             */
+            toGruntTask: function () {
+                return grocer.GruntTask.create(this.valueOf());
+            }
+        },
+        false, false, false
+    );
+}());
