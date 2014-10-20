@@ -5,38 +5,47 @@
 
     module("MultiTask");
 
-    test("Instantiation", function () {
+    test("Instantiation with object", function () {
         raises(function () {
             g$.MultiTask.create('foo', 'bar');
         }, "should raise exception on invalid arguments");
 
-        var taskNode = {
+        var configNode = {
                 dev : {},
                 prod: {}
             },
-            task = g$.MultiTask.create('foo', taskNode);
+            task;
 
-        ok(task.targets.isA(sntls.Collection), "should initialize targets property as collection");
-        strictEqual(task.targets.items, taskNode, "should set targets' buffer to specified taskNode");
+        task = g$.MultiTask.create('foo');
+        deepEqual(task.configNode, {}, "should set configNode property to empty object");
+
+        task = g$.MultiTask.create('foo', configNode);
+        strictEqual(task.configNode, configNode, "should set configNode property to specified object");
+    });
+
+    test("Instantiation with function", function () {
+        var task = g$.MultiTask.create('foo', genConfigNode);
+
+        function genConfigNode() {
+        }
+
+        strictEqual(task.configNode, genConfigNode, "should set configNode property to specified function");
     });
 
     test("Conversion from string", function () {
-        var multiTask = 'foo'.toMultiTask();
+        var multiTask = 'foo'.toMultiTask({
+            foo: {}
+        });
 
         ok(multiTask.hasOwnProperty('gruntPlugin'), "should add gruntPlugin property");
         equal(typeof multiTask.gruntPlugin, 'undefined', "should initialize gruntPlugin property to undefined");
 
         ok(multiTask.isA(g$.MultiTask), "should return MultiTask instance");
         equal(multiTask.taskName, 'foo', "should set task name");
-        equal(multiTask.targets.getKeyCount(), 0, "should set targets property to empty collection");
-
-        multiTask = 'foo'.toMultiTask({
+        deepEqual(multiTask.configNode, {
             foo: {}
-        });
+        }, "should set configNode property to specified object");
 
-        deepEqual(multiTask.targets.items, {
-            foo: {}
-        }, "should set targets property to collection having the specified config node");
     });
 
     test("Setting package name", function () {
@@ -84,16 +93,7 @@
         g$.GruntProxy.removeMocks();
     });
 
-    test("Target tester", function () {
-        var task = g$.MultiTask.create('foo', {
-            foo: {}
-        });
-
-        ok(task.hasTarget('foo'), "should return true for existing target");
-        ok(!task.hasTarget('bar'), "should return false for missing target");
-    });
-
-    test("Config node getter", function () {
+    test("Config node getter with object", function () {
         var task = 'foo'.toMultiTask({
             foo: {
                 bar: 'baz'
@@ -104,8 +104,31 @@
             task.getConfigNode(4);
         }, "should raise exception on invalid argument");
 
-        strictEqual(task.getConfigNode(), task.targets.items,
-            "should return targets buffer when no target prefix is specified");
+        strictEqual(task.getConfigNode(), task.configNode,
+            "should return configNode when no target prefix is specified");
+
+        deepEqual(task.getConfigNode('_'), {
+            _foo: {
+                bar: 'baz'
+            }
+        }, "should return task config node with prefixed targets when prefix is specified");
+    });
+
+    test("Config node getter with generator", function () {
+        var task = 'foo'.toMultiTask(function () {
+            return {
+                foo: {
+                    bar: 'baz'
+                }
+            };
+        });
+
+        deepEqual(task.getConfigNode(), {
+                foo: {
+                    bar: 'baz'
+                }
+            },
+            "should return configNode copy when no target prefix is specified");
 
         deepEqual(task.getConfigNode('_'), {
             _foo: {

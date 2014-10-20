@@ -3,7 +3,8 @@ troop.postpone(grocer, 'MultiTask', function () {
     "use strict";
 
     var base = grocer.GruntTask,
-        self = base.extend();
+        self = base.extend(),
+        validators = dessert.validators;
 
     /**
      * Creates a MultiTask instance.
@@ -12,7 +13,7 @@ troop.postpone(grocer, 'MultiTask', function () {
      * @name grocer.MultiTask.create
      * @function
      * @param {string} taskName Name of multi task.
-     * @param {object} [taskNode]
+     * @param {object|function} [configNode]
      * @returns {grocer.MultiTask}
      */
 
@@ -24,14 +25,27 @@ troop.postpone(grocer, 'MultiTask', function () {
      * @see http://gruntjs.com/creating-tasks#multi-tasks
      */
     grocer.MultiTask = self
+        .addPrivateMethods(/** @lends grocer.MultiTask# */{
+            /**
+             * @returns {object}
+             * @private
+             */
+            _getConfigNode: function () {
+                return typeof this.configNode === 'function' ?
+                       this.configNode() :
+                       this.configNode;
+            }
+        })
         .addMethods(/** @lends grocer.MultiTask# */{
             /**
              * @param {string} taskName
-             * @param {object} [configNode]
+             * @param {object|function} [configNode]
              * @ignore
              */
             init: function (taskName, configNode) {
-                dessert.isObjectOptional(configNode, "Invalid task config node");
+                dessert.assert(
+                    !configNode || validators.isFunction(configNode) || validators.isObject(configNode),
+                    "Invalid task config node");
 
                 base.init.call(this, taskName);
 
@@ -42,11 +56,10 @@ troop.postpone(grocer, 'MultiTask', function () {
                 this.gruntPlugin = undefined;
 
                 /**
-                 * Collection of target configurations.
-                 * Structure: target name - target config object.
-                 * @type {sntls.Collection}
+                 * Config node object or function that generates it.
+                 * @type {object|function}
                  */
-                this.targets = sntls.Collection.create(configNode);
+                this.configNode = configNode || {};
             },
 
             /**
@@ -82,15 +95,6 @@ troop.postpone(grocer, 'MultiTask', function () {
             },
 
             /**
-             * Tells whether the task has the specified target.
-             * @param {string} targetName
-             * @returns {boolean}
-             */
-            hasTarget: function (targetName) {
-                return !!this.targets.getItem(targetName);
-            },
-
-            /**
              * Fetches config node for the whole task, with each target prefixed optionally.
              * @param {string} [targetPrefix] Optional prefix for targets.
              * @returns {Object|Array}
@@ -98,14 +102,16 @@ troop.postpone(grocer, 'MultiTask', function () {
             getConfigNode: function (targetPrefix) {
                 dessert.isStringOptional(targetPrefix, "Invalid target prefix");
 
+                var configNode = this._getConfigNode();
+
                 if (targetPrefix) {
-                    return this.targets
+                    return sntls.Collection.create(configNode)
                         .mapKeys(function (targetConfig, targetName) {
                             return targetPrefix + targetName;
                         })
                         .items;
                 } else {
-                    return this.targets.items;
+                    return configNode;
                 }
             },
 
