@@ -16,7 +16,13 @@ troop.postpone(grocer, 'ClassPathParser', function () {
              * @type {RegExp}
              * @constant
              */
-            RE_CLASS_PATH_DELIMITER: /[^0-9a-z_$]+/i
+            RE_CLASS_PATH_DELIMITER: /[^0-9a-z_$]+/i,
+
+            /**
+             * @type {RegExp}
+             * @constant
+             */
+            RE_IDENTIFIER: /^[a-z][0-9a-z_$]+$/i
         })
         .addMethods(/** @lends grocer.ClassPathParser */{
             /**
@@ -27,6 +33,31 @@ troop.postpone(grocer, 'ClassPathParser', function () {
              */
             parseClassPath: function (classPath) {
                 return classPath.split(this.RE_CLASS_PATH_DELIMITER).toPath();
+            }
+        });
+});
+
+troop.amendPostponed(sntls, 'Path', function () {
+    "use strict";
+
+    sntls.Path
+        .addMethods(/** @lends sntls.Path */{
+            /**
+             * Converts Path to a class path string.
+             * @returns {string}
+             */
+            toClassPath: function () {
+                return this.asArray
+                    .toCollection()
+                    .mapValues(function (propertyName, index) {
+                        return !grocer.ClassPathParser.RE_IDENTIFIER.test(propertyName) ?
+                               '["' + propertyName.replace('"', '\\"') + '"]' :
+                               index > 0 ?
+                               '.' + propertyName :
+                               propertyName;
+                    })
+                    .items
+                    .join('');
             }
         });
 });

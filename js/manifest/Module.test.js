@@ -92,6 +92,7 @@
         });
 
         deepEqual(module.getModuleNode(), {
+            classPath: 'foo.bar.baz',
             assets   : {
                 js: ['hello.js', 'world.js']
             }

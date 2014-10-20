@@ -53,8 +53,8 @@ troop.postpone(grocer, 'Module', function () {
                  * @type {sntls.Path}
                  */
                 this.classPath = classPath ?
-                    classPath.toPathFromClassPath() :
-                    undefined;
+                                 classPath.toPathFromClassPath() :
+                                 undefined;
 
                 /**
                  * Collection of asset collections. Within a module, there's an asset collection associated
@@ -88,22 +88,30 @@ troop.postpone(grocer, 'Module', function () {
                 dessert.isString(assetType, "Invalid asset type");
                 var assets = this.assetCollections.getItem(assetType);
                 return assets ?
-                    assets.getAssetNames() :
-                    [];
+                       assets.getAssetNames() :
+                       [];
             },
 
             /**
-             *
+             * Reconstructs module node base don current module contents.
              * @returns {object}
              */
             getModuleNode: function () {
-                return {
-                    assets: this.assetCollections
+                var result = {};
+
+                if (this.classPath) {
+                    result.classPath = this.classPath.toClassPath();
+                }
+
+                if (this.assetCollections.getKeyCount()) {
+                    result.assets = this.assetCollections
                         .mapValues(function (assetCollection) {
                             return assetCollection.getAssetNames();
                         })
-                        .items
-                };
+                        .items;
+                }
+
+                return result;
             },
 
             /**

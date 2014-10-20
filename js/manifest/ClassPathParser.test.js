@@ -27,4 +27,9 @@
             g$.ClassPathParser.parseClassPath(classPathString),
             "should parse class path");
     });
+
+    test("Conversion to class path (string)", function () {
+        var classPath = ['foo', 'bar-bar', 'baz'].toPath();
+        equal(classPath.toClassPath(), 'foo["bar-bar"].baz', "should return correct class path string");
+    });
 }());
