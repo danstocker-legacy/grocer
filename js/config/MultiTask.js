@@ -82,17 +82,6 @@ troop.postpone(grocer, 'MultiTask', function () {
             },
 
             /**
-             * Adds a target to the task.
-             * @param {string} targetName Name of target, eg. 'development'.
-             * @param {object} targetConfigNode
-             * @returns {grocer.MultiTask}
-             */
-            addTarget: function (targetName, targetConfigNode) {
-                this.targets.setItem(targetName, targetConfigNode);
-                return this;
-            },
-
-            /**
              * Tells whether the task has the specified target.
              * @param {string} targetName
              * @returns {boolean}

@@ -84,18 +84,6 @@
         g$.GruntProxy.removeMocks();
     });
 
-    test("Target addition", function () {
-        var task = 'foo'.toMultiTask();
-
-        strictEqual(task.addTarget('bar', {hello: "world"}), task, "should be chainable");
-
-        deepEqual(task.targets.items, {
-            bar: {
-                hello: "world"
-            }
-        });
-    });
-
     test("Target tester", function () {
         var task = g$.MultiTask.create('foo', {
             foo: {}
@@ -106,10 +94,11 @@
     });
 
     test("Config node getter", function () {
-        var task = 'foo'.toMultiTask()
-            .addTarget('foo', {
+        var task = 'foo'.toMultiTask({
+            foo: {
                 bar: 'baz'
-            });
+            }
+        });
 
         raises(function () {
             task.getConfigNode(4);
@@ -128,10 +117,11 @@
     test("Addition to config", function () {
         expect(4);
 
-        var task = 'foo'.toMultiTask()
-                .addTarget('foo', {
+        var task = 'foo'.toMultiTask({
+                foo: {
                     bar: 'baz'
-                }),
+                }
+            }),
             config = g$.GruntConfig.create();
 
         raises(function () {
