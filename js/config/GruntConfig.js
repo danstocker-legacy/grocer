@@ -84,7 +84,7 @@ troop.postpone(grocer, 'GruntConfig', function () {
                         .forEachItem(function (targetConfigNode, targetPath) {
                             var prop = targetPath.toPath().asArray
                                 .toCollection()
-                                .mapValues(gruntProxy.configEscape)
+                                .mapValues(gruntProxy.configEscape, gruntProxy)
                                 .items
                                 .join('.');
 
