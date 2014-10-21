@@ -51,15 +51,19 @@
             tasks = [];
 
         g$.GruntProxy.addMocks({
-            configSet: function (taskName, configNode) {
-                tasks.push([taskName, configNode]);
+            configEscape: function (propertyName) {
+                return propertyName;
+            },
+
+            configSet: function (targetPath, targetNode) {
+                tasks.push([targetPath, targetNode]);
             }
         });
 
         strictEqual(config.applyConfig(), config, "should be chainable");
         deepEqual(tasks, [
-            ['foo', {hello:"world"}],
-            ['bar', {hi:"all"}]
+            ['foo.hello', "world"],
+            ['bar.hi', "all"]
         ], "should set config nodes in grunt config object");
 
         g$.GruntProxy.removeMocks();

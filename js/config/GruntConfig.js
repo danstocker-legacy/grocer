@@ -79,9 +79,16 @@ troop.postpone(grocer, 'GruntConfig', function () {
                 if (wipe) {
                     gruntProxy.configInit(this.items);
                 } else {
-                    this.toCollection()
-                        .forEachItem(function (taskConfigNode, taskName) {
-                            gruntProxy.configSet(taskName, taskConfigNode);
+                    this.queryPathValuePairsAsHash('|>|'.toQuery())
+                        .toCollection()
+                        .forEachItem(function (targetConfigNode, targetPath) {
+                            var prop = targetPath.toPath().asArray
+                                .toCollection()
+                                .mapValues(gruntProxy.configEscape)
+                                .items
+                                .join('.');
+
+                            gruntProxy.configSet(prop, targetConfigNode);
                         });
                 }
                 return this;

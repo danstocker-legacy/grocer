@@ -75,6 +75,14 @@ troop.postpone(grocer, 'GruntProxy', function () {
             },
 
             /**
+             * @param {string} propertyName
+             * @returns {string}
+             */
+            configEscape: function (propertyName) {
+                return this.grunt.config.escape(propertyName);
+            },
+
+            /**
              * Proxy for grunt.registerTask().
              * @returns {*}
              */
