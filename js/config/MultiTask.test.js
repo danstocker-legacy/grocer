@@ -48,6 +48,13 @@
 
     });
 
+    test("Setting task path", function () {
+        var task = 'foo'.toMultiTask();
+
+        strictEqual(task.setTaskPath('foo/bar/baz'), task, "should be chainable");
+        equal(task.taskPath, 'foo/bar/baz', "should set taskPath property");
+    });
+
     test("Setting package name", function () {
         var task = 'foo'.toMultiTask();
 
@@ -69,6 +76,23 @@
         });
 
         strictEqual(task.applyTask(), task, "should be chainable");
+
+        g$.GruntProxy.removeMocks();
+    });
+
+    test("Applying path-based task", function () {
+        expect(2);
+
+        var task = 'foo'.toMultiTask()
+            .setTaskPath('foo/bar/baz');
+
+        g$.GruntProxy.addMocks({
+            loadTasks: function (taskPath) {
+                equal(taskPath, 'foo/bar/baz', "should load task from path");
+            }
+        });
+
+        strictEqual(task.applyTask('foo/bar/baz'), task, "should be chainable");
 
         g$.GruntProxy.removeMocks();
     });

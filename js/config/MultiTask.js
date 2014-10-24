@@ -56,6 +56,12 @@ troop.postpone(grocer, 'MultiTask', function () {
                 this.gruntPlugin = undefined;
 
                 /**
+                 * Relative path to file that implements the task.
+                 * @type {string}
+                 */
+                this.taskPath = undefined;
+
+                /**
                  * Config node object or function that generates it.
                  * @type {object|function}
                  */
@@ -69,12 +75,17 @@ troop.postpone(grocer, 'MultiTask', function () {
              */
             applyTask: function (description) {
                 var gruntPlugin = this.gruntPlugin,
+                    taskPath = this.taskPath,
                     taskHandler = this.taskHandler;
 
-                dessert.assert(!!gruntPlugin || !!taskHandler, "Task has no associated plugin or handler");
+                dessert.assert(!!gruntPlugin || !!taskPath || !!taskHandler,
+                    "Task has no associated plugin, path, or handler");
 
                 if (gruntPlugin) {
                     gruntPlugin.loadPlugin();
+                } else if (taskPath) {
+                    grocer.GruntProxy.create()
+                        .loadTasks(taskPath);
                 } else {
                     grocer.GruntProxy.create()
                         .registerMultiTask(this.taskName, description, this.taskHandler);
@@ -91,6 +102,18 @@ troop.postpone(grocer, 'MultiTask', function () {
             setPackageName: function (packageName) {
                 dessert.isString(packageName, "Invalid packahe name");
                 this.gruntPlugin = packageName.toGruntPlugin();
+                return this;
+            },
+
+            /**
+             * Sets task path, so that it can be loaded from an external javascript file.
+             * Overwrites previously set task path.
+             * @param {string} taskPath
+             * @returns {grocer.MultiTask}
+             */
+            setTaskPath: function (taskPath) {
+                dessert.isString(taskPath, "Invalid task path");
+                this.taskPath = taskPath;
                 return this;
             },
 

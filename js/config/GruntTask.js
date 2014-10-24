@@ -12,7 +12,7 @@ troop.postpone(grocer, 'GruntTask', function () {
      * @name grocer.CustomTask.create
      * @function
      * @param {string} taskName Name of the task.
-     * @returns {grocer.CustomTask}
+     * @returns {grocer.GruntTask}
      * @see String#toGruntTask
      */
 
@@ -41,7 +41,7 @@ troop.postpone(grocer, 'GruntTask', function () {
 
                 /**
                  * Function that implements the task.
-                 * @type {undefined}
+                 * @type {function}
                  */
                 this.taskHandler = undefined;
             },

@@ -101,6 +101,15 @@ troop.postpone(grocer, 'GruntProxy', function () {
             },
 
             /**
+             * Proxy for grunt.loadTasks().
+             * returns {*}
+             */
+            loadTasks: function () {
+                dessert.assert(!!this.grunt, "Grunt reference not set");
+                return this.grunt.loadTasks.apply(this.grunt, arguments);
+            },
+
+            /**
              * Proxy for grunt.loadNpmTasks().
              * returns {*}
              */
