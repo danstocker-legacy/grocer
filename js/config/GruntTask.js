@@ -66,6 +66,17 @@ troop.postpone(grocer, 'GruntTask', function () {
                 dessert.isFunction(taskHandler, "Invalid task handler");
                 this.taskHandler = taskHandler;
                 return this;
+            },
+
+            /**
+             * Adds current task to a collection of tasks.
+             * @param {grocer.MultiTaskCollection} taskCollection Collection to add the task to.
+             * @returns {grocer.GruntTask}
+             */
+            addToCollection: function (taskCollection) {
+                dessert.isGruntTaskCollection(taskCollection, "Invalid grunt task collection");
+                taskCollection.setItem(this.taskName, this);
+                return this;
             }
         });
 });

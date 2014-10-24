@@ -58,4 +58,28 @@
         strictEqual(task.setTaskHandler(taskHandler), task, "should be chainable");
         strictEqual(task.taskHandler, taskHandler, "should set taskHandler property");
     });
+
+    test("Adding to collection", function () {
+        expect(5);
+
+        var task = 'foo'.toGruntTask(),
+            collection = g$.GruntTaskCollection.create();
+
+        raises(function () {
+            task.addToCollection();
+        }, "should raise exception on missing argument");
+
+        raises(function () {
+            task.addToCollection('foo');
+        }, "should raise exception on invalid collection argument");
+
+        collection.addMocks({
+            setItem: function (itemName, itemValue) {
+                strictEqual(itemValue, task, "should set task as item in collection");
+                equal(itemName, 'foo', "should set task by task name in collection");
+            }
+        });
+
+        strictEqual(task.addToCollection(collection), task, "should be chainable");
+    });
 }());
