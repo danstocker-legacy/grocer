@@ -103,6 +103,20 @@
             "should return empty asset collection for invalid type");
     });
 
+    test("Flat assets getter", function () {
+        var manifest = g$.Manifest.create(manifestNode);
+
+        deepEqual(
+            manifest.getFlatAssets('js'),
+            [ "jquery.js", "app.js", "Users.js" ].toAssetCollection('js'),
+            "should return combined flat asset list for specified type");
+
+        equal(
+            manifest.getFlatAssets('foo'),
+            [].toAssetCollection('foo'),
+            "should return empty asset collection for invalid type");
+    });
+
     test("Serialized asset list getter", function () {
         var manifest = g$.Manifest.create(manifestNode);
 

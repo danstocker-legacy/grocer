@@ -98,6 +98,21 @@ troop.postpone(grocer, 'Manifest', function () {
             },
 
             /**
+             * Retrieves assets from all modules matching the specified asset type,
+             * with all returned paths flattened out. (So that assets may go in the same folder.)
+             * @param {string} assetType
+             * @returns {grocer.AssetCollection}
+             */
+            getFlatAssets: function (assetType) {
+                return this.getAssets(assetType)
+                    .getFlatAssetFileNameLookup()
+                    .getValuesAsHash()
+                    .toCollection()
+                    .callOnEachItem('toAsset', assetType)
+                    .toAssetCollection();
+            },
+
+            /**
              * Filters manifest down to a set of modules. Returns a new manifest instance
              * containing only the specified modules.
              * @example
