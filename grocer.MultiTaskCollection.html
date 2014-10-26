@@ -162,7 +162,7 @@ config-related objects and classes.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MultiTask.js.html">config/MultiTask.js</a>, line 62
+        <a href="MultiTask.js.html">config/MultiTask.js</a>, line 68
     </li></ul></dd>
     
     
@@ -237,7 +237,7 @@ config-related objects and classes.
         
             
 <dt>
-    <h4 class="name" id="taskHandler"><span class="type-signature"></span>taskHandler<span class="type-signature"> :undefined</span></h4>
+    <h4 class="name" id="taskHandler"><span class="type-signature"></span>taskHandler<span class="type-signature"> :function</span></h4>
     
     
 </dt>
@@ -334,6 +334,63 @@ config-related objects and classes.
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
         <a href="GruntTask.js.html">config/GruntTask.js</a>, line 40
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="taskPath"><span class="type-signature"></span>taskPath<span class="type-signature"> :string</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    <div class="description">
+        Relative path to file that implements the task.
+    </div>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="grocer.MultiTask.html#taskPath">grocer.MultiTask#taskPath</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MultiTask.js.html">config/MultiTask.js</a>, line 62
     </li></ul></dd>
     
     
@@ -680,7 +737,7 @@ MultiTaskCollection instances may also be created via conversion from Array and 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MultiTask.js.html">config/MultiTask.js</a>, line 134
+        <a href="MultiTask.js.html">config/MultiTask.js</a>, line 157
     </li></ul></dd>
     
     
@@ -816,7 +873,7 @@ MultiTaskCollection instances may also be created via conversion from Array and 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MultiTask.js.html">config/MultiTask.js</a>, line 123
+        <a href="MultiTask.js.html">config/MultiTask.js</a>, line 146
     </li></ul></dd>
     
     
@@ -964,7 +1021,7 @@ MultiTaskCollection instances may also be created via conversion from Array and 
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MultiTask.js.html">config/MultiTask.js</a>, line 70
+        <a href="MultiTask.js.html">config/MultiTask.js</a>, line 76
     </li></ul></dd>
     
     
@@ -1247,7 +1304,7 @@ with targets optionally prefixed.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="MultiTask.js.html">config/MultiTask.js</a>, line 91
+        <a href="MultiTask.js.html">config/MultiTask.js</a>, line 102
     </li></ul></dd>
     
     
@@ -1425,6 +1482,143 @@ with targets optionally prefixed.
         
             
 <dt>
+    <h4 class="name" id="setTaskPath"><span class="type-signature"></span>setTaskPath<span class="signature">(taskPath)</span><span class="type-signature"> &rarr; {<a href="grocer.MultiTask.html">grocer.MultiTask</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Sets task path, so that it can be loaded from an external javascript file.
+Overwrites previously set task path.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>taskPath</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    <dt class="inherited-from">Inherited From:</dt>
+    <dd class="inherited-from"><ul class="dummy"><li>
+        <a href="grocer.MultiTask.html#setTaskPath">grocer.MultiTask#setTaskPath</a>
+    </li></dd>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="MultiTask.js.html">config/MultiTask.js</a>, line 114
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="grocer.MultiTask.html">grocer.MultiTask</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
     <h4 class="name" id="toGruntConfig"><span class="type-signature"></span>toGruntConfig<span class="signature">(<span class="optional">targetPrefix</span>)</span><span class="type-signature"> &rarr; {<a href="grocer.GruntConfig.html">grocer.GruntConfig</a>}</span></h4>
     
     
@@ -1581,13 +1775,13 @@ with targets optionally prefixed.
 </div>
 
 <nav>
-    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="grocer.AliasTask.html">AliasTask</a></li><li><a href="grocer.Asset.html">Asset</a></li><li><a href="grocer.AssetCollection.html">AssetCollection</a></li><li><a href="grocer.ClassPathParser.html">ClassPathParser</a></li><li><a href="grocer.Css.html">Css</a></li><li><a href="grocer.GruntConfig.html">GruntConfig</a></li><li><a href="grocer.GruntPlugin.html">GruntPlugin</a></li><li><a href="grocer.GruntProxy.html">GruntProxy</a></li><li><a href="grocer.GruntTask.html">GruntTask</a></li><li><a href="grocer.GruntTaskCollection.html">GruntTaskCollection</a></li><li><a href="grocer.Manifest.html">Manifest</a></li><li><a href="grocer.Module.html">Module</a></li><li><a href="grocer.MultiTask.html">MultiTask</a></li><li><a href="grocer.MultiTaskCollection.html">MultiTaskCollection</a></li><li><a href="grocer.Script.html">Script</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="grocer.html">grocer</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul>
+    <h2><a href="index.html">Index</a></h2><h3>Classes</h3><ul><li><a href="Array.html">Array</a></li><li><a href="dessert.html">dessert</a></li><li><a href="grocer.AliasTask.html">AliasTask</a></li><li><a href="grocer.Asset.html">Asset</a></li><li><a href="grocer.AssetCollection.html">AssetCollection</a></li><li><a href="grocer.ClassPathParser.html">ClassPathParser</a></li><li><a href="grocer.Css.html">Css</a></li><li><a href="grocer.GruntConfig.html">GruntConfig</a></li><li><a href="grocer.GruntPlugin.html">GruntPlugin</a></li><li><a href="grocer.GruntProxy.html">GruntProxy</a></li><li><a href="grocer.GruntTask.html">GruntTask</a></li><li><a href="grocer.GruntTaskCollection.html">GruntTaskCollection</a></li><li><a href="grocer.Manifest.html">Manifest</a></li><li><a href="grocer.Module.html">Module</a></li><li><a href="grocer.MultiTask.html">MultiTask</a></li><li><a href="grocer.MultiTaskCollection.html">MultiTaskCollection</a></li><li><a href="grocer.Script.html">Script</a></li><li><a href="sntls.Hash.html">Hash</a></li><li><a href="sntls.Path.html">Path</a></li><li><a href="String.html">String</a></li></ul><h3>Namespaces</h3><ul><li><a href="grocer.html">grocer</a></li><li><a href="sntls.html">sntls</a></li><li><a href="troop.html">troop</a></li></ul><h3>Global</h3><ul><li><a href="global.html#name">name</a></li></ul>
 </nav>
 
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Oct 20 2014 21:01:20 GMT+0100 (BST)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Oct 26 2014 22:41:45 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>
