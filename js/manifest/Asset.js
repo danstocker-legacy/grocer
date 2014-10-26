@@ -8,6 +8,7 @@ troop.postpone(grocer, 'Asset', function () {
     /**
      * Creates an Asset instance.
      * Assets may also be created via conversion from string.
+     * TODO: Rename assetName to assetPath.
      * @name grocer.Asset.create
      * @function
      * @param {string} assetName Asset name, usually a relative path.
@@ -54,6 +55,32 @@ troop.postpone(grocer, 'Asset', function () {
             addPrefix: function (assetPrefix) {
                 this.assetName = assetPrefix + this.assetName;
                 return this;
+            },
+
+            /**
+             * Extracts file name from asset name.
+             * @returns {string}
+             */
+            getAssetFileName: function () {
+                return this.assetName.split('/').pop();
+            },
+
+            /**
+             * Extracts asset base name (file name without extension) from asset name.
+             * @returns {string}
+             */
+            getAssetBaseName: function () {
+                var assetParts = this.getAssetFileName().split('.');
+                assetParts.pop();
+                return assetParts.join('.');
+            },
+
+            /**
+             * Extracts file extension from asset name.
+             * @returns {string}
+             */
+            getAssetExtension: function () {
+                return this.assetName.split('.').pop();
             }
 
             /**

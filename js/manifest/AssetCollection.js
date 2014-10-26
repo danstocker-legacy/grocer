@@ -41,6 +41,58 @@ troop.postpone(grocer, 'AssetCollection', function () {
             },
 
             /**
+             * Retrieves a dictionary of asset paths associated with flattened asset file names.
+             * @returns {sntls.Dictionary}
+             */
+            getFlatAssetFileNameLookup: function () {
+                var result = {},
+
+                // assets identified by their (unique) asset names
+                    assetNameByAsset = this
+                        .mapKeys(function (/**grocer.Asset*/asset) {
+                            return asset.assetName;
+                        }),
+
+                // asset name lookup by asset file names (with extension)
+                    assetFileNameToAssetName = assetNameByAsset
+                        .mapValues(function (/**grocer.Asset*/asset) {
+                            return asset.getAssetFileName();
+                        })
+                        .toStringDictionary()
+                        .reverse(),
+
+                // asset data lookup by (unique) asset names
+                    assetNameToAssetNameParts = assetNameByAsset
+                        .mapValues(function (/**grocer.Asset*/asset, assetName) {
+                            return {
+                                name: assetName,
+                                base: asset.getAssetBaseName(),
+                                ext : asset.getAssetExtension()
+                            };
+                        })
+                        .toDictionary();
+
+                // obtaining flat asset file names associated with asset name
+                assetFileNameToAssetName
+                    .combineWith(assetNameToAssetNameParts)
+                    .toCollection()
+                    .forEachItem(function (assetData) {
+                        var i, assetParts;
+                        if (assetData instanceof Array) {
+                            for (i = 0; i < assetData.length; i++) {
+                                assetParts = assetData[i];
+                                result[assetParts.name] = assetParts.base + i + '.' + assetParts.ext;
+                            }
+                        } else {
+                            assetParts = assetData;
+                            result[assetParts.name] = assetParts.base + '.' + assetParts.ext;
+                        }
+                    });
+
+                return sntls.Dictionary.create(result);
+            },
+
+            /**
              * Serializes all assets in the collection.
              * @returns {string}
              * @see grocer.Asset#toString
