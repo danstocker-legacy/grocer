@@ -24,6 +24,9 @@ troop.postpone(grocer, 'AliasTask', function () {
      * @see http://gruntjs.com/creating-tasks#alias-tasks
      */
     grocer.AliasTask = self
+        .setInstanceMapper(function (taskName) {
+            return taskName;
+        })
         .addMethods(/** @lends grocer.AliasTask# */{
             /**
              * @param {string} taskName

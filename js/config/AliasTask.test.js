@@ -3,13 +3,22 @@
 (function () {
     "use strict";
 
-    module("AliasTask");
+    module("AliasTask", {
+        setup: function () {
+            g$.AliasTask.clearInstanceRegistry();
+        },
+        teardown: function () {
+            g$.AliasTask.clearInstanceRegistry();
+        }
+    });
 
     test("Instantiation", function () {
         var task = g$.AliasTask.create('foo');
 
         ok(task.subTasks.isA(sntls.Collection), "should initialize subTasks property as Collection");
         equal(task.subTasks.getKeyCount(), 0, "should set subTasks to empty collection");
+
+        strictEqual(g$.AliasTask.create('foo'), task, "should be memoized");
     });
 
     test("Conversion from string", function () {
