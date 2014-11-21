@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, g$ */
+/*global dessert, troop, sntls, grocer */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -7,14 +7,14 @@
 
     test("Instantiation", function () {
         raises(function () {
-            g$.Module.create();
+            grocer.Module.create();
         }, "should raise exception on absent arguments");
 
         raises(function () {
-            g$.Module.create('foo', 'bar');
+            grocer.Module.create('foo', 'bar');
         }, "should raise exception on invalid arguments");
 
-        var module = g$.Module.create('foo', {
+        var module = grocer.Module.create('foo', {
             classPath: 'foo["bar"].baz',
             assets   : {
                 js: ['hello.js', 'world.js']
@@ -38,7 +38,7 @@
             }
         });
 
-        ok(module.isA(g$.Module), "should return Module instance");
+        ok(module.isA(grocer.Module), "should return Module instance");
         equal(module.moduleName, 'foo', "should set module name");
     });
 
@@ -51,7 +51,7 @@
             }),
             scripts = module.getAssets('js');
 
-        ok(scripts.isA(g$.AssetCollection), "should return AssetCollection instance");
+        ok(scripts.isA(grocer.AssetCollection), "should return AssetCollection instance");
         deepEqual(
             scripts,
             ['hello.js', 'world.js'].toAssetCollection('js'),
@@ -121,7 +121,7 @@
         }, "should raise exception on invalid asset type argument");
 
         result = module.toAsset('js');
-        ok(result.isA(g$.Asset), "should return Asset instance");
+        ok(result.isA(grocer.Asset), "should return Asset instance");
         equal(result.assetName, 'foo.js', "should set asset name");
         equal(result.assetType, 'js', "should set asset type");
     });

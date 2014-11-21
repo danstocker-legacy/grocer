@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, g$ */
+/*global dessert, troop, sntls, grocer */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -28,21 +28,21 @@
 
     test("Instantiation", function () {
         raises(function () {
-            g$.Manifest.create();
+            grocer.Manifest.create();
         }, "should raise exception on absent arguments");
 
         raises(function () {
-            g$.Manifest.create('foo');
+            grocer.Manifest.create('foo');
         }, "should raise exception on invalid arguments");
 
-        var manifest = g$.Manifest.create(manifestNode);
+        var manifest = grocer.Manifest.create(manifestNode);
 
         ok(manifest.modules.isA(sntls.Collection), "should initialize modules collection");
         equal(manifest.modules.getKeyCount(), 3, "should set modules in collection");
     });
 
     test("Module getter", function () {
-        var manifest = g$.Manifest.create(manifestNode),
+        var manifest = grocer.Manifest.create(manifestNode),
             module;
 
         raises(function () {
@@ -51,7 +51,7 @@
 
         module = manifest.getModule('common');
 
-        ok(module.isA(g$.Module), "should return Module instance");
+        ok(module.isA(grocer.Module), "should return Module instance");
         deepEqual(
             module.assetCollections,
             sntls.Collection.create({
@@ -61,7 +61,7 @@
     });
 
     test("Module asset getter", function () {
-        var manifest = g$.Manifest.create(manifestNode);
+        var manifest = grocer.Manifest.create(manifestNode);
 
         equal(
             manifest
@@ -76,7 +76,7 @@
     });
 
     test("Assets getter for module", function () {
-        var manifest = g$.Manifest.create(manifestNode);
+        var manifest = grocer.Manifest.create(manifestNode);
 
         deepEqual(
             manifest.getAssetsForModule('common', 'js'),
@@ -90,7 +90,7 @@
     });
 
     test("Assets getter", function () {
-        var manifest = g$.Manifest.create(manifestNode);
+        var manifest = grocer.Manifest.create(manifestNode);
 
         deepEqual(
             manifest.getAssets('js'),
@@ -104,7 +104,7 @@
     });
 
     test("Flat assets getter", function () {
-        var manifest = g$.Manifest.create(manifestNode);
+        var manifest = grocer.Manifest.create(manifestNode);
 
         deepEqual(
             manifest.getFlatAssets('js'),
@@ -118,7 +118,7 @@
     });
 
     test("Serialized asset list getter", function () {
-        var manifest = g$.Manifest.create(manifestNode);
+        var manifest = grocer.Manifest.create(manifestNode);
 
         equal(
             manifest.getAssets('js').toString(),
@@ -138,10 +138,10 @@
     test("Filtering by module names", function () {
         expect(2);
 
-        var manifest = g$.Manifest.create(manifestNode),
+        var manifest = grocer.Manifest.create(manifestNode),
             result = {};
 
-        g$.Manifest.addMocks({
+        grocer.Manifest.addMocks({
             create: function (manifestNode) {
                 deepEqual(manifestNode, {
                     "libraries": {
@@ -164,6 +164,6 @@
         strictEqual(manifest.filterByModuleNames('libraries', 'users'), result,
             "return new Manifest instance based on filtered manifest node");
 
-        g$.Manifest.removeMocks();
+        grocer.Manifest.removeMocks();
     });
 }());

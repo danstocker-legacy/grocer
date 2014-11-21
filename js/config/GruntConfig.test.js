@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, g$ */
+/*global dessert, troop, sntls, grocer */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -6,7 +6,7 @@
     module("GruntConfig");
 
     test("Task addition", function () {
-        var config = g$.GruntConfig.create(),
+        var config = grocer.GruntConfig.create(),
             task = 'foo'.toMultiTask({
                 hello: "world"
             }),
@@ -34,7 +34,7 @@
     });
 
     test("Task config getter", function () {
-        var config = g$.GruntConfig.create({
+        var config = grocer.GruntConfig.create({
             hello: "world"
         });
 
@@ -44,13 +44,13 @@
     test("Config initialization", function () {
         expect(3);
 
-        var config = g$.GruntConfig.create({
+        var config = grocer.GruntConfig.create({
                 foo: {hello: "world"},
                 bar: {hi: "all"}
             }),
             tasks = [];
 
-        g$.GruntProxy.addMocks({
+        grocer.GruntProxy.addMocks({
             configEscape: function (propertyName) {
                 return propertyName;
             },
@@ -66,9 +66,9 @@
             ['bar.hi', "all"]
         ], "should set config nodes in grunt config object");
 
-        g$.GruntProxy.removeMocks();
+        grocer.GruntProxy.removeMocks();
 
-        g$.GruntProxy.addMocks({
+        grocer.GruntProxy.addMocks({
             configInit: function (configNode) {
                 strictEqual(configNode, config.items,
                     "should pass config node to grunt.config.init() when wipe argument is set");
@@ -77,15 +77,15 @@
 
         config.applyConfig(true);
 
-        g$.GruntProxy.removeMocks();
+        grocer.GruntProxy.removeMocks();
     });
 
     test("Config merge", function () {
         expect(2);
 
-        var config = g$.GruntConfig.create();
+        var config = grocer.GruntConfig.create();
 
-        g$.GruntProxy.addMocks({
+        grocer.GruntProxy.addMocks({
             configMerge: function (configNode) {
                 strictEqual(configNode, config.items, "should pass config node to grunt.config.merge()");
             }
@@ -93,11 +93,11 @@
 
         strictEqual(config.mergeConfig(), config, "should be chainable");
 
-        g$.GruntProxy.removeMocks();
+        grocer.GruntProxy.removeMocks();
     });
 
     test("Getting alias task association", function () {
-        var config = g$.GruntConfig.create({
+        var config = grocer.GruntConfig.create({
                 copy  : {
                     dev : {},
                     prod: {}
@@ -123,7 +123,7 @@
     });
 
     test("Getting alias tasks grouped by target", function () {
-        var config = g$.GruntConfig.create({
+        var config = grocer.GruntConfig.create({
                 copy  : {
                     dev : {},
                     prod: {}
@@ -135,7 +135,7 @@
             result;
 
         result = config.getAliasTasksGroupedByTarget();
-        ok(result.isA(g$.GruntTaskCollection), "should return GruntTaskCollection instance");
+        ok(result.isA(grocer.GruntTaskCollection), "should return GruntTaskCollection instance");
         deepEqual(result.items, {
             dev : 'dev'.toAliasTask().addSubTasks('copy:dev', 'cssMin:dev'),
             prod: 'prod'.toAliasTask().addSubTask('copy:prod')
@@ -143,8 +143,8 @@
     });
 
     test("Merging with other config", function () {
-        var tasks = g$.MultiTaskCollection.create(),
-            configA = g$.GruntConfig.create({
+        var tasks = grocer.MultiTaskCollection.create(),
+            configA = grocer.GruntConfig.create({
                 copy  : {
                     dev : {foo: "baz"},
                     prod: {hello: "all"}
@@ -167,7 +167,7 @@
 
         configMerged = configA.mergeWith(tasks.toGruntConfig('_'));
 
-        ok(configMerged.isA(g$.GruntConfig), "should return GruntConfig instance");
+        ok(configMerged.isA(grocer.GruntConfig), "should return GruntConfig instance");
         deepEqual(configMerged.items, {
             copy  : {
                 dev  : {foo: "baz"},

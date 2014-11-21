@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, g$ */
+/*global dessert, troop, sntls, grocer */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -7,10 +7,10 @@
 
     test("Instantiation", function () {
         raises(function () {
-            g$.GruntTask.create();
+            grocer.GruntTask.create();
         }, "should raise exception on missing arguments");
 
-        var task = g$.GruntTask.create('foo');
+        var task = grocer.GruntTask.create('foo');
 
         equal(task.taskName, 'foo', "should set taskName property");
 
@@ -21,18 +21,18 @@
     test("Conversion from string", function () {
         var task = 'foo'.toGruntTask();
 
-        ok(task.isA(g$.GruntTask), "should return GruntTask instance");
+        ok(task.isA(grocer.GruntTask), "should return GruntTask instance");
         equal(task.taskName, 'foo', "should set task name");
     });
 
     test("Task registration", function () {
         expect(4);
 
-        var task = g$.GruntTask.create('foo')
+        var task = grocer.GruntTask.create('foo')
             .setTaskHandler(function () {
             });
 
-        g$.GruntProxy.addMocks({
+        grocer.GruntProxy.addMocks({
             registerTask: function (name, description, taskHandler) {
                 equal(name, 'foo', "should specify task name");
                 equal(description, 'bar', "should pass description");
@@ -42,11 +42,11 @@
 
         strictEqual(task.applyTask('bar'), task, "should be chainable");
 
-        g$.GruntProxy.removeMocks();
+        grocer.GruntProxy.removeMocks();
     });
 
     test("Setting handler", function () {
-        var task = g$.GruntTask.create('foo');
+        var task = grocer.GruntTask.create('foo');
 
         function taskHandler() {
         }
@@ -63,7 +63,7 @@
         expect(5);
 
         var task = 'foo'.toGruntTask(),
-            collection = g$.GruntTaskCollection.create();
+            collection = grocer.GruntTaskCollection.create();
 
         raises(function () {
             task.addToCollection();

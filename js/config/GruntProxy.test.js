@@ -1,28 +1,28 @@
-/*global dessert, troop, sntls, g$ */
+/*global dessert, troop, sntls, grocer */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
 
     module("GruntProxy", {
         setup   : function () {
-            g$.GruntProxy.clearInstanceRegistry();
+            grocer.GruntProxy.clearInstanceRegistry();
         },
         teardown: function () {
-            g$.GruntProxy.clearInstanceRegistry();
+            grocer.GruntProxy.clearInstanceRegistry();
         }
     });
 
     test("Instantiation", function () {
-        var gruntProxy = g$.GruntProxy.create();
+        var gruntProxy = grocer.GruntProxy.create();
 
         ok(gruntProxy.hasOwnProperty('grunt'), "should add grunt property");
         equal(typeof gruntProxy.grunt, 'undefined', "should set grunt property to undefined");
 
-        strictEqual(g$.GruntProxy.create(), gruntProxy, "should be singleton");
+        strictEqual(grocer.GruntProxy.create(), gruntProxy, "should be singleton");
     });
 
     test("Grunt object setter", function () {
-        var gruntProxy = g$.GruntProxy.create(),
+        var gruntProxy = grocer.GruntProxy.create(),
             gruntObject = {};
 
         raises(function () {

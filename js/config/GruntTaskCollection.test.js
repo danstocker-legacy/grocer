@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, g$ */
+/*global dessert, troop, sntls, grocer */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -8,7 +8,7 @@
     test("Conversion from Array", function () {
         var tasks = [1, 2, 3].toGruntTaskCollection();
 
-        ok(tasks.isA(g$.GruntTaskCollection), "should return GruntTaskCollection instance");
+        ok(tasks.isA(grocer.GruntTaskCollection), "should return GruntTaskCollection instance");
         deepEqual(
             tasks.items,
             [1, 2, 3],
@@ -19,7 +19,7 @@
         var hash = [1, 2, 3].toHash(),
             tasks = hash.toGruntTaskCollection();
 
-        ok(tasks.isA(g$.GruntTaskCollection), "should return GruntTaskCollection instance");
+        ok(tasks.isA(grocer.GruntTaskCollection), "should return GruntTaskCollection instance");
         deepEqual(
             tasks.items,
             [1, 2, 3],

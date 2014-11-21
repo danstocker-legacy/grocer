@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, g$ */
+/*global dessert, troop, sntls, grocer */
 /*global module, test, expect, ok, equal, strictEqual, notStrictEqual, deepEqual, notDeepEqual, raises */
 (function () {
     "use strict";
@@ -7,17 +7,17 @@
 
     test("Instantiation", function () {
         raises(function () {
-            g$.AssetCollection.create({});
+            grocer.AssetCollection.create({});
         }, "should raise exception on invalid arguments");
     });
 
     test("Conversion from Array", function () {
         var assets = ['foo/bar', 'hello/world'].toAssetCollection('baz');
 
-        ok(assets.isA(g$.AssetCollection), "should return AssetCollection instance");
+        ok(assets.isA(grocer.AssetCollection), "should return AssetCollection instance");
         deepEqual(
             assets,
-            g$.AssetCollection.create(['foo/bar'.toAsset('baz'), 'hello/world'.toAsset('baz')]),
+            grocer.AssetCollection.create(['foo/bar'.toAsset('baz'), 'hello/world'.toAsset('baz')]),
             "should initialize instance identically as through constructor");
     });
 
@@ -28,10 +28,10 @@
             ].toHash(),
             assets = hash.toAssetCollection();
 
-        ok(assets.isA(g$.AssetCollection), "should return AssetCollection instance");
+        ok(assets.isA(grocer.AssetCollection), "should return AssetCollection instance");
         deepEqual(
             assets,
-            g$.AssetCollection.create(['foo/bar'.toAsset('baz'), 'hello/world'.toAsset('baz')]),
+            grocer.AssetCollection.create(['foo/bar'.toAsset('baz'), 'hello/world'.toAsset('baz')]),
             "should initialize instance identically as through constructor");
     });
 
