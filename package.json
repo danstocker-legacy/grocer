@@ -1,6 +1,6 @@
 {
     "name"           : "grocer",
-    "version"        : "0.4.6",
+    "version"        : "0.4.7",
     "description"    : "Front end asset manager",
     "keywords"       : [
         "asset", "asset file", "asset list",
@@ -17,7 +17,7 @@
     },
     "dependencies"   : {
         "dessert": "~0.3.2",
-        "troop"  : "~0.7.2",
+        "troop"  : "~0.7.2 || ~0.8.0",
         "sntls"  : "~0.17.0"
     },
     "devDependencies": {
