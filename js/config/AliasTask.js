@@ -3,7 +3,8 @@ troop.postpone(grocer, 'AliasTask', function () {
     "use strict";
 
     var base = grocer.GruntTask,
-        self = base.extend();
+        self = base.extend(),
+        slice = Array.prototype.slice;
 
     /**
      * Creates an AliasTask instance.
@@ -36,10 +37,10 @@ troop.postpone(grocer, 'AliasTask', function () {
                 base.init.call(this, taskName);
 
                 /**
-                 * Collection of task names that the current alias task groups together.
-                 * @type {sntls.Collection}
+                 * Array of task names that the current alias task groups together.
+                 * @type {string[]}
                  */
-                this.subTasks = sntls.Collection.create();
+                this.subTasks = [];
             },
 
             /**
@@ -49,18 +50,58 @@ troop.postpone(grocer, 'AliasTask', function () {
              */
             applyTask: function (description) {
                 grocer.GruntProxy.create()
-                    .registerTask(this.taskName, description, this.subTasks.getValues());
+                    .registerTask(this.taskName, description, this.subTasks);
                 return this;
             },
 
             /**
-             * Adds sub-task to the current alias task.
+             * Adds sub-task to the current alias task as the last sub-task.
              * @param {string} taskName Name of sub-task to be added.
              * @returns {grocer.AliasTask}
              */
             addSubTask: function (taskName) {
                 dessert.isString(taskName, "Invalid sub-task name");
-                this.subTasks.setItem(taskName, taskName);
+                this.subTasks.push(taskName);
+                return this;
+            },
+
+            /**
+             * Adds sub-task to the alias task after the last occurrence of the specified sub-task,
+             * or at the end when the specified sub-task does not exist.
+             * @param {string} taskName
+             * @param {string} [afterTaskName]
+             * @returns {grocer.AliasTask}
+             */
+            addSubTaskAfter: function (taskName, afterTaskName) {
+                var subTasks = this.subTasks,
+                    sliceIndex = subTasks.lastIndexOf(afterTaskName);
+
+                if (sliceIndex >= 0) {
+                    subTasks.splice(sliceIndex + 1, 0, taskName);
+                } else {
+                    subTasks.push(taskName);
+                }
+
+                return this;
+            },
+
+            /**
+             * Adds sub-task to the alias task before the first occurrence of the specified sub-task,
+             * or at the beginning when the specified sub-task does not exist.
+             * @param {string} taskName
+             * @param {string} [beforeTaskName]
+             * @returns {grocer.AliasTask}
+             */
+            addSubTaskBefore: function (taskName, beforeTaskName) {
+                var subTasks = this.subTasks,
+                    sliceIndex = subTasks.indexOf(beforeTaskName);
+
+                if (sliceIndex >= 0) {
+                    subTasks.splice(sliceIndex, 0, taskName);
+                } else {
+                    subTasks.unshift(taskName);
+                }
+
                 return this;
             },
 
@@ -69,10 +110,7 @@ troop.postpone(grocer, 'AliasTask', function () {
              * @returns {grocer.AliasTask}
              */
             addSubTasks: function () {
-                var i;
-                for (i = 0; i < arguments.length; i++) {
-                    this.addSubTask(arguments[i]);
-                }
+                this.subTasks = this.subTasks.concat(slice.call(arguments));
                 return this;
             }
         });
@@ -89,7 +127,9 @@ troop.postpone(grocer, 'AliasTask', function () {
              * @returns {grocer.AliasTask}
              */
             toAliasTask: function () {
-                return grocer.AliasTask.create(this.valueOf());
+                var aliasTask = grocer.AliasTask.create(this.valueOf());
+                aliasTask.addSubTasks.apply(aliasTask, arguments);
+                return aliasTask;
             }
         },
         false, false, false

@@ -1,6 +1,6 @@
 {
     "name"           : "grocer",
-    "version"        : "0.4.7",
+    "version"        : "0.4.8",
     "description"    : "Front end asset manager",
     "keywords"       : [
         "asset", "asset file", "asset list",
