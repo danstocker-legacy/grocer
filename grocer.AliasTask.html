@@ -74,7 +74,7 @@ Alias grunt tasks group other tasks into a single task.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AliasTask.js.html">config/AliasTask.js</a>, line 26
+        <a href="AliasTask.js.html">config/AliasTask.js</a>, line 27
     </li></ul></dd>
     
     
@@ -127,14 +127,14 @@ Alias grunt tasks group other tasks into a single task.
         <dl>
             
 <dt>
-    <h4 class="name" id="subTasks"><span class="type-signature"></span>subTasks<span class="type-signature"> :sntls.Collection</span></h4>
+    <h4 class="name" id="subTasks"><span class="type-signature"></span>subTasks<span class="type-signature"> :string[]</span></h4>
     
     
 </dt>
 <dd>
     
     <div class="description">
-        Collection of task names that the current alias task groups together.
+        Array of task names that the current alias task groups together.
     </div>
     
     
@@ -161,7 +161,7 @@ Alias grunt tasks group other tasks into a single task.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AliasTask.js.html">config/AliasTask.js</a>, line 39
+        <a href="AliasTask.js.html">config/AliasTask.js</a>, line 43
     </li></ul></dd>
     
     
@@ -390,7 +390,7 @@ where the string is treated as the name of the task.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AliasTask.js.html">config/AliasTask.js</a>, line 8
+        <a href="AliasTask.js.html">config/AliasTask.js</a>, line 9
     </li></ul></dd>
     
     
@@ -447,7 +447,7 @@ where the string is treated as the name of the task.
     
     
     <div class="description">
-        Adds sub-task to the current alias task.
+        Adds sub-task to the current alias task as the last sub-task.
     </div>
     
 
@@ -528,7 +528,357 @@ where the string is treated as the name of the task.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AliasTask.js.html">config/AliasTask.js</a>, line 58
+        <a href="AliasTask.js.html">config/AliasTask.js</a>, line 62
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="grocer.AliasTask.html">grocer.AliasTask</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="addSubTaskAfter"><span class="type-signature"></span>addSubTaskAfter<span class="signature">(taskName, <span class="optional">afterTaskName</span>)</span><span class="type-signature"> &rarr; {<a href="grocer.AliasTask.html">grocer.AliasTask</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Adds sub-task to the alias task after the last occurrence of the specified sub-task,
+or at the end when the specified sub-task does not exist.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>taskName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>afterTaskName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AliasTask.js.html">config/AliasTask.js</a>, line 75
+    </li></ul></dd>
+    
+    
+    
+    
+    
+    
+    
+</dl>
+
+    
+    
+    
+    
+    
+    
+    <h5>Returns:</h5>
+    
+            
+
+
+<dl>
+	<dt>
+		Type
+	</dt>
+	<dd>
+		
+<span class="param-type"><a href="grocer.AliasTask.html">grocer.AliasTask</a></span>
+
+
+	</dd>
+</dl>
+
+        
+    
+    
+</dd>
+
+        
+            
+<dt>
+    <h4 class="name" id="addSubTaskBefore"><span class="type-signature"></span>addSubTaskBefore<span class="signature">(taskName, <span class="optional">beforeTaskName</span>)</span><span class="type-signature"> &rarr; {<a href="grocer.AliasTask.html">grocer.AliasTask</a>}</span></h4>
+    
+    
+</dt>
+<dd>
+    
+    
+    <div class="description">
+        Adds sub-task to the alias task before the first occurrence of the specified sub-task,
+or at the beginning when the specified sub-task does not exist.
+    </div>
+    
+
+    
+    
+    
+    
+    
+        <h5>Parameters:</h5>
+        
+
+<table class="params">
+    <thead>
+	<tr>
+		
+		<th>Name</th>
+		
+		
+		<th>Type</th>
+		
+		
+		<th>Argument</th>
+		
+		
+		
+		
+		<th class="last">Description</th>
+	</tr>
+	</thead>
+	
+	<tbody>
+	
+	
+        <tr>
+            
+                <td class="name"><code>taskName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	
+        <tr>
+            
+                <td class="name"><code>beforeTaskName</code></td>
+            
+            
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+            
+            
+                <td class="attributes">
+                
+                    &lt;optional><br>
+                
+                    
+                
+                    
+                
+                </td>
+            
+            
+            
+            
+            <td class="description last"></td>
+        </tr>
+	
+	
+	</tbody>
+</table>
+    
+    
+    
+<dl class="details">
+    
+        
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="AliasTask.js.html">config/AliasTask.js</a>, line 95
     </li></ul></dd>
     
     
@@ -611,7 +961,7 @@ where the string is treated as the name of the task.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AliasTask.js.html">config/AliasTask.js</a>, line 68
+        <a href="AliasTask.js.html">config/AliasTask.js</a>, line 112
     </li></ul></dd>
     
     
@@ -890,7 +1240,7 @@ where the string is treated as the name of the task.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="AliasTask.js.html">config/AliasTask.js</a>, line 47
+        <a href="AliasTask.js.html">config/AliasTask.js</a>, line 51
     </li></ul></dd>
     
     
@@ -1087,7 +1437,7 @@ where the string is treated as the name of the task.
 <br clear="both">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Sun Oct 26 2014 22:41:44 GMT-0000 (GMT)
+    Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.2.0-dev</a> on Mon Jan 19 2015 18:37:01 GMT-0000 (GMT)
 </footer>
 
 <script> prettyPrint(); </script>
