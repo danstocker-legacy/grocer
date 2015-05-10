@@ -1,12 +1,16 @@
 {
     "name"           : "grocer",
-    "version"        : "0.4.9",
+    "version"        : "0.4.10",
     "description"    : "Front end asset manager",
     "keywords"       : [
-        "asset", "asset file", "asset list",
+        "asset",
+        "asset file",
+        "asset list",
         "manifest",
         "script list",
-        "grunt", "task", "task management"
+        "grunt",
+        "task",
+        "task management"
     ],
     "author"         : "Dan Stocker <dan@kwaia.com>",
     "copyright"      : "Copyright (c) 2014 Dan Stocker",
@@ -17,21 +21,22 @@
     },
     "dependencies"   : {
         "dessert": "~0.3.2",
-        "troop"  : "~0.8.0",
-        "sntls"  : "~0.18.0"
+        "sntls"  : "~0.20.0",
+        "troop"  : "~0.8.0"
     },
     "devDependencies": {
-        "phil"                : "~0.2.3",
-        "grunt"               : "~0.4.1",
-        "grunt-jstestdriver"  : "git://github.com/danstocker/grunt-jstestdriver.git",
-        "grunt-contrib-concat": "~0.3.0",
-        "grunt-contrib-jshint": "~0.5.4",
-        "grunt-yui-compressor": "~0.3.0",
-        "grunt-contrib-copy"  : "~0.4.1",
+        "QUnitAdapter"        : "https://dl.dropboxusercontent.com/u/9258903/packages/QUnitAdapter-0.1.0.tgz",
+        "common-gruntfile"    : "git://github.com/danstocker/common-gruntfile.git#0.1.5",
+        "grunt"               : "~0.4.5",
+        "grunt-contrib-concat": "~0.5.1",
+        "grunt-contrib-copy"  : "~0.8.0",
+        "grunt-contrib-jshint": "~0.11.1",
         "grunt-jsdoc"         : "~0.3.3",
-        "grunt-regex-replace" : "~0.2.5",
-        "common-gruntfile"    : "git://github.com/danstocker/common-gruntfile.git#0.1.7",
-        "QUnitAdapter"        : "https://dl.dropboxusercontent.com/u/9258903/packages/QUnitAdapter-0.1.0.tgz"
+        "grunt-jstestdriver"  : "git://github.com/danstocker/grunt-jstestdriver.git",
+        "grunt-regex-replace" : "~0.2.6",
+        "grunt-yui-compressor": "~0.4.0",
+        "phil"                : "~0.2.3",
+        "q"                   : "^1.4.0"
     },
     "files"          : [
         "grocer.js"
