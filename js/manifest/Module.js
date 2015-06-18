@@ -12,7 +12,6 @@ troop.postpone(grocer, 'Module', function () {
      * @name grocer.Module.create
      * @function
      * @param {string} moduleName
-     * @param {object} moduleNode
      * @returns {grocer.Module}
      * @see String#toModule
      */
@@ -29,89 +28,16 @@ troop.postpone(grocer, 'Module', function () {
         .addMethods(/** @lends grocer.Module# */{
             /**
              * @param {string} moduleName
-             * @param {object} moduleNode
              * @ignore
              */
-            init: function (moduleName, moduleNode) {
-                dessert
-                    .isString(moduleName, "Invalid module name")
-                    .isObject(moduleNode, "Invalid module node");
-
-                /** @type {sntls.Tree} */
-                var moduleDescriptor = sntls.Tree.create(moduleNode),
-                    classPath = moduleDescriptor.getNode('classPath'.toPath());
+            init: function (moduleName) {
+                dessert.isString(moduleName, "Invalid module name");
 
                 /**
-                 * Name of the module. The module name must be unique within the application.
-                 * @type {string}
+                 * Document key identifying the module.
+                 * @type {bookworm.DocumentKey}
                  */
-                this.moduleName = moduleName;
-
-                /**
-                 * Class path associated with the module. The class path identifies the module's
-                 * main symbol (object, function, class, etc.) relative to the global object.
-                 * @type {sntls.Path}
-                 */
-                this.classPath = classPath ?
-                                 classPath.toPathFromClassPath() :
-                                 undefined;
-
-                /**
-                 * Collection of asset collections. Within a module, there's an asset collection associated
-                 * with each available asset type.
-                 * @type {sntls.Collection}
-                 */
-                this.assetCollections = moduleDescriptor
-                    .getNodeAsHash('assets'.toPath())
-                    .toCollection()
-                    .mapValues(function (/**Array*/assets, assetType) {
-                        return assets.toAssetCollection(assetType);
-                    });
-            },
-
-            /**
-             * Fetches all assets in the module for the specified asset type.
-             * @param {string} assetType
-             * @returns {grocer.AssetCollection}
-             */
-            getAssets: function (assetType) {
-                dessert.isString(assetType, "Invalid asset type");
-                return this.assetCollections.getItem(assetType);
-            },
-
-            /**
-             * Retrieves an array of asset names based on the contents of the module.
-             * @param {string} assetType
-             * @returns {string[]}
-             */
-            getAssetNames: function (assetType) {
-                dessert.isString(assetType, "Invalid asset type");
-                var assets = this.assetCollections.getItem(assetType);
-                return assets ?
-                       assets.getAssetNames() :
-                       [];
-            },
-
-            /**
-             * Reconstructs module node base don current module contents.
-             * @returns {object}
-             */
-            getModuleNode: function () {
-                var result = {};
-
-                if (this.classPath) {
-                    result.classPath = this.classPath.toClassPath();
-                }
-
-                if (this.assetCollections.getKeyCount()) {
-                    result.assets = this.assetCollections
-                        .mapValues(function (assetCollection) {
-                            return assetCollection.getAssetNames();
-                        })
-                        .items;
-                }
-
-                return result;
+                this.entityKey = ['module', moduleName].toDocumentKey();
             },
 
             /**
@@ -124,10 +50,13 @@ troop.postpone(grocer, 'Module', function () {
              * @returns {grocer.Asset}
              */
             toAsset: function (assetType) {
-                dessert
-                    .isString(assetType, "Invalid asset type")
-                    .assert(this.assetCollections.getItem(assetType), "Invalid assetType");
-                return (this.moduleName + '.' + assetType).toAsset(assetType);
+                var moduleDocument = this.entityKey.toDocument();
+
+                dessert.isString(assetType, "Invalid asset type");
+
+                return moduleDocument.hasAssetType(assetType) ?
+                    (moduleDocument.getModuleName() + '.' + assetType).toAsset(assetType) :
+                    undefined;
             }
         });
 });
@@ -139,11 +68,10 @@ troop.postpone(grocer, 'Module', function () {
         String.prototype,
         /** @lends String# */{
             /**
-             * @param {object} [moduleNode]
              * @returns {grocer.Module}
              */
-            toModule: function (moduleNode) {
-                return grocer.Module.create(this.valueOf(), moduleNode);
+            toModule: function () {
+                return grocer.Module.create(this.valueOf());
             }
         },
         false, false, false

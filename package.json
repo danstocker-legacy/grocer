@@ -20,9 +20,12 @@
         "url" : "https://github.com/danstocker/grocer.git"
     },
     "dependencies"   : {
-        "dessert": "~0.3.2",
-        "sntls"  : "~0.20.0",
-        "troop"  : "~0.8.0"
+        "bookworm"  : "~0.3.1",
+        "dessert"   : "~0.3.2",
+        "evan"      : "~0.7.7",
+        "rubberband": "~0.1.6",
+        "sntls"     : "~0.20.4",
+        "troop"     : "~0.8.0"
     },
     "devDependencies": {
         "QUnitAdapter"        : "https://dl.dropboxusercontent.com/u/9258903/packages/QUnitAdapter-0.1.0.tgz",
@@ -35,7 +38,6 @@
         "grunt-jstestdriver"  : "git://github.com/danstocker/grunt-jstestdriver.git",
         "grunt-regex-replace" : "~0.2.6",
         "grunt-yui-compressor": "~0.4.0",
-        "phil"                : "~0.2.3",
         "q"                   : "^1.4.0"
     },
     "files"          : [
