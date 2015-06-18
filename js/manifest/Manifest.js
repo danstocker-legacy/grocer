@@ -1,4 +1,4 @@
-/*global dessert, troop, sntls, grocer */
+/*global dessert, troop, sntls, bookworm, grocer */
 troop.postpone(grocer, 'Manifest', function () {
     "use strict";
 
@@ -11,7 +11,6 @@ troop.postpone(grocer, 'Manifest', function () {
      * See the sample manifest file included in the repo. (/manifest/manifest-sample.json)
      * @name grocer.Manifest.create
      * @function
-     * @param {object} manifestNode Object that holds the manifest in a pre-defined format.
      * @returns {grocer.Manifest}
      */
 
@@ -22,33 +21,21 @@ troop.postpone(grocer, 'Manifest', function () {
      * @extends troop.Base
      */
     grocer.Manifest = self
+        .setInstanceMapper(function () {
+            return 'singleton';
+        })
         .addMethods(/** @lends grocer.Manifest# */{
-            /**
-             * @param {object} manifestNode
-             * @ignore
-             */
-            init: function (manifestNode) {
-                dessert.isObject(manifestNode, "Invalid manifest node");
-
+            /** @ignore */
+            init: function () {
                 /**
                  * Defines and maintains the modules of the application.
                  * Collection holds Module instances.
                  * @type {sntls.Collection}
                  */
-                this.modules = sntls.Collection.create(manifestNode)
-                    .mapValues(function (moduleNode, moduleName) {
-                        return grocer.Module.create(moduleName, moduleNode);
-                    });
-            },
-
-            /**
-             * Fetches the specified Module instance from the manifest.
-             * @param {string} moduleName Name of module to be retrieved.
-             * @returns {grocer.Module}
-             */
-            getModule: function (moduleName) {
-                dessert.isString(moduleName, "Invalid module name");
-                return this.modules.getItem(moduleName);
+                this.modules = bookworm.entities.getNodeAsHash('document>module'.toPath())
+                    .getKeysAsHash()
+                    .toCollection()
+                    .callOnEachItem('toModule');
             },
 
             /**
