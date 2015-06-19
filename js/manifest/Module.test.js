@@ -22,6 +22,36 @@
         ok(module.entityKey.equals('module/foo'.toDocumentKey()), "should set entityKey property");
     });
 
+    test("Asset list getter", function () {
+        bookworm.entities
+            .appendNode('document>module'.toPath(), {
+                "foo": {
+                    "dependencies": ["libraries"],
+
+                    "assets": {
+                        "js": [
+                            "src/foo1.js",
+                            "src/foo2.js"
+                        ],
+
+                        "css": [
+                        ]
+                    }
+                }
+            });
+
+        var module = 'foo'.toModule(),
+            assets;
+
+        assets = module.getAssetsByType('js');
+
+        ok(assets.isA(grocer.AssetCollection), "should return AssetCollection instance");
+        deepEqual(assets.items, [
+            "src/foo1.js".toAsset('js'),
+            "src/foo2.js".toAsset('js')
+        ], "should return collection with Asset instances");
+    });
+
     test("Conversion to asset", function () {
         var module = 'foo'.toModule(),
             result;

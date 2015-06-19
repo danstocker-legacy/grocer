@@ -43,12 +43,13 @@ troop.postpone(grocer, 'Module', function () {
             /**
              * Retrieves Asset instances fro each asset of the specified ty[e within the module.
              * @param {string} assetType
-             * @returns {Asset[]}
+             * @returns {grocer.AssetCollection}
              */
             getAssetsByType: function (assetType) {
                 var assetNames = this.entityKey.toDocument().getAssetsByType(assetType);
                 return assetNames && assetNames.toCollection()
-                    .callOnEachItem('toAsset');
+                    .callOnEachItem('toAsset', assetType)
+                    .toAssetCollection();
             },
 
             /**
