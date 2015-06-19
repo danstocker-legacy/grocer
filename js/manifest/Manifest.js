@@ -53,19 +53,6 @@ troop.postpone(grocer, 'Manifest', function () {
             },
 
             /**
-             * Retrieves all assets of the specified asset type for the specified module.
-             * @param {string} moduleName Name of module to retrieve assets from.
-             * @param {string} assetType Type of assets to be retrieved.
-             * @returns {grocer.AssetCollection}
-             */
-            getAssetsForModule: function (moduleName, assetType) {
-                var module = this.getModule(moduleName);
-                return module ?
-                       module.getAssets(assetType) :
-                       undefined;
-            },
-
-            /**
              * Retrieves assets from all modules matching the specified asset type.
              * @param {string} assetType Type of assets to be retrieved.
              * @returns {grocer.AssetCollection}

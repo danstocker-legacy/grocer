@@ -55,11 +55,11 @@
     });
 
     test("Serialization", function () {
-        var assets = ['foo/bar', 'hello/world'].toAssetCollection('js');
+        var assets = ['foo/bar', 'hello/world'].toAssetCollection('baz');
 
         equal(
             assets.toString(),
-            '<script src="foo/bar"></script>\n<script src="hello/world"></script>',
+            'foo/bar\nhello/world',
             "should return serialized assets concatenated");
     });
 }());

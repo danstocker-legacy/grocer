@@ -81,15 +81,16 @@ troop.postpone(grocer, 'Asset', function () {
              */
             getAssetExtension: function () {
                 return this.assetName.split('.').pop();
-            }
+            },
 
             /**
-             * Serializes the asset to string.
-             * Typically used for inclusion in a project file, eg. index.html.
-             * @name grocer.Asset#toString
-             * @function
+             * An Asset when serialized should return a string that can be placed in an HTML
+             * file for inclusion. By default, just returns the asset name.
              * @returns {string}
              */
+            toString: function () {
+                return this.assetName;
+            }
         });
 });
 
@@ -108,6 +109,5 @@ troop.postpone(grocer, 'Asset', function () {
                 return grocer.Asset.create(this.valueOf(), assetType);
             }
         },
-        false, false, false
-    );
+        false, false, false);
 }());
