@@ -43,34 +43,46 @@
             "should fetch modules as individual assets");
     });
 
-    //    test("Assets getter for module", function () {
-    //        var manifest = grocer.Manifest.create(manifestNode);
-    //
-    //        deepEqual(
-    //            manifest.getAssetsForModule('common', 'js'),
-    //            [ "src/app.js" ].toAssetCollection('js'),
-    //            "should return asset collection for specified module & type");
-    //
-    //        equal(
-    //            typeof manifest.getAssetsForModule('foo', 'js'),
-    //            'undefined',
-    //            "should return undefined for invalid module");
-    //    });
-    //
-    //    test("Assets getter", function () {
-    //        var manifest = grocer.Manifest.create(manifestNode);
-    //
-    //        deepEqual(
-    //            manifest.getAssets('js'),
-    //            [ "src/jquery.js", "src/app.js", "src/Users.js" ].toAssetCollection('js'),
-    //            "should return combined asset list for specified type");
-    //
-    //        equal(
-    //            manifest.getAssets('foo'),
-    //            [].toAssetCollection('foo'),
-    //            "should return empty asset collection for invalid type");
-    //    });
-    //
+    test("Assets getter", function () {
+        bookworm.entities
+            .setNode('document>module'.toPath(), {
+                "libraries": {
+                    "assets": {
+                        "js": [
+                            "src/jquery.js"
+                        ]
+                    }
+                },
+
+                "common": {
+                    "dependencies": ["libraries"],
+
+                    "assets": {
+                        "js": [
+                            "src/app.js"
+                        ],
+
+                        "css": [
+                        ]
+                    }
+                }
+            });
+
+        var manifest = grocer.Manifest.create();
+
+        console.log(JSON.stringify(manifest.getAssets('js'), null, 2));
+
+        deepEqual(
+            manifest.getAssets('js'),
+            [ "src/jquery.js", "src/app.js"].toAssetCollection('js'),
+            "should return combined asset list for specified type");
+
+        equal(
+            manifest.getAssets('foo'),
+            [].toAssetCollection('foo'),
+            "should return empty asset collection for invalid type");
+    });
+
     //    test("Flat assets getter", function () {
     //        var manifest = grocer.Manifest.create(manifestNode);
     //

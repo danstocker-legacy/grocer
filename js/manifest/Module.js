@@ -41,6 +41,17 @@ troop.postpone(grocer, 'Module', function () {
             },
 
             /**
+             * Retrieves Asset instances fro each asset of the specified ty[e within the module.
+             * @param {string} assetType
+             * @returns {Asset[]}
+             */
+            getAssetsByType: function (assetType) {
+                var assetNames = this.entityKey.toDocument().getAssetsByType(assetType);
+                return assetNames && assetNames.toCollection()
+                    .callOnEachItem('toAsset');
+            },
+
+            /**
              * Converts module to a single asset.
              * To be used for reducing all assets within the module to a single file ie.
              * via concatenation, minification, etc.
