@@ -5,11 +5,14 @@ module.exports = function (grunt) {
     var params = {
         files: [
             'js/namespace.js',
+            'js/entities/config.js',
+            'js/entities/entities.js',
             'js/manifest/ClassPathParser.js',
             'js/manifest/Asset.js',
             'js/manifest/Script.js',
             'js/manifest/Css.js',
             'js/manifest/AssetCollection.js',
+            'js/manifest/ModuleDocument.js',
             'js/manifest/Module.js',
             'js/manifest/Manifest.js',
             'js/config/GruntProxy.js',

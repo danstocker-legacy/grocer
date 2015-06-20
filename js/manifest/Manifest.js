@@ -3,8 +3,7 @@ troop.postpone(grocer, 'Manifest', function () {
     "use strict";
 
     var base = troop.Base,
-        self = base.extend(),
-        slice = Array.prototype.slice;
+        self = base.extend();
 
     /**
      * Creates a Manifest instance.
