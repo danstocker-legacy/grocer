@@ -29,13 +29,13 @@ troop.postpone(grocer, 'AssetCollection', function () {
             },
 
             /**
-             * Retrieves an array of asset names based on the assets in the collection.
+             * Retrieves an array of asset paths based on the assets in the collection.
              * @returns {string[]}
              */
             getAssetNames: function () {
                 return this
                     .mapValues(function (/**grocer.Asset*/asset) {
-                        return asset.assetName;
+                        return asset.assetPath;
                     })
                     .items;
             },
@@ -47,34 +47,34 @@ troop.postpone(grocer, 'AssetCollection', function () {
             getFlatAssetFileNameLookup: function () {
                 var result = {},
 
-                // assets identified by their (unique) asset names
-                    assetNameByAsset = this
+                // assets identified by their (unique) asset paths
+                    assetPathByAsset = this
                         .mapKeys(function (/**grocer.Asset*/asset) {
-                            return asset.assetName;
+                            return asset.assetPath;
                         }),
 
-                // asset name lookup by asset file names (with extension)
-                    assetFileNameToAssetName = assetNameByAsset
+                // asset path lookup by asset file names (with extension)
+                    assetFileNameToAssetPath = assetPathByAsset
                         .mapValues(function (/**grocer.Asset*/asset) {
                             return asset.getAssetFileName();
                         })
                         .toStringDictionary()
                         .reverse(),
 
-                // asset data lookup by (unique) asset names
-                    assetNameToAssetNameParts = assetNameByAsset
-                        .mapValues(function (/**grocer.Asset*/asset, assetName) {
+                // asset data lookup by (unique) asset paths
+                    assetPathToAssetNameParts = assetPathByAsset
+                        .mapValues(function (/**grocer.Asset*/asset, assetPath) {
                             return {
-                                name: assetName,
+                                name: assetPath,
                                 base: asset.getAssetBaseName(),
                                 ext : asset.getAssetExtension()
                             };
                         })
                         .toDictionary();
 
-                // obtaining flat asset file names associated with asset name
-                assetFileNameToAssetName
-                    .combineWith(assetNameToAssetNameParts)
+                // obtaining flat asset file names associated with asset path
+                assetFileNameToAssetPath
+                    .combineWith(assetPathToAssetNameParts)
                     .toCollection()
                     .forEachItem(function (assetData) {
                         var i, assetParts;

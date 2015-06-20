@@ -8,8 +8,8 @@
     test("Instantiation", function () {
         var asset = grocer.Script.create('foo/bar');
 
-        equal(asset.assetName, 'foo/bar', "should set asset name");
-        equal(asset.assetType, 'js', "should set asset type to js");
+        equal(asset.assetPath, 'foo/bar', "should set assetPath property");
+        equal(asset.assetType, 'js', "should set assetType to js");
     });
 
     test("Asset surrogate", function () {

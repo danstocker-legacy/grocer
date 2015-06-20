@@ -94,7 +94,7 @@
 
         result = module.toAsset('js');
         ok(result.isA(grocer.Asset), "should return Asset instance");
-        equal(result.assetName, 'foo.js', "should set asset name");
-        equal(result.assetType, 'js', "should set asset type");
+        equal(result.assetPath, 'foo.js', "should set assetPath property");
+        equal(result.assetType, 'js', "should set assetType property");
     });
 }());

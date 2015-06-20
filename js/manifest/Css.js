@@ -36,7 +36,7 @@ troop.postpone(grocer, 'Css', function () {
              * @returns {string}
              */
             toString: function () {
-                return '<link rel="stylesheet" href="' + this.assetName + '" />';
+                return '<link rel="stylesheet" href="' + this.assetPath + '" />';
             }
         });
 });

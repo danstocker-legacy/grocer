@@ -12,14 +12,14 @@
 
         var asset = grocer.Asset.create('foo/bar', 'baz');
 
-        equal(asset.assetName, 'foo/bar', "should set asset name");
-        equal(asset.assetType, 'baz', "should set asset type");
+        equal(asset.assetPath, 'foo/bar', "should set assetPath property");
+        equal(asset.assetType, 'baz', "should set assetType property");
     });
 
     test("Conversion from string", function () {
         var asset = 'foo/bar'.toAsset('js');
         ok(asset.isA(grocer.Asset), "should return Asset instance");
-        equal(asset.assetName, 'foo/bar', "should set asset name");
+        equal(asset.assetPath, 'foo/bar', "should set assetPath property");
         equal(asset.assetType, 'js', "should set asset type");
     });
 
@@ -27,7 +27,7 @@
         var asset = 'foo/bar'.toAsset('js');
 
         strictEqual(asset.addPrefix('baz/'), asset, "should be chainable");
-        equal(asset.assetName, 'baz/foo/bar', "should prefix asset name");
+        equal(asset.assetPath, 'baz/foo/bar', "should prefix assetPath");
     });
 
     test("File name getter", function () {

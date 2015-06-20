@@ -36,7 +36,7 @@ troop.postpone(grocer, 'Script', function () {
              * @returns {string}
              */
             toString: function () {
-                return '<script src="' + this.assetName + '"></script>';
+                return '<script src="' + this.assetPath + '"></script>';
             }
         });
 });

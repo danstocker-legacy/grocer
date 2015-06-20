@@ -8,8 +8,8 @@
     test("Instantiation", function () {
         var asset = grocer.Css.create('foo/bar');
 
-        equal(asset.assetName, 'foo/bar', "should set asset name");
-        equal(asset.assetType, 'css', "should set asset type to css");
+        equal(asset.assetPath, 'foo/bar', "should set assetPath property");
+        equal(asset.assetType, 'css', "should set assetType to css");
     });
 
     test("Asset surrogate", function () {
