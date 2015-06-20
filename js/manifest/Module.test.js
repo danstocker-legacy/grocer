@@ -3,7 +3,15 @@
 (function () {
     "use strict";
 
-    module("Module");
+    module("Module", {
+        setup: function () {
+            grocer.Module.clearInstanceRegistry();
+        },
+
+        teardown: function () {
+            grocer.Module.clearInstanceRegistry();
+        }
+    });
 
     test("Instantiation", function () {
         raises(function () {
@@ -13,6 +21,9 @@
         var module = grocer.Module.create('foo');
 
         ok(module.entityKey.equals('module/foo'.toDocumentKey()), "should set entityKey property");
+        strictEqual(grocer.Module.create('foo'), module, "should return same instance for same moduleName");
+        notStrictEqual(grocer.Module.create('bar'), module,
+            "should return different instance for different moduleName");
     });
 
     test("Conversion from string", function () {

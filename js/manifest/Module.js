@@ -25,6 +25,9 @@ troop.postpone(grocer, 'Module', function () {
      * @extends troop.Base
      */
     grocer.Module = self
+        .setInstanceMapper(function (moduleName) {
+            return moduleName;
+        })
         .addMethods(/** @lends grocer.Module# */{
             /**
              * @param {string} moduleName
