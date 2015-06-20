@@ -81,35 +81,41 @@
             "should return empty asset collection for invalid type");
     });
 
-    //    test("Flat assets getter", function () {
-    //        var manifest = grocer.Manifest.create(manifestNode);
-    //
-    //        deepEqual(
-    //            manifest.getFlatAssets('js'),
-    //            [ "jquery.js", "app.js", "Users.js" ].toAssetCollection('js'),
-    //            "should return combined flat asset list for specified type");
-    //
-    //        equal(
-    //            manifest.getFlatAssets('foo'),
-    //            [].toAssetCollection('foo'),
-    //            "should return empty asset collection for invalid type");
-    //    });
-    //
-    //    test("Serialized asset list getter", function () {
-    //        var manifest = grocer.Manifest.create(manifestNode);
-    //
-    //        equal(
-    //            manifest.getAssetsForType('js').toString(),
-    //            [
-    //                "src/jquery.js".toAsset('js').toString(),
-    //                "src/app.js".toAsset('js').toString(),
-    //                "src/Users.js".toAsset('js').toString()
-    //            ].join('\n'),
-    //            "should return serialized asset list for specified type");
-    //
-    //        equal(
-    //            manifest.getAssetsForType('foo').toString(),
-    //            '',
-    //            "should return empty string for invalid type");
-    //    });
+    test("Flat assets getter", function () {
+        bookworm.entities
+            .setNode('document>module'.toPath(), {
+                "libraries": {
+                    "assets": {
+                        "js": [
+                            "src/jquery.js"
+                        ]
+                    }
+                },
+
+                "common": {
+                    "dependencies": ["libraries"],
+
+                    "assets": {
+                        "js": [
+                            "src/app.js"
+                        ],
+
+                        "css": [
+                        ]
+                    }
+                }
+            });
+
+        var manifest = grocer.Manifest.create();
+
+        deepEqual(
+            manifest.getFlatAssets('js'),
+            [ "jquery.js", "app.js" ].toAssetCollection('js'),
+            "should return combined flat asset list for specified type");
+
+        equal(
+            manifest.getFlatAssets('foo'),
+            [].toAssetCollection('foo'),
+            "should return empty asset collection for invalid type");
+    });
 }());
