@@ -38,7 +38,7 @@
 
         var manifest = grocer.Manifest.create();
 
-        equal(manifest.getModulesAsAssets('js').toString(),
+        equal(manifest.getModulesAsAssetsForType('js').toString(),
             [ 'common.js' ].join('\n'),
             "should fetch modules as individual assets");
     });
@@ -70,15 +70,13 @@
 
         var manifest = grocer.Manifest.create();
 
-        console.log(JSON.stringify(manifest.getAssets('js'), null, 2));
-
         deepEqual(
-            manifest.getAssets('js'),
+            manifest.getAssetsForType('js'),
             [ "src/jquery.js", "src/app.js"].toAssetCollection('js'),
             "should return combined asset list for specified type");
 
         equal(
-            manifest.getAssets('foo'),
+            manifest.getAssetsForType('foo'),
             [].toAssetCollection('foo'),
             "should return empty asset collection for invalid type");
     });
@@ -101,7 +99,7 @@
     //        var manifest = grocer.Manifest.create(manifestNode);
     //
     //        equal(
-    //            manifest.getAssets('js').toString(),
+    //            manifest.getAssetsForType('js').toString(),
     //            [
     //                "src/jquery.js".toAsset('js').toString(),
     //                "src/app.js".toAsset('js').toString(),
@@ -110,40 +108,8 @@
     //            "should return serialized asset list for specified type");
     //
     //        equal(
-    //            manifest.getAssets('foo').toString(),
+    //            manifest.getAssetsForType('foo').toString(),
     //            '',
     //            "should return empty string for invalid type");
-    //    });
-    //
-    //    test("Filtering by module names", function () {
-    //        expect(2);
-    //
-    //        var manifest = grocer.Manifest.create(manifestNode),
-    //            result = {};
-    //
-    //        grocer.Manifest.addMocks({
-    //            create: function (manifestNode) {
-    //                deepEqual(manifestNode, {
-    //                    "libraries": {
-    //                        "assets": {
-    //                            "js": [ "src/jquery.js" ]
-    //                        }
-    //                    },
-    //                    "users"    : {
-    //                        "classPath": "app.pages.Users",
-    //                        "assets"   : {
-    //                            "js" : [ "src/Users.js" ],
-    //                            "css": [ "src/Users.css" ]
-    //                        }
-    //                    }
-    //                }, "should pass filtered manifest node to constructor");
-    //                return result;
-    //            }
-    //        });
-    //
-    //        strictEqual(manifest.filterByModuleNames('libraries', 'users'), result,
-    //            "return new Manifest instance based on filtered manifest node");
-    //
-    //        grocer.Manifest.removeMocks();
     //    });
 }());

@@ -80,7 +80,7 @@
 
         var moduleDocument = 'module/common'.toDocument();
 
-        deepEqual(moduleDocument.getAssetsByType('js'), ["src/app.js"], "should return corresponding attribute");
-        equal(typeof moduleDocument.getAssetsByType('less'), 'undefined', "should return undefined for absent asset type");
+        deepEqual(moduleDocument.getAssetsForType('js'), ["src/app.js"], "should return corresponding attribute");
+        equal(typeof moduleDocument.getAssetsForType('less'), 'undefined', "should return undefined for absent asset type");
     });
 }());

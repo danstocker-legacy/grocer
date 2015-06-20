@@ -54,7 +54,7 @@
         var module = 'foo'.toModule(),
             assets;
 
-        assets = module.getAssetsByType('js');
+        assets = module.getAssetsForType('js');
 
         ok(assets.isA(grocer.AssetCollection), "should return AssetCollection instance");
         deepEqual(assets.items, [

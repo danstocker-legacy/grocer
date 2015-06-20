@@ -47,7 +47,7 @@ troop.postpone(grocer, 'ModuleDocument', function () {
              * @param {string} assetType
              * @returns {Array}
              */
-            getAssetsByType: function (assetType) {
+            getAssetsForType: function (assetType) {
                 return this.getField('assets').getAttribute(assetType).getNode();
             },
 

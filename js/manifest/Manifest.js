@@ -45,7 +45,7 @@ troop.postpone(grocer, 'Manifest', function () {
              * @param {string} assetType Type of assets to be retrieved.
              * @returns {grocer.AssetCollection}
              */
-            getModulesAsAssets: function (assetType) {
+            getModulesAsAssetsForType: function (assetType) {
                 return this.modules
                     .callOnEachItem('toAsset', assetType)
                     .getValuesAsHash()
@@ -57,11 +57,11 @@ troop.postpone(grocer, 'Manifest', function () {
              * @param {string} assetType Type of assets to be retrieved.
              * @returns {grocer.AssetCollection}
              */
-            getAssets: function (assetType) {
+            getAssetsForType: function (assetType) {
                 var result = [];
 
                 this.modules
-                    .callOnEachItem('getAssets', assetType)
+                    .callOnEachItem('getAssetsForType', assetType)
                     .forEachItem(function (assetCollection) {
                         if (assetCollection) {
                             result = result.concat(assetCollection.items);
@@ -78,29 +78,12 @@ troop.postpone(grocer, 'Manifest', function () {
              * @returns {grocer.AssetCollection}
              */
             getFlatAssets: function (assetType) {
-                return this.getAssets(assetType)
+                return this.getAssetsForType(assetType)
                     .getFlatAssetFileNameLookup()
                     .getValuesAsHash()
                     .toCollection()
                     .callOnEachItem('toAsset', assetType)
                     .toAssetCollection();
-            },
-
-            /**
-             * Filters manifest down to a set of modules. Returns a new manifest instance
-             * containing only the specified modules.
-             * @example
-             * manifest.filterByModuleNames('third-party', 'common', 'login')
-             * @returns {grocer.Manifest}
-             */
-            filterByModuleNames: function () {
-                var filteredModules = this.modules
-                        .filterByKeys(slice.apply(arguments)),
-                    filteredManifestNode = filteredModules
-                        .callOnEachItem('getModuleNode')
-                        .items;
-
-                return this.getBase().create(filteredManifestNode);
             }
         });
 });

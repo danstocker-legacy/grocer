@@ -48,8 +48,8 @@ troop.postpone(grocer, 'Module', function () {
              * @param {string} assetType
              * @returns {grocer.AssetCollection}
              */
-            getAssetsByType: function (assetType) {
-                var assetNames = this.entityKey.toDocument().getAssetsByType(assetType);
+            getAssetsForType: function (assetType) {
+                var assetNames = this.entityKey.toDocument().getAssetsForType(assetType);
                 return assetNames && assetNames.toCollection()
                     .callOnEachItem('toAsset', assetType)
                     .toAssetCollection();
