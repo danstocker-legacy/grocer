@@ -26,7 +26,7 @@
                     "dependencies": ["libraries"],
 
                     "assets": {
-                        "js": [
+                        "foo": [
                             "src/app.js"
                         ],
 
@@ -38,8 +38,8 @@
 
         var manifest = grocer.Manifest.create();
 
-        equal(manifest.getModulesAsAssetsForType('js').toString(),
-            [ 'common.js' ].join('\n'),
+        equal(manifest.getModulesAsAssetsForType('foo').toString(),
+            [ 'common.foo' ].join('\n'),
             "should fetch modules as individual assets");
     });
 
