@@ -68,7 +68,7 @@
             result;
 
         bookworm.entities
-            .appendNode('document>module'.toPath(), {
+            .setNode('document>module'.toPath(), {
                 "foo": {
                     "dependencies": ["libraries"],
 
@@ -87,6 +87,8 @@
             module.toAsset();
         }, "should raise exception on missing argument");
 
+        equal(typeof 'bar'.toModule().toAsset('js'), 'undefined',
+            "should return undefined when module has no associated document in manifest");
         equal(typeof module.toAsset('css'), 'undefined',
             "should return undefined when module has no assets of the specified type");
 
