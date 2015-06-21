@@ -6,6 +6,7 @@ troop.amendPostponed(bookworm, 'entities', function () {
         .appendNode('document>document>field'.toPath(), {
             'module/assets': 'collection',
             'module/symbol': 'string',
-            'module/parent': 'string'
+            'module/parent': 'string',
+            'module/loaded': 'boolean'
         });
 });

@@ -57,6 +57,24 @@ troop.postpone(grocer, 'ModuleDocument', function () {
              */
             getSymbol: function () {
                 return this.getField('symbol').getValue();
+            },
+
+            /**
+             * Retrieves the 'loaded' flag for the current module.
+             * @returns {boolean}
+             */
+            getLoaded: function () {
+                return this.getField('loaded').getValue();
+            },
+
+            /**
+             * Sets the 'loaded' flag for the current module.
+             * @param {boolean} loaded
+             * @returns {grocer.ModuleDocument}
+             */
+            setLoaded: function (loaded) {
+                this.getField('loaded').setValue(loaded);
+                return this;
             }
         });
 });

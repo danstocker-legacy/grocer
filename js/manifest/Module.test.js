@@ -63,6 +63,23 @@
         ], "should return collection with Asset instances");
     });
 
+    test("Loaded flag tester", function () {
+        var module = 'foo'.toModule(),
+            result = {};
+
+        grocer.ModuleDocument.addMocks({
+            getLoaded: function () {
+                ok(this.entityKey.equals('module/foo'.toDocumentKey()),
+                    "should fetch loaded flag from document");
+                return result;
+            }
+        });
+
+        strictEqual(module.isLoaded(), result, "should return whatever is stored in the document");
+
+        grocer.ModuleDocument.removeMocks();
+    });
+
     test("Conversion to asset", function () {
         var module = 'foo'.toModule(),
             result;
