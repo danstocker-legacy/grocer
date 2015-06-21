@@ -58,9 +58,9 @@
     });
 
     test("Instantiation", function () {
-        var dependencyTree = grocer.DependencyManager.create();
+        var dependencyManager = grocer.DependencyManager.create();
 
-        deepEqual(dependencyTree.dependencyTree.items, {
+        deepEqual(dependencyManager.dependencyTree.items, {
             "framework": {
                 "user-common": {
                     "user-profile": true,
@@ -68,5 +68,47 @@
                 }
             }
         }, "should initialize dependency tree");
+    });
+
+    test("Dependency path getter", function () {
+        var dependencyManager = grocer.DependencyManager.create();
+
+        equal(typeof dependencyManager.getDependencyPathForModule('foo'), 'undefined',
+            "should return undefined for non-existing module");
+        ok(dependencyManager.getDependencyPathForModule('user-profile')
+            .equals('framework>user-common>user-profile'.toPath()),
+            "should return path from module to root");
+    });
+
+    test("Closest non-loaded module getter", function () {
+        var dependencyManager = grocer.DependencyManager.create();
+
+        equal(typeof dependencyManager.getFirstAbsentParent('foo'), 'undefined',
+            "should return undefined for invalid / absent module");
+
+        bookworm.entities
+            .setNode('document>module'.toPath(), {
+            });
+
+        equal(dependencyManager.getFirstAbsentParent('user-home'), 'framework',
+            "should return root module when no modules are marked as loaded");
+
+        bookworm.entities
+            .setNode('document>module'.toPath(), {
+                'framework': {
+                    loaded: true
+                },
+
+                'user-common': {
+                    loaded: true
+                },
+
+                'user-profile': {
+                    loaded: true
+                }
+            });
+
+        equal(dependencyManager.getFirstAbsentParent('user-home'), 'user-home',
+            "should return first non-loaded module name");
     });
 }());

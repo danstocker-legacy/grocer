@@ -80,12 +80,47 @@ troop.postpone(grocer, 'DependencyManager', function () {
             },
 
             /**
-             * Retrieves the last loaded module on the specified module's parent chain.
+             * @param {string} moduleName
+             * @returns {sntls.Path}
+             */
+            getDependencyPathForModule: function (moduleName) {
+                return this.dependencyTree
+                    .queryPathsAsHash(['\\'.toKVP(), moduleName].toQuery())
+                    .getFirstValue();
+            },
+
+            /**
+             * Retrieves the first module's name on the specified module's parent chain
+             * that is not yet loaded.
              * @param {string} moduleName
              * @returns {string}
              */
-            getClosestLoadedParent: function (moduleName) {
+            getFirstAbsentParent: function (moduleName) {
+                dessert.isString(moduleName, "Invalid module name");
 
+                var dependencyPath = this.getDependencyPathForModule(moduleName),
+                    moduleLoadedLookup,
+                    i, result;
+
+                if (dependencyPath) {
+                    // collecting loaded flags for each module on path
+                    moduleLoadedLookup = dependencyPath.asArray.toCollection()
+                        .mapKeys(function (moduleName) {
+                            return moduleName;
+                        })
+                        .callOnEachItem('toModule')
+                        .callOnEachItem('isLoaded');
+
+                    // finding first non-loaded module
+                    for (i = 0; i < dependencyPath.asArray.length; i++) {
+                        result = dependencyPath.asArray[i];
+                        if (!moduleLoadedLookup.getItem(result)) {
+                            break;
+                        }
+                    }
+                }
+
+                return result;
             }
         });
 });

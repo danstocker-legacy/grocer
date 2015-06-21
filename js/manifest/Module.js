@@ -60,7 +60,7 @@ troop.postpone(grocer, 'Module', function () {
              * @returns {boolean}
              */
             isLoaded: function () {
-                return this.entityKey.toDocument().getLoaded();
+                return this.entityKey.toDocument().getLoaded() || false;
             },
 
             /**

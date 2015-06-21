@@ -77,6 +77,16 @@
 
         strictEqual(module.isLoaded(), result, "should return whatever is stored in the document");
 
+        grocer.ModuleDocument
+            .removeMocks()
+            .addMocks({
+                getLoaded: function () {
+                    return undefined;
+                }
+            });
+
+        equal(module.isLoaded(), false, "should return false by default");
+
         grocer.ModuleDocument.removeMocks();
     });
 
