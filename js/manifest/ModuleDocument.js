@@ -26,11 +26,11 @@ troop.postpone(grocer, 'ModuleDocument', function () {
             },
 
             /**
-             * Retrieves a flat array of dependencies.
+             * Retrieves the module name for the parent module.
              * @returns {Array}
              */
-            getDependencies: function () {
-                return this.getField('dependencies').getValue();
+            getParent: function () {
+                return this.getField('parent').getValue();
             },
 
             /**

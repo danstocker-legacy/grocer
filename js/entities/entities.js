@@ -10,13 +10,9 @@ troop.amendPostponed(bookworm, 'entities', function () {
      */
     bookworm.entities
         .appendNode('document>module'.toPath(), {
-            'thirdParty': {
-                js: ['node_modules/q/q.js']
-            },
-
             'bookworm': {
-                dependencies: ['dessert', 'evan', 'rubberband', 'sntls', 'troop'],
-                assets      : {
+                parent: 'rubberband',
+                assets: {
                     js: ['node_modules/bookworm/bookworm.js']
                 }
             },
@@ -28,29 +24,32 @@ troop.amendPostponed(bookworm, 'entities', function () {
             },
 
             'evan': {
-                dependencies: ['dessert', 'sntls', 'troop'],
-                assets      : {
+                parent: 'sntls',
+                assets: {
                     js: ['node_modules/evan/evan.js']
                 }
             },
 
             'rubberband': {
-                dependencies: ['dessert', 'evan', 'thirdParty', 'sntls', 'troop'],
-                assets      : {
+                parent: 'evan',
+                assets: {
                     js: ['node_modules/rubberband/rubberband.js']
                 }
             },
 
             'sntls': {
-                dependencies: ['dessert', 'troop'],
-                assets      : {
-                    js: ['node_modules/sntls/sntls.js']
+                parent: 'troop',
+                assets: {
+                    js: [
+                        'node_modules/q/q.js',
+                        'node_modules/sntls/sntls.js'
+                    ]
                 }
             },
 
             'troop': {
-                dependencies: ['dessert'],
-                assets      : {
+                parent: 'dessert',
+                assets: {
                     js: ['node_modules/troop/troop.js']
                 }
             }
@@ -60,9 +59,9 @@ troop.amendPostponed(bookworm, 'entities', function () {
             //             * Alternative singular module definition for all framework libraries.
             //             */
             //            framework: {
-            //                dependencies: ['thirdParty'],
             //                assets      : {
             //                    js: [
+            //                        'node_modules/q/q.js',
             //                        'node_modules/bookworm/bookworm.js',
             //                        'node_modules/dessert/dessert.js',
             //                        'node_modules/evan/evan.js',

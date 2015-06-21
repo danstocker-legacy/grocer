@@ -23,7 +23,7 @@
         bookworm.entities
             .setNode('document>module'.toPath(), {
                 "common": {
-                    "dependencies": ["libraries"],
+                    "parent": "libraries",
 
                     "assets": {
                         "foo": [
@@ -55,7 +55,7 @@
                 },
 
                 "common": {
-                    "dependencies": ["libraries"],
+                    "parent": "libraries",
 
                     "assets": {
                         "js": [
@@ -93,7 +93,7 @@
                 },
 
                 "common": {
-                    "dependencies": ["libraries"],
+                    "parent": "libraries",
 
                     "assets": {
                         "js": [

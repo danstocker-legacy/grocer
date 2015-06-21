@@ -18,11 +18,11 @@
         bookworm.entities
             .appendNode('document>module'.toPath(), {
                 "common": {
-                    "dependencies": ["libraries"]
+                    "parent": "libraries"
                 }
             });
 
-        deepEqual('module/common'.toDocument().getDependencies(), ["libraries"], "should return dependencies field value");
+        equal('module/common'.toDocument().getParent(), "libraries", "should return parent field value");
     });
 
     test("Symbol getter", function () {
@@ -40,7 +40,7 @@
         bookworm.entities
             .appendNode('document>module'.toPath(), {
                 "common": {
-                    "dependencies": ["libraries"],
+                    "parent": "libraries",
 
                     "assets": {
                         "js": [
@@ -64,7 +64,7 @@
         bookworm.entities
             .appendNode('document>module'.toPath(), {
                 "common": {
-                    "dependencies": ["libraries"],
+                    "parent": "libraries",
 
                     "assets": {
                         "js": [

@@ -4,8 +4,8 @@ troop.amendPostponed(bookworm, 'entities', function () {
 
     bookworm.config
         .appendNode('document>document>field'.toPath(), {
-            'module/assets'      : 'collection',
-            'module/symbol'      : 'string',
-            'module/dependencies': 'collection'
+            'module/assets': 'collection',
+            'module/symbol': 'string',
+            'module/parent': 'string'
         });
 });

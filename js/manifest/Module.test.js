@@ -37,7 +37,7 @@
         bookworm.entities
             .appendNode('document>module'.toPath(), {
                 "foo": {
-                    "dependencies": ["libraries"],
+                    "parent": "libraries",
 
                     "assets": {
                         "js": [
@@ -70,7 +70,7 @@
         bookworm.entities
             .setNode('document>module'.toPath(), {
                 "foo": {
-                    "dependencies": ["libraries"],
+                    "parent": "libraries",
 
                     "assets": {
                         "js": [
