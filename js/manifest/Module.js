@@ -64,6 +64,15 @@ troop.postpone(grocer, 'Module', function () {
             },
 
             /**
+             * Marks the module as loaded.
+             * @returns {grocer.Module}
+             */
+            markAsLoaded: function () {
+                this.entityKey.toDocument().setLoaded(true);
+                return this;
+            },
+
+            /**
              * Converts module to a single asset.
              * To be used for reducing all assets within the module to a single file ie.
              * via concatenation, minification, etc.

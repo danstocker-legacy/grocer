@@ -90,6 +90,24 @@
         grocer.ModuleDocument.removeMocks();
     });
 
+    test("Loaded flag setter", function () {
+        expect(3);
+
+        var module = 'foo'.toModule();
+
+        grocer.ModuleDocument.addMocks({
+            setLoaded: function (loaded) {
+                ok(this.entityKey.equals('module/foo'.toDocumentKey()),
+                    "should set loaded flag on ");
+                equal(loaded, true, "should set loaded flag to true");
+            }
+        });
+
+        strictEqual(module.markAsLoaded(), module, "should be chainable");
+
+        grocer.ModuleDocument.removeMocks();
+    });
+
     test("Conversion to asset", function () {
         var module = 'foo'.toModule(),
             result;
