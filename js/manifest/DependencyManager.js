@@ -121,6 +121,31 @@ troop.postpone(grocer, 'DependencyManager', function () {
                 }
 
                 return result;
+            },
+
+            /**
+             * Retrieves an Asset instance for the specified module and asset type.
+             * The returned asset will contain the specified module's parents
+             * up to the first module that is already loaded.
+             * @param {string} moduleName
+             * @param {string} assetType
+             * @returns {grocer.Asset}
+             */
+            getAssetForModule: function (moduleName, assetType) {
+                var firstAbsentParent = this.getFirstAbsentParent(moduleName),
+                    assetName;
+
+                if (typeof firstAbsentParent !== 'undefined') {
+                    assetName = firstAbsentParent === moduleName ?
+                        bookworm.StringUtils.escapeChars(moduleName, '-') : [
+                        bookworm.StringUtils.escapeChars(firstAbsentParent, '-'),
+                        bookworm.StringUtils.escapeChars(moduleName, '-')
+                    ].join('-');
+
+                    return assetName.toAsset(assetType);
+                } else {
+                    return undefined;
+                }
             }
         });
 });

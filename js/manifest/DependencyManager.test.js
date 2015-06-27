@@ -111,4 +111,40 @@
         equal(dependencyManager.getFirstAbsentParent('user-home'), 'user-home',
             "should return first non-loaded module name");
     });
+
+    test("Asset getter for module", function () {
+        var dependencyManager = grocer.DependencyManager.create();
+
+        equal(typeof dependencyManager.getAssetForModule('foo', 'js'), 'undefined',
+            "should return undefined for invalid / absent module");
+
+        bookworm.entities
+            .setNode('document>module'.toPath(), {
+            });
+
+        deepEqual(
+            dependencyManager.getAssetForModule('user-home', 'js'),
+            'framework-user\\-home'.toAsset('js'),
+            "should return asset name for root to specified module when no modules are marked as loaded");
+
+        bookworm.entities
+            .setNode('document>module'.toPath(), {
+                'framework': {
+                    loaded: true
+                },
+
+                'user-common': {
+                    loaded: true
+                },
+
+                'user-profile': {
+                    loaded: true
+                }
+            });
+
+        deepEqual(
+            dependencyManager.getAssetForModule('user-home', 'js'),
+            'user\\-home'.toAsset('js'),
+            "should return asset for modules from first non-loaded module up");
+    });
 }());
