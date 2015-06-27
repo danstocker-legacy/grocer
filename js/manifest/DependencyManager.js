@@ -95,7 +95,7 @@ troop.postpone(grocer, 'DependencyManager', function () {
              * @param {string} moduleName
              * @returns {string}
              */
-            getFirstAbsentParent: function (moduleName) {
+            getFirstAbsentParentName: function (moduleName) {
                 dessert.isString(moduleName, "Invalid module name");
 
                 var dependencyPath = this.getDependencyPathForModule(moduleName),
@@ -132,7 +132,7 @@ troop.postpone(grocer, 'DependencyManager', function () {
              * @returns {grocer.Asset}
              */
             getAssetForModule: function (moduleName, assetType) {
-                var firstAbsentParent = this.getFirstAbsentParent(moduleName),
+                var firstAbsentParent = this.getFirstAbsentParentName(moduleName),
                     assetName;
 
                 if (typeof firstAbsentParent !== 'undefined') {

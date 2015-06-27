@@ -83,14 +83,14 @@
     test("Closest non-loaded module getter", function () {
         var dependencyManager = grocer.DependencyManager.create();
 
-        equal(typeof dependencyManager.getFirstAbsentParent('foo'), 'undefined',
+        equal(typeof dependencyManager.getFirstAbsentParentName('foo'), 'undefined',
             "should return undefined for invalid / absent module");
 
         bookworm.entities
             .setNode('document>module'.toPath(), {
             });
 
-        equal(dependencyManager.getFirstAbsentParent('user-home'), 'framework',
+        equal(dependencyManager.getFirstAbsentParentName('user-home'), 'framework',
             "should return root module when no modules are marked as loaded");
 
         bookworm.entities
@@ -108,7 +108,7 @@
                 }
             });
 
-        equal(dependencyManager.getFirstAbsentParent('user-home'), 'user-home',
+        equal(dependencyManager.getFirstAbsentParentName('user-home'), 'user-home',
             "should return first non-loaded module name");
     });
 
