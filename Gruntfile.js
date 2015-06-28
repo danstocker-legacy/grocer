@@ -7,7 +7,6 @@ module.exports = function (grunt) {
             'js/namespace.js',
             'js/entities/config.js',
             'js/entities/entities.js',
-            'js/manifest/ClassPathParser.js',
             'js/manifest/Asset.js',
             'js/manifest/Script.js',
             'js/manifest/Css.js',
