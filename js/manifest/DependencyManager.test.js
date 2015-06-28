@@ -147,4 +147,22 @@
             'user\\-home'.toAsset('js'),
             "should return asset for modules from first non-loaded module up");
     });
+
+    test("Combined module name getter", function () {
+        var dependencyManager = grocer.DependencyManager.create(),
+            combinedModuleNames = dependencyManager.getCombinedModuleNames();
+
+        ok(combinedModuleNames.isA(sntls.Collection), "should return Collection instance");
+
+        deepEqual(combinedModuleNames.items, {
+            'framework'                   : ['framework'],
+            'framework-user\\-common'     : ['framework', 'user-common'],
+            'framework-user\\-profile'    : ['framework', 'user-common', 'user-profile'],
+            'framework-user\\-home'       : ['framework', 'user-common', 'user-home'],
+            'user\\-common-user\\-profile': ['user-common', 'user-profile'],
+            'user\\-common-user\\-home'   : ['user-common', 'user-home'],
+            'user\\-profile'              : ['user-profile'],
+            'user\\-home'                 : ['user-home']
+        });
+    });
 }());

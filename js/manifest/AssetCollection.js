@@ -8,7 +8,7 @@ troop.postpone(grocer, 'AssetCollection', function () {
     /**
      * @name grocer.AssetCollection.create
      * @function
-     * @param {Asset[]} items
+     * @param {Asset[]} [items]
      * @returns {grocer.AssetCollection}
      */
 
@@ -20,7 +20,7 @@ troop.postpone(grocer, 'AssetCollection', function () {
     grocer.AssetCollection = self
         .addMethods(/** @lends grocer.AssetCollection# */{
             /**
-             * @param {Asset[]} items
+             * @param {Asset[]} [items]
              * @ignore
              */
             init: function (items) {

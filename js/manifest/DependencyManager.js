@@ -3,7 +3,8 @@ troop.postpone(grocer, 'DependencyManager', function () {
     "use strict";
 
     var base = troop.Base,
-        self = base.extend();
+        self = base.extend(),
+        slice = Array.prototype.slice;
 
     /**
      * @name grocer.DependencyManager.create
@@ -18,6 +19,10 @@ troop.postpone(grocer, 'DependencyManager', function () {
     grocer.DependencyManager = self
         .setInstanceMapper(function () {
             return 'singleton';
+        })
+        .addConstants(/** @lends grocer.DependencyManager# */{
+            /** @constant */
+            MODULE_NAME_SEPARATOR: '-'
         })
         .addPrivateMethods(/** @lends grocer.DependencyManager# */{
             /** @private */
@@ -63,6 +68,17 @@ troop.postpone(grocer, 'DependencyManager', function () {
                             dependencyTree.setNode(path, true);
                         }
                     });
+            },
+
+            /** @private */
+            _getCombinedModuleName: function () {
+                var StringUtils = bookworm.StringUtils,
+                    MODULE_NAME_SEPARATOR = this.MODULE_NAME_SEPARATOR;
+
+                return slice.call(arguments).toCollection()
+                    .passEachItemTo(StringUtils.escapeChars, StringUtils, 0, MODULE_NAME_SEPARATOR)
+                    .getValues()
+                    .join(MODULE_NAME_SEPARATOR);
             }
         })
         .addMethods(/** @lends grocer.DependencyManager# */{
@@ -137,15 +153,48 @@ troop.postpone(grocer, 'DependencyManager', function () {
 
                 if (typeof firstAbsentParent !== 'undefined') {
                     assetName = firstAbsentParent === moduleName ?
-                        bookworm.StringUtils.escapeChars(moduleName, '-') : [
-                        bookworm.StringUtils.escapeChars(firstAbsentParent, '-'),
-                        bookworm.StringUtils.escapeChars(moduleName, '-')
-                    ].join('-');
+                        this._getCombinedModuleName(moduleName) :
+                        this._getCombinedModuleName(firstAbsentParent, moduleName);
 
                     return assetName.toAsset(assetType);
                 } else {
                     return undefined;
                 }
+            },
+
+            /**
+             * Retrieves a collection of module name groups, indexed by their combined names.
+             * Use this when generating (concatenating, minifying, packaging) assets.
+             * @returns {sntls.Collection}
+             */
+            getCombinedModuleNames: function () {
+                var that = this;
+
+                return this.dependencyTree
+                    // querying all end-to-end dependency paths
+                    .queryPathsAsHash('\\>"'.toQuery())
+                    .toCollection()
+                    .collectProperty('asArray')
+                    .createWithEachItem(grocer.DependencyPath)
+                    .toCollection(grocer.DependencyPathCollection)
+
+                    // obtaining unique path fragments
+                    .getPathFragments()
+
+                    // restructuring collection so that keys are combined module names...
+                    .mapKeys(function (/**sntls.Path*/path) {
+                        var firstKey = path.asArray[0],
+                            lastKey = path.getLastKey();
+
+                        return path.asArray.length === 1 ?
+                            that._getCombinedModuleName(firstKey) :
+                            that._getCombinedModuleName(firstKey, lastKey);
+                    })
+
+                    // ...and values are a list of affected module names
+                    .mapValues(function (path) {
+                        return path.asArray;
+                    });
             }
         });
 });
